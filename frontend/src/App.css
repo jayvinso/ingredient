@@ -1,0 +1,20 @@
+section { border: 1px solid; }
+
+.right {
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  gap: 16px;
+  min-height: 0;
+}
+
+.right section { min-height: 0; overflow-y: auto; }
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: 16px;
+  height: 100vh;
+  padding: 16px;
+}
+
+
