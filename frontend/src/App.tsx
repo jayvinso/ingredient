@@ -1,11 +1,14 @@
-import { useState } from 'react'
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>  </>
+    <main className="layout">
+      <section className="main" />
+      <aside className="right">
+        <section className ="" />
+        <section className = "" />
+      </aside>
+    </main>
   )
 }
 
