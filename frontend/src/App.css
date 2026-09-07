@@ -1,5 +1,12 @@
 section { border: 1px solid; }
 
+/* Let the bowl workspace shrink or scroll without changing the sidebar. */
+.layout > .main {
+  min-width: 0;
+  min-height: 0;
+  overflow: auto;
+}
+
 .right {
   display: grid;
   grid-template-rows: 1fr 1fr;
@@ -16,5 +23,3 @@ section { border: 1px solid; }
   height: 100vh;
   padding: 16px;
 }
-
-

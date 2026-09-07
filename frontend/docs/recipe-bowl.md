@@ -1,0 +1,1 @@
+- [x] The large left section shows the heading, bowl and separate spoon.
