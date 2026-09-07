@@ -1,5 +1,6 @@
 /* Scoped to the bowl feature; do not copy the prototype's global page CSS. */
 .rb-workspace {
+  container-type: inline-size;
   --rb-ink: #342d25;
   --rb-muted: #665c50;
   --rb-green: #365b46;
@@ -45,6 +46,7 @@
   display: grid;
   flex: 1;
   place-items: center;
+  align-content: center;
   min-width: 0;
   isolation: isolate;
 }
@@ -100,4 +102,139 @@
   color: var(--rb-muted);
   font-size: 0.875rem;
   line-height: 1.5;
+}
+
+/* The selected card is inside the left workspace, not the team's sidebar. */
+.rb-workspace-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(14rem, 16rem);
+  gap: 1.25rem;
+  flex: 1;
+}
+
+.rb-workspace-grid > .rb-workspace-heading { grid-column: 1; grid-row: 1; }
+.rb-workspace-grid > .rb-bowl-stage { grid-column: 1; grid-row: 2; }
+.rb-workspace-grid > .rb-bowl-actions { grid-column: 1; grid-row: 3; }
+
+.rb-workspace .rb-selection {
+  grid-column: 2;
+  grid-row: 1 / span 3;
+  align-self: start;
+  min-width: 0;
+  max-height: 36rem;
+  overflow: auto;
+  padding: 1rem;
+  border: 1px solid #d7cfbd;
+  border-radius: 1rem;
+  background: #fffdf6e6;
+}
+
+.rb-selection-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.rb-selection-heading h2 { margin: 0; font-size: 1.25rem; }
+.rb-selection-count { font-weight: 700; color: var(--rb-green); }
+.rb-selected-group h3 { margin: 1rem 0 0.5rem; font-size: 1rem; }
+.rb-selected-group p { color: var(--rb-muted); font-size: 0.875rem; }
+.rb-selected-group ul { margin: 0; padding: 0; list-style: none; }
+.rb-selected-group li {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 2.75rem;
+}
+.rb-selected-name { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+
+.rb-workspace button:focus-visible,
+.rb-workspace summary:focus-visible {
+  outline: 3px solid #286650;
+  outline-offset: 3px;
+}
+
+.rb-workspace .rb-remove-button {
+  flex-shrink: 0;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 0;
+  border-radius: 0.5rem;
+  background: transparent;
+  color: var(--rb-ink);
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+.rb-workspace .rb-remove-button:hover { background: #eee5d6; }
+.rb-workspace .rb-clear-button {
+  width: 100%;
+  min-height: 2.75rem;
+  margin-top: 1rem;
+  padding: 0.5rem;
+  border: 1px solid #b5ac9d;
+  border-radius: 0.5rem;
+  background: transparent;
+  color: var(--rb-green);
+  font: inherit;
+  cursor: pointer;
+}
+.rb-workspace .rb-clear-button:disabled { opacity: 0.5; cursor: default; }
+
+/* Token dimensions are SVG scene units; the whole scene scales together. */
+.rb-token-object { overflow: visible; }
+.rb-workspace .rb-bowl-token {
+  display: grid;
+  place-items: center;
+  width: 112px;
+  height: 112px;
+  margin: 8px;
+  padding: 0;
+  border: 3px solid #ffffffb3;
+  border-radius: 50%;
+  box-shadow: 0 7px 12px #2d1b2030;
+  font-size: 55px;
+  cursor: pointer;
+}
+.rb-bowl-token--ingredient { background: #dce6bb; }
+.rb-bowl-token--appliance { background: #c5e0e6; }
+.rb-workspace .rb-bowl-token:hover { border-color: #365b46; }
+.rb-workspace .rb-bowl-token:focus-visible { outline-width: 6px; outline-offset: 5px; }
+.rb-overflow-note { margin: 0; font-size: 0.875rem; color: var(--rb-muted); }
+
+.rb-devtools {
+  padding: 0.75rem;
+  border: 1px dashed #918471;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+}
+.rb-devtools summary { cursor: pointer; font-weight: 600; }
+.rb-devtools p { line-height: 1.5; }
+.rb-devtools-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.rb-devtools-actions button {
+  min-height: 2.75rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #b5ac9d;
+  border-radius: 0.5rem;
+  background: #fffdf6;
+  color: var(--rb-ink);
+  font: inherit;
+  cursor: pointer;
+}
+
+.rb-workspace .rb-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* Respond to the left panel's available width, not the whole browser width. */
+@container (max-width: 46rem) {
+  .rb-workspace-grid { grid-template-columns: minmax(0, 1fr); }
+  .rb-workspace .rb-selection { grid-column: 1; grid-row: 4; }
 }

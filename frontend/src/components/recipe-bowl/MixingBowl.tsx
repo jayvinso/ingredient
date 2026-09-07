@@ -1,25 +1,33 @@
 import { useId } from 'react'
 import bowlImage from './assets/wooden-bowl.png'
 import spoonImage from './assets/wooden-spoon.png'
+import { itemKey, MAX_VISIBLE_BOWL_ITEMS, tokenPosition } from './selection'
+import type { BowlItem, BowlItemIdentity } from './selection'
+
+type MixingBowlProps = {
+  items: readonly BowlItem[]
+  onRemove: (item: BowlItemIdentity) => void
+}
 
 /**
- * Visual-only bowl extracted from the standalone prototype.
+ * Bowl and selected bubbles extracted from the standalone prototype.
  * Keep artwork in SVG coordinates so every layer scales together.
- * Selection rendering, drop handling, and motion arrive in later commits.
+ * Item data comes from the shared selection; this component has no copy of it.
  */
-export default function MixingBowl() {
+export default function MixingBowl({ items, onRemove }: MixingBowlProps) {
   const id = useId()
   const titleId = `${id}-title`
   const frontClipId = `${id}-front`
+  const visibleItems = items.slice(0, MAX_VISIBLE_BOWL_ITEMS)
 
   return (
     <svg
       className="rb-bowl-scene"
       viewBox="100 0 1336 1220"
-      role="img"
+      role="group"
       aria-labelledby={titleId}
     >
-      <title id={titleId}>Wooden mixing bowl with a wooden spoon</title>
+      <title id={titleId}>Recipe bowl. Activate a selected bubble to remove it.</title>
       <defs>
         <clipPath id={frontClipId} clipPathUnits="userSpaceOnUse">
           {/* Follows the front rim of this specific bowl image. */}
@@ -36,6 +44,31 @@ export default function MixingBowl() {
         height="1024"
         className="rb-bowl-base"
       />
+
+      {/* Native HTML buttons provide mouse, touch, and keyboard removal. */}
+      {visibleItems.map((item, index) => {
+        const point = tokenPosition(index, visibleItems.length)
+        return (
+          <foreignObject
+            key={itemKey(item)}
+            x={point.x - 64}
+            y={point.y - 64}
+            width="128"
+            height="128"
+            className="rb-token-object"
+          >
+            <button
+              type="button"
+              className={`rb-bowl-token rb-bowl-token--${item.type}`}
+              onClick={() => onRemove(item)}
+              aria-label={`Remove ${item.name} (${item.type}) from the bowl`}
+              title={`Remove ${item.name}`}
+            >
+              <span aria-hidden="true">{item.emoji ?? (item.type === 'ingredient' ? '🌿' : '⚙️')}</span>
+            </button>
+          </foreignObject>
+        )
+      })}
 
       {/* Layer 2: separate spoon; this group will move when mixing. */}
       <g transform="translate(895 680) rotate(28)" className="rb-spoon-rig">
