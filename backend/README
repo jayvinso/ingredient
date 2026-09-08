@@ -1,7 +1,11 @@
-### Swagger Documentation: 
 
-To access the swagger documentation this is what you need to do: 
+How to setup backend:
 
-1) Visit https://editor.swagger.io/
-2) Paste the .yml file swagger.yml into the editor. 
+1. Setup python virtual environment. I used anaconda, but whatever works.
+2. Install requirements.txt
+    - For anaconda, the command was """conda install --yes --file requirements.txt"""
 
+3. To start server, run the command """python manage.py runserver"""
+    - By default, the server will start at """http://127.0.0.1:8000/"""
+
+Bonus - """http://127.0.0.1:8000/test/""" will give you a simple http response
