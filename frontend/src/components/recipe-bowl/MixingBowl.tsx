@@ -5,17 +5,20 @@ import { itemKey, MAX_VISIBLE_BOWL_ITEMS, tokenPosition } from './selection'
 import { useBowlSelection } from './useBowlSelection'
 import { useBowlDrag } from './useBowlDrag'
 import { useDropFeedback } from './useDropFeedback'
+import { useSpoonMotion } from './useSpoonMotion'
 
 /** PNG layers share one SVG coordinate system with the drop target and tokens. */
 export default function MixingBowl() {
   const id = useId()
   const bodyRef = useRef<SVGGElement>(null)
+  const spoonRef = useRef<SVGGElement>(null)
   const { items, locked, pulse, lastAddedKey } = useBowlSelection()
   const { drag, bowlRef, bindItem } = useBowlDrag()
   const titleId = `${id}-title`
   const frontClipId = `${id}-front`
   const visibleItems = items.slice(0, MAX_VISIBLE_BOWL_ITEMS)
   useDropFeedback(bodyRef, pulse)
+  useSpoonMotion(spoonRef, locked)
 
   return (
     <svg
@@ -27,8 +30,8 @@ export default function MixingBowl() {
       <title id={titleId}>Recipe bowl. Drag bubbles out, or activate them to remove.</title>
       <defs>
         <clipPath id={frontClipId} clipPathUnits="userSpaceOnUse">
-          {/* This curve follows the front rim of the original bowl PNG. */}
-          <path d="M190 377 C238 481 472 571 768 572 C1060 572 1290 480 1345 377 L1536 1024 L0 1024 Z" />
+          {/* Raised slightly along the inner lip to hide the spoon above the outer edge. */}
+          <path d="M190 382 C238 480 472 566 768 567 C1060 567 1290 469 1345 382 L1536 1024 L0 1024 Z" />
         </clipPath>
       </defs>
 
@@ -70,8 +73,8 @@ export default function MixingBowl() {
           )
         })}
 
-        <g className="rb-stir-motion">
-          <g transform="translate(895 680) rotate(28)" className="rb-spoon-rig">
+        <g ref={spoonRef} className="rb-stir-motion">
+          <g transform="translate(895 690) rotate(28)" className="rb-spoon-rig">
             <image href={spoonImage} x="-256" y="-617" width="512" height="768" />
           </g>
         </g>

@@ -1,89 +1,87 @@
 # Recipe bowl
 
-The left workspace owns the bowl and selected-items card. Ingredient/action-item
-source lists remain in the team's two right-hand sections.
+The left workspace owns the bowl, spoon and selected-items card. The team's
+ingredient/action-item source lists stay separate. On screens at most 760px wide,
+the two source sections stack below the workspace.
 
-## What works
+## Behavior
 
-- Shared ingredient/appliance selection, counts, removal and clear-all.
-- Drag a source item into the bowl opening to add it; drag a bowl bubble outside
-  the opening to remove it. Dropping it back inside keeps it selected.
-- Click/tap or Enter/Space also adds from a source button or removes a bowl bubble.
-- Escape, pointer cancellation or loss of window focus cancels the drag.
-  Releasing outside the browser viewport does not change the selection.
-- Drop highlight, floating preview and addition animation with reduced-motion support.
+- Add items by dragging a source button into the bowl, clicking it, or using
+  Enter/Space. The same type and ID is selected only once.
+- Remove through the card, activate a bowl bubble, or drag it outside the opening.
+  Dropping back inside keeps it. Escape, focus loss and pointer cancellation
+  cancel a drag; releasing outside the browser viewport does not remove an item.
+- At least one ingredient enables search. Selection is locked during a request.
+  Cancel/Escape stops it; errors allow retry. Closing the recipe preserves the
+  bowl and returns focus to search.
+- The bowl shows up to 12 bubbles; all selections remain in the card. Refresh resets
+  selection. Demo source buttons only appear in development.
 
-Selections reset on refresh. Only 12 bubbles fit the artwork; extra selections
-remain in the card. With at least one ingredient, **Mix & find a recipe** starts
-stirring and opens a recipe dialog. Selection is locked while searching; Cancel
-or Escape stops the search. Closing the dialog preserves the bowl and returns
-focus to the search button. Reduced motion disables stirring and drop animations.
+The spoon follows a continuous oval with eased startup and settling. The PNG
+front layer masks it at the inner rim; replacing artwork requires retuning the
+clip path. Reduced motion disables stirring and drop animations. Background
+texture and shading use CSS, with no additional image assets.
 
-## Connecting source buttons
+## Connecting source lists
 
-`App.tsx` already wraps the layout in `BowlSelectionProvider`.
-`useBowlSelection()` exposes `items`, category counts, `addItem(item)`,
-`removeItem({ id, type })` and `clearItems()`.
+Components inside the existing `BowlSelectionProvider` use `useBowlSelection()`
+for `items`, category counts, `locked`, `addItem(item)`, `removeItem({ id, type })`
+and `clearItems()`. The provider blocks mutations while locked.
 
-The frontend item format is `{ id, type, name, emoji? }`, where `type` is
-`'ingredient'` or `'appliance'`. Use stable IDs; the same type and ID is selected
-only once. The backend's action-item meaning and data format still need agreement.
+An item is `{ id, type, name, emoji? }`; type is `'ingredient'` or `'appliance'`.
+Keep IDs stable. The backend's action-item meaning still needs team agreement.
 
-For a component at `src/components/IngredientBubble.tsx`:
+Example for `src/components/IngredientBubble.tsx`:
 
 ```tsx
 import { useBowlDrag } from './recipe-bowl/useBowlDrag'
+import { useBowlSelection } from './recipe-bowl/useBowlSelection'
 import type { BowlItem } from './recipe-bowl/selection'
 
 export default function IngredientBubble({ item }: { item: BowlItem }) {
   const { bindItem } = useBowlDrag()
-  return <button type="button" {...bindItem(item, 'source')}>{item.name}</button>
+  const { locked } = useBowlSelection()
+  return (
+    <button type="button" {...bindItem(item, 'source', locked)} disabled={locked}>
+      {item.name}
+    </button>
+  )
 }
 ```
 
-The binding handles pointer dragging and click/keyboard activation. Keep its
-event handlers and `touchAction` style; do not add a second `onClick` handler.
-For an unavailable item, pass `true` as the third argument and disable the button.
-Source buttons should also read `locked` from `useBowlSelection()` and disable
-themselves while it is true. The provider blocks selection mutations during search.
-These bindings use React state and pointer capture, not native HTML drag data.
-
-`usePointerDrag.ts` handles input and cancellation; `dragGeometry.ts` checks the
-oval opening. `MixingBowl.tsx` layers the original PNGs in SVG, with the front
-rim above the spoon. Changing artwork may require adjusting the oval and clip.
-
-## Check locally
-
-From `frontend`, run `npm run build`, `npm run lint`, then `npm run dev`.
-Expand **Development: test selection and dragging** below the workspace.
-
-- Drag tomato into the opening: one bubble, one selected item and one ingredient.
-- Release pasta outside: nothing added. Click it or use Enter/Space to add it.
-- Drag a bowl bubble back inside: keep it; release outside: remove it from both views.
-- Press Escape or switch windows during a drag: selection stays unchanged.
-- Remove through the card, clear all, re-add, and check the counts stay synchronized.
-- Check touch dragging and scrolling from empty space; enable reduced motion to
-  verify addition animations stop. Check the two right-hand sections still render.
-
-The sample buttons are development-only (`import.meta.env.DEV`). Teammates can
-connect their source buttons with the hook above.
+The binding includes click/keyboard activation and pointer capture. Preserve its
+event handlers and touch-action style; do not attach a second add-on-click handler.
 
 ## Recipe service
 
-Without configuration, the UI labels itself **Demo mode** and displays a fixed
-sample recipe, not a match for the submitted selection. The selected items are
-shown separately. **Development: test recipe search** provides Success, Error
-and Slow response scenarios. Test cancellation, retry, dialog scrolling,
-Tab/Shift+Tab containment, Escape and focus restoration before committing.
+Default **Demo mode** shows a labeled fixed recipe, not a selection-based match.
+The submitted selection is shown separately. For a running backend, set
+`VITE_RECIPE_API_BASE_URL` in local `frontend/.env.local` and restart Vite.
+Use the base URL without `/recipes`; the backend must allow the frontend origin.
+Vite variables are public, so do not put secrets in them.
 
-`recipeService.ts` follows `backend/swagger.yml`: `GET /recipes?query=...`, with
-an `application/json` string response. To connect a running backend, set
-`VITE_RECIPE_API_BASE_URL` in a local `frontend/.env.local` and restart Vite.
-Use the server base URL, without `/recipes`; the backend must allow the frontend
-origin through CORS. Never put secrets in a `VITE_` variable. The free-text query
-includes ingredient and appliance names; confirm its wording with the backend team.
+`recipeClient.ts` implements Swagger's `GET /recipes?query=...` and JSON-string
+response. `recipeService.ts` supplies Vite configuration. Confirm the free-text
+query wording and appliance interpretation with the backend team before integration.
+Requests use a copied selection, abort on cancellation and time out after 30 seconds.
+Successful responses wait at least 1.8 seconds for mixing. API text is displayed
+as plain text.
 
-`useRecipeFlow.ts` snapshots the selection, rejects repeated starts, aborts canceled
-requests and times out after 30 seconds. Successful results wait at least 1.8 seconds
-for the mixing sequence. `RecipeDialog.tsx` renders the returned string as plain text.
-There are no backend, dependency, shared-layout or source-list changes in this step.
+## Verification
+
+From `frontend`: `npm test`, `npm run build`, `npm run lint`, `npm run dev`.
+Tests use Node's runner and the existing TypeScript dependency. They cover selection,
+drag handlers, request ownership/cancellation, the API contract and motion lifecycle.
+Hook tests simulate events/state; they do not replace browser checks.
+
+Before merging, check locally:
+
+- Add/remove/clear, duplicate prevention and synchronized counts.
+- Drag-back retention, drag-out removal, Escape and touch interaction.
+- Spoon masking through a full cycle, smooth cancellation and reduced motion.
+- Demo Success, Error/retry and Slow response/cancel controls under the workspace.
+- Dialog scrolling, Tab/Shift+Tab containment, Escape and returned focus.
+- Narrow/short windows, both source sections and a console without errors.
+
+The demo flow is complete; production source-list wiring and the live backend
+connection still depend on the other team components.

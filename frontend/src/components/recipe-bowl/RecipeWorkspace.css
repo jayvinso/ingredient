@@ -13,8 +13,12 @@
   color: var(--rb-ink);
   font-family: 'Segoe UI', system-ui, sans-serif;
   background:
-    radial-gradient(ellipse at 34% 34%, #fffdf5 0%, #fffaf040 51%, transparent 73%),
-    linear-gradient(160deg, #f8f3e7 5%, #f0e5d1 70%, #e5d7bf 100%);
+    repeating-linear-gradient(0deg, #78684905 0 1px, transparent 1px 4px),
+    repeating-linear-gradient(90deg, #78684904 0 1px, transparent 1px 5px),
+    radial-gradient(ellipse at 4% 0%, #afbc9560, transparent 47%),
+    radial-gradient(ellipse at 96% 95%, #d5aa6750, transparent 52%),
+    radial-gradient(ellipse at 38% 38%, #fffef9 0%, #fffaf060 45%, transparent 70%),
+    linear-gradient(150deg, #f9f6ed, #f1e9d9);
 }
 
 .rb-workspace-heading .rb-kicker {
@@ -43,12 +47,28 @@
 }
 
 .rb-workspace .rb-bowl-stage {
+  position: relative;
   display: grid;
   flex: 1;
   place-items: center;
   align-content: center;
   min-width: 0;
   isolation: isolate;
+}
+
+/* A quiet oval under the scene gives the bowl a place on the table. */
+.rb-workspace .rb-bowl-stage::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  width: 88%;
+  max-width: 29rem;
+  aspect-ratio: 1.5;
+  border: 1px solid #b7a68435;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, #fffdf760 40%, #d9c8a520 72%, transparent);
+  transform: translateY(12%);
+  pointer-events: none;
 }
 
 .rb-workspace .rb-bowl-scene {
@@ -297,20 +317,9 @@
   .rb-workspace .rb-bowl-token.is-new { animation: none; }
 }
 
-/* Animate a wrapper so the spoon's SVG pose and front-rim clipping stay intact. */
+/* Motion is applied to the wrapper by useSpoonMotion; the resting pose stays intact. */
 .rb-stir-motion {
   pointer-events: none;
-  transform-box: view-box;
-  transform-origin: 768px 523px;
-}
-.rb-bowl-scene.is-mixing .rb-stir-motion {
-  animation: rb-stir 900ms ease-in-out infinite;
-}
-@keyframes rb-stir {
-  0%, 100% { transform: translate(0, 0) rotate(0deg); }
-  25% { transform: translate(-65px, -20px) rotate(-8deg); }
-  50% { transform: translate(-130px, 0) rotate(-12deg); }
-  75% { transform: translate(-65px, 20px) rotate(-6deg); }
 }
 .rb-workspace .rb-bowl-token:disabled { cursor: default; }
 .rb-workspace .rb-bowl-actions button:not(:disabled) { cursor: pointer; }
@@ -348,6 +357,3 @@
 .rb-recipe-text { white-space: pre-wrap; margin: 1.5rem 0; padding-top: 1rem; border-top: 1px solid #d7cfbd; }
 .rb-recipe-back { padding: 0.6rem 1rem; border: 0; border-radius: 0.6rem; background: #365b46; color: #fffdf5; }
 .rb-recipe-dialog button:focus-visible { outline: 3px solid #286650; outline-offset: 3px; }
-@media (prefers-reduced-motion: reduce) {
-  .rb-bowl-scene.is-mixing .rb-stir-motion { animation: none; }
-}
