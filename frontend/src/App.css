@@ -1,5 +1,12 @@
 section { border: 1px solid; }
 
+/* Let the bowl workspace shrink or scroll without changing the sidebar. */
+.layout > .main {
+  min-width: 0;
+  min-height: 0;
+  overflow: auto;
+}
+
 .right {
   display: grid;
   grid-template-rows: 1fr 1fr;
@@ -14,7 +21,19 @@ section { border: 1px solid; }
   grid-template-columns: minmax(0, 1fr) 320px;
   gap: 16px;
   height: 100vh;
+  height: 100dvh;
   padding: 16px;
 }
 
-
+/* Preserve both source sections while giving the bowl usable room on phones. */
+@media (max-width: 760px) {
+  .layout {
+    grid-template-columns: minmax(0, 1fr);
+    height: auto;
+    min-height: 100dvh;
+    padding: 12px;
+    gap: 12px;
+  }
+  .layout > .main { overflow: visible; }
+  .right { grid-template-rows: repeat(2, minmax(14rem, auto)); }
+}
