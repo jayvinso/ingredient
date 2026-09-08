@@ -1,0 +1,124 @@
+openapi: 3.1.0
+
+info:
+  title: Recipe API
+  version: 1.0.0
+
+paths:
+
+  /recipes:
+    get:
+      summary: Find the closest recipe
+      parameters:
+        - name: query
+          in: query
+          required: true
+          description: Text used to find the closest matching recipe
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Closest matching recipe
+          content:
+            application/json:
+              schema:
+                type: string
+
+  /ingredients:
+    get:
+      summary: Find the closest ingredient
+      parameters:
+        - name: query
+          in: query
+          required: true
+          description: Text used to find the closest matching ingredient
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Closest matching ingredient
+          content:
+            application/json:
+              schema:
+                type: string
+
+  /action-items:
+    get:
+      summary: Find the closest action item
+      parameters:
+        - name: query
+          in: query
+          required: true
+          description: Text used to find the closest matching action item
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Closest matching action item
+          content:
+            application/json:
+              schema:
+                type: string
+
+  /random/recipes:
+    get:
+      summary: Get random recipes
+      parameters:
+        - name: number
+          in: query
+          required: true
+          description: Number of random recipes to return
+          schema:
+            type: integer
+            minimum: 1
+      responses:
+        '200':
+          description: Random recipes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+
+  /random/ingredients:
+    get:
+      summary: Get random ingredients
+      parameters:
+        - name: number
+          in: query
+          required: true
+          description: Number of random ingredients to return
+          schema:
+            type: integer
+            minimum: 1
+      responses:
+        '200':
+          description: Random ingredients
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+
+  /random/action-items:
+    get:
+      summary: Get random action items
+      parameters:
+        - name: number
+          in: query
+          required: true
+          description: Number of random action items to return
+          schema:
+            type: integer
+            minimum: 1
+      responses:
+        '200':
+          description: Random action items
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
