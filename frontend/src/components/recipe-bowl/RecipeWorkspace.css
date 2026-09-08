@@ -199,6 +199,8 @@
 .rb-bowl-token--ingredient { background: #dce6bb; }
 .rb-bowl-token--appliance { background: #c5e0e6; }
 .rb-workspace .rb-bowl-token:hover { border-color: #365b46; }
+.rb-workspace .rb-bowl-token { cursor: grab; }
+.rb-workspace .rb-bowl-token:active { cursor: grabbing; }
 .rb-workspace .rb-bowl-token:focus-visible { outline-width: 6px; outline-offset: 5px; }
 .rb-overflow-note { margin: 0; font-size: 0.875rem; color: var(--rb-muted); }
 
@@ -237,4 +239,60 @@
 @container (max-width: 46rem) {
   .rb-workspace-grid { grid-template-columns: minmax(0, 1fr); }
   .rb-workspace .rb-selection { grid-column: 1; grid-row: 4; }
+}
+
+.rb-drop-hint {
+  margin: 0 0 0.5rem;
+  color: var(--rb-green);
+  font-size: 0.875rem;
+  line-height: 1.5;
+  text-align: center;
+}
+.rb-drop-zone {
+  fill: transparent;
+  stroke: transparent;
+  stroke-width: 6;
+  stroke-dasharray: 14 12;
+  pointer-events: all;
+}
+.rb-bowl-scene.is-over .rb-drop-zone { stroke: #365b46; }
+.rb-workspace .rb-bowl-front, .rb-workspace .rb-spoon-rig { pointer-events: none; }
+.rb-workspace .rb-bowl-token.is-new { animation: rb-drop-in 380ms ease-out both; }
+.rb-workspace .rb-bowl-token.is-dragged { filter: opacity(0.25); }
+.rb-workspace .rb-remove-button:disabled { opacity: 0.5; cursor: default; }
+.rb-devtools-actions button { cursor: grab; }
+.rb-devtools-actions button:active { cursor: grabbing; }
+.rb-devtools-actions button:disabled { opacity: 0.5; cursor: default; }
+
+/* Portal lives outside the workspace; it must never intercept hit testing. */
+.rb-drag-preview {
+  position: fixed;
+  z-index: 1000;
+  transform: translate(-50%, -50%);
+  display: grid;
+  justify-items: center;
+  gap: 0.25rem;
+  max-width: 13rem;
+  padding: 0.75rem;
+  border: 2px solid #365b46;
+  border-radius: 1rem;
+  background: #fffdf6f2;
+  color: #342d25;
+  box-shadow: 0 8px 24px #0002;
+  pointer-events: none;
+  user-select: none;
+  font: 0.875rem/1.3 'Segoe UI', system-ui, sans-serif;
+  text-align: center;
+}
+.rb-drag-preview > span { font-size: 2.5rem; }
+.rb-drag-preview strong { overflow-wrap: anywhere; }
+.rb-drag-preview small { font-size: 0.875rem; }
+.rb-drag-preview.is-removing { border-color: #a03d30; }
+
+@keyframes rb-drop-in {
+  from { opacity: 0; transform: translateY(-45px) scale(0.8); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .rb-workspace .rb-bowl-token.is-new { animation: none; }
 }

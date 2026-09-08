@@ -1,11 +1,13 @@
 import { useId } from 'react'
 import { itemKey } from './selection'
 import { useBowlSelection } from './useBowlSelection'
+import { useBowlDrag } from './useBowlDrag'
 
 /** The selected-items card belongs inside the left workspace. */
 export default function SelectedItems() {
   const headingId = useId()
   const { items, removeItem, clearItems } = useBowlSelection()
+  const { drag } = useBowlDrag()
 
   return (
     <aside className="rb-selection" aria-labelledby={headingId}>
@@ -30,6 +32,7 @@ export default function SelectedItems() {
                     <button
                       className="rb-remove-button"
                       type="button"
+                      disabled={!!drag}
                       onClick={() => removeItem(item)}
                       aria-label={`Remove ${item.name} (${item.type})`}
                     >
@@ -46,7 +49,7 @@ export default function SelectedItems() {
       <button
         className="rb-clear-button"
         type="button"
-        disabled={items.length === 0}
+        disabled={items.length === 0 || !!drag}
         onClick={clearItems}
       >
         Empty the bowl

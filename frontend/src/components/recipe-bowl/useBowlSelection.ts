@@ -6,6 +6,8 @@ export type BowlSelectionValue = {
   ingredientCount: number
   applianceCount: number
   announcement: string
+  pulse: number
+  lastAddedKey: string | null
   addItem: (item: BowlItem) => void
   removeItem: (item: BowlItemIdentity) => void
   clearItems: () => void

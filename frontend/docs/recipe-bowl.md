@@ -1,68 +1,64 @@
 # Recipe bowl
 
-The bowl workspace occupies the main left section. The two far-right
-ingredient/action-item lists remain separate.
+The left workspace owns the bowl and selected-items card. Ingredient/action-item
+source lists remain in the team's two right-hand sections.
 
-## Current functionality
+## What works
 
-- Shared ingredient/appliance selection with duplicate prevention.
-- Selected-items card, category counts, removal and clear-all.
-- Matching bowl bubbles; click/tap or use Enter/Space to remove.
-- Static bowl/spoon artwork; mixing and recipe search remain disabled.
+- Shared ingredient/appliance selection, counts, removal and clear-all.
+- Drag a source item into the bowl opening to add it; drag a bowl bubble outside
+  the opening to remove it. Dropping it back inside keeps it selected.
+- Click/tap or Enter/Space also adds from a source button or removes a bowl bubble.
+- Escape, pointer cancellation or loss of window focus cancels the drag.
+  Releasing outside the browser viewport does not change the selection.
+- Drop highlight, floating preview and addition animation with reduced-motion support.
 
-Selections reset on a full page refresh. The bowl displays up to 12 bubbles;
-additional selections remain in the list and an overflow count is shown.
+Selections reset on refresh. Only 12 bubbles fit the artwork; extra selections
+remain in the card. Mixing and recipe search are still disabled.
 
-## Main files
+## Connecting source buttons
 
-All component files are in `src/components/recipe-bowl/`:
+`App.tsx` already wraps the layout in `BowlSelectionProvider`.
+`useBowlSelection()` exposes `items`, category counts, `addItem(item)`,
+`removeItem({ id, type })` and `clearItems()`.
 
-- `RecipeWorkspace.tsx` / `RecipeWorkspace.css` — left workspace.
-- `MixingBowl.tsx` — PNG layers and selected bubbles.
-- `SelectedItems.tsx` — grouped selection card.
-- `selection.ts` — item types, reducer and bubble positions.
-- `BowlSelectionProvider.tsx` / `useBowlSelection.ts` — shared state.
-- `SelectionDevTools.tsx` — temporary development-only test buttons.
+The frontend item format is `{ id, type, name, emoji? }`, where `type` is
+`'ingredient'` or `'appliance'`. Use stable IDs; the same type and ID is selected
+only once. The backend's action-item meaning and data format still need agreement.
 
-SVG positions the PNGs together; a clipped front layer hides the lower spoon.
-Changing the bowl artwork may require adjusting its clip path.
+For a component at `src/components/IngredientBubble.tsx`:
 
-## Connecting a teammate's component
+```tsx
+import { useBowlDrag } from './recipe-bowl/useBowlDrag'
+import type { BowlItem } from './recipe-bowl/selection'
 
-`App.tsx` wraps the layout in one `BowlSelectionProvider`. Components inside
-it can call `useBowlSelection()` to access `items`, `ingredientCount`,
-`applianceCount`, `addItem(item)`, `removeItem({ id, type })`, and `clearItems()`.
-
-The proposed frontend item format is:
-
-```ts
-{ id: 'tomato', type: 'ingredient', name: 'Tomato', emoji: '🍅' }
+export default function IngredientBubble({ item }: { item: BowlItem }) {
+  const { bindItem } = useBowlDrag()
+  return <button type="button" {...bindItem(item, 'source')}>{item.name}</button>
+}
 ```
 
-`type` is `'ingredient'` or `'appliance'`; `emoji` is optional.
-The same type and ID is selected only once. Keep IDs stable; names are labels.
-Pass a complete item to `addItem`; no hardcoded catalog lookup is required.
-Call the hook at the top of a component, then call `addItem` in its click handler.
-The backend's meaning of `action-items` and its data format still need agreement.
+The binding handles pointer dragging and click/keyboard activation. Keep its
+event handlers and `touchAction` style; do not add a second `onClick` handler.
+For an unavailable item, pass `true` as the third argument and disable the button.
+These bindings use React state and pointer capture, not native HTML drag data.
 
-## Checking changes
+`usePointerDrag.ts` handles input and cancellation; `dragGeometry.ts` checks the
+oval opening. `MixingBowl.tsx` layers the original PNGs in SVG, with the front
+rim above the spoon. Changing artwork may require adjusting the oval and clip.
 
-From `frontend`:
+## Check locally
 
-```sh
-npm run build
-npm run lint
-npm run dev
-```
+From `frontend`, run `npm run build`, `npm run lint`, then `npm run dev`.
+Expand **Development: test selection and dragging** below the workspace.
 
-Expand **Development: test selection** at the bottom of the left panel.
-Add tomato twice: there should be one tomato. Add pasta and oven: expect
-two ingredients, one appliance, and three bubbles. Remove through the card
-and bowl; check both update together. Empty the bowl and re-add an item.
+- Drag tomato into the opening: one bubble, one selected item and one ingredient.
+- Release pasta outside: nothing added. Click it or use Enter/Space to add it.
+- Drag a bowl bubble back inside: keep it; release outside: remove it from both views.
+- Press Escape or switch windows during a drag: selection stays unchanged.
+- Remove through the card, clear all, re-add, and check the counts stay synchronized.
+- Check touch dragging and scrolling from empty space; enable reduced motion to
+  verify addition animations stop. Check the two right-hand sections still render.
 
-Tab through controls and activate a remove button with Enter/Space.
-Refresh to confirm the empty state, and check that the two right boxes
-remain unchanged. Search stays disabled even when ingredients are selected.
-
-Test controls use `import.meta.env.DEV`: they appear with `npm run dev`,
-not in production builds. No backend request is made in this milestone.
+The sample buttons are development-only (`import.meta.env.DEV`). Teammates can
+connect their source buttons with the hook above. No backend request is made yet.

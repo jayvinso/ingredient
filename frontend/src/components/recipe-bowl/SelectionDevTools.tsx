@@ -1,23 +1,39 @@
+import { itemKey } from './selection'
+import type { BowlItem } from './selection'
 import { useBowlSelection } from './useBowlSelection'
+import { useBowlDrag } from './useBowlDrag'
 
-/** Temporary test buttons; never mounted in a production build. */
+const samples: readonly BowlItem[] = [
+  { id: 'demo-tomato', type: 'ingredient', name: 'Tomato', emoji: '🍅' },
+  { id: 'demo-pasta', type: 'ingredient', name: 'Pasta', emoji: '🍝' },
+  { id: 'demo-oven', type: 'appliance', name: 'Oven', emoji: '♨️' },
+]
+
+/** Temporary drag sources only; not the team's production ingredient lists. */
 export default function SelectionDevTools() {
-  const { addItem } = useBowlSelection()
+  const { items } = useBowlSelection()
+  const { bindItem } = useBowlDrag()
 
   return (
     <details className="rb-devtools">
-      <summary>Development: test selection</summary>
-      <p>Temporary controls until the team's lists connect. Adding the same item twice keeps one copy.</p>
+      <summary>Development: test selection and dragging</summary>
+      <p>Drag a sample into the bowl, or click to add. Drag selected bubbles out to remove. Escape cancels a drag.</p>
       <div className="rb-devtools-actions">
-        <button type="button" onClick={() => addItem({
-          id: 'demo-tomato', type: 'ingredient', name: 'Tomato', emoji: '🍅',
-        })}>Add tomato</button>
-        <button type="button" onClick={() => addItem({
-          id: 'demo-pasta', type: 'ingredient', name: 'Pasta', emoji: '🍝',
-        })}>Add pasta</button>
-        <button type="button" onClick={() => addItem({
-          id: 'demo-oven', type: 'appliance', name: 'Oven', emoji: '♨️',
-        })}>Add oven</button>
+        {samples.map((item) => {
+          const selected = items.some((entry) => itemKey(entry) === itemKey(item))
+          return (
+            <button
+              key={itemKey(item)}
+              type="button"
+              {...bindItem(item, 'source', selected)}
+              disabled={selected}
+              aria-label={selected ? `${item.name}, already added` : `Add ${item.name}`}
+            >
+              <span aria-hidden="true">{item.emoji}</span>{' '}
+              {item.name}{selected ? ' ✓' : ''}
+            </button>
+          )
+        })}
       </div>
     </details>
   )
