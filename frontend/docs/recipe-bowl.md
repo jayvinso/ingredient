@@ -14,7 +14,10 @@ source lists remain in the team's two right-hand sections.
 - Drop highlight, floating preview and addition animation with reduced-motion support.
 
 Selections reset on refresh. Only 12 bubbles fit the artwork; extra selections
-remain in the card. Mixing and recipe search are still disabled.
+remain in the card. With at least one ingredient, **Mix & find a recipe** starts
+stirring and opens a recipe dialog. Selection is locked while searching; Cancel
+or Escape stops the search. Closing the dialog preserves the bowl and returns
+focus to the search button. Reduced motion disables stirring and drop animations.
 
 ## Connecting source buttons
 
@@ -41,6 +44,8 @@ export default function IngredientBubble({ item }: { item: BowlItem }) {
 The binding handles pointer dragging and click/keyboard activation. Keep its
 event handlers and `touchAction` style; do not add a second `onClick` handler.
 For an unavailable item, pass `true` as the third argument and disable the button.
+Source buttons should also read `locked` from `useBowlSelection()` and disable
+themselves while it is true. The provider blocks selection mutations during search.
 These bindings use React state and pointer capture, not native HTML drag data.
 
 `usePointerDrag.ts` handles input and cancellation; `dragGeometry.ts` checks the
@@ -61,4 +66,24 @@ Expand **Development: test selection and dragging** below the workspace.
   verify addition animations stop. Check the two right-hand sections still render.
 
 The sample buttons are development-only (`import.meta.env.DEV`). Teammates can
-connect their source buttons with the hook above. No backend request is made yet.
+connect their source buttons with the hook above.
+
+## Recipe service
+
+Without configuration, the UI labels itself **Demo mode** and displays a fixed
+sample recipe, not a match for the submitted selection. The selected items are
+shown separately. **Development: test recipe search** provides Success, Error
+and Slow response scenarios. Test cancellation, retry, dialog scrolling,
+Tab/Shift+Tab containment, Escape and focus restoration before committing.
+
+`recipeService.ts` follows `backend/swagger.yml`: `GET /recipes?query=...`, with
+an `application/json` string response. To connect a running backend, set
+`VITE_RECIPE_API_BASE_URL` in a local `frontend/.env.local` and restart Vite.
+Use the server base URL, without `/recipes`; the backend must allow the frontend
+origin through CORS. Never put secrets in a `VITE_` variable. The free-text query
+includes ingredient and appliance names; confirm its wording with the backend team.
+
+`useRecipeFlow.ts` snapshots the selection, rejects repeated starts, aborts canceled
+requests and times out after 30 seconds. Successful results wait at least 1.8 seconds
+for the mixing sequence. `RecipeDialog.tsx` renders the returned string as plain text.
+There are no backend, dependency, shared-layout or source-list changes in this step.

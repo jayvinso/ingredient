@@ -10,7 +10,7 @@ import { useDropFeedback } from './useDropFeedback'
 export default function MixingBowl() {
   const id = useId()
   const bodyRef = useRef<SVGGElement>(null)
-  const { items, pulse, lastAddedKey } = useBowlSelection()
+  const { items, locked, pulse, lastAddedKey } = useBowlSelection()
   const { drag, bowlRef, bindItem } = useBowlDrag()
   const titleId = `${id}-title`
   const frontClipId = `${id}-front`
@@ -19,7 +19,7 @@ export default function MixingBowl() {
 
   return (
     <svg
-      className={`rb-bowl-scene ${drag?.overBowl ? 'is-over' : ''}`}
+      className={`rb-bowl-scene ${drag?.overBowl ? 'is-over' : ''} ${locked ? 'is-mixing' : ''}`}
       viewBox="100 0 1336 1220"
       role="group"
       aria-labelledby={titleId}
@@ -58,6 +58,7 @@ export default function MixingBowl() {
             >
               <button
                 type="button"
+                disabled={locked}
                 {...bindItem(item, 'bowl')}
                 className={`rb-bowl-token rb-bowl-token--${item.type} ${lastAddedKey === key ? 'is-new' : ''} ${moving ? 'is-dragged' : ''}`}
                 aria-label={`Remove ${item.name} (${item.type}) from the bowl`}
@@ -69,8 +70,10 @@ export default function MixingBowl() {
           )
         })}
 
-        <g transform="translate(895 680) rotate(28)" className="rb-spoon-rig">
-          <image href={spoonImage} x="-256" y="-617" width="512" height="768" />
+        <g className="rb-stir-motion">
+          <g transform="translate(895 680) rotate(28)" className="rb-spoon-rig">
+            <image href={spoonImage} x="-256" y="-617" width="512" height="768" />
+          </g>
         </g>
         {/* Redraw the front above the spoon to hide its lower end. */}
         <g transform="translate(0 160)" className="rb-bowl-front">

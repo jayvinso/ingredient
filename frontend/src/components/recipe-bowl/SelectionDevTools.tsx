@@ -11,7 +11,7 @@ const samples: readonly BowlItem[] = [
 
 /** Temporary drag sources only; not the team's production ingredient lists. */
 export default function SelectionDevTools() {
-  const { items } = useBowlSelection()
+  const { items, locked } = useBowlSelection()
   const { bindItem } = useBowlDrag()
 
   return (
@@ -26,7 +26,7 @@ export default function SelectionDevTools() {
               key={itemKey(item)}
               type="button"
               {...bindItem(item, 'source', selected)}
-              disabled={selected}
+              disabled={selected || locked}
               aria-label={selected ? `${item.name}, already added` : `Add ${item.name}`}
             >
               <span aria-hidden="true">{item.emoji}</span>{' '}

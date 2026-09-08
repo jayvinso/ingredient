@@ -6,7 +6,7 @@ import { useBowlDrag } from './useBowlDrag'
 /** The selected-items card belongs inside the left workspace. */
 export default function SelectedItems() {
   const headingId = useId()
-  const { items, removeItem, clearItems } = useBowlSelection()
+  const { items, locked, removeItem, clearItems } = useBowlSelection()
   const { drag } = useBowlDrag()
 
   return (
@@ -32,7 +32,7 @@ export default function SelectedItems() {
                     <button
                       className="rb-remove-button"
                       type="button"
-                      disabled={!!drag}
+                      disabled={locked || !!drag}
                       onClick={() => removeItem(item)}
                       aria-label={`Remove ${item.name} (${item.type})`}
                     >
@@ -49,7 +49,7 @@ export default function SelectedItems() {
       <button
         className="rb-clear-button"
         type="button"
-        disabled={items.length === 0 || !!drag}
+        disabled={locked || items.length === 0 || !!drag}
         onClick={clearItems}
       >
         Empty the bowl

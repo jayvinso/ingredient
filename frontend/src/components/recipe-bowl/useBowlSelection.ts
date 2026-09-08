@@ -2,6 +2,7 @@ import { createContext, useContext } from 'react'
 import type { BowlItem, BowlItemIdentity } from './selection'
 
 export type BowlSelectionValue = {
+  locked: boolean
   items: readonly BowlItem[]
   ingredientCount: number
   applianceCount: number

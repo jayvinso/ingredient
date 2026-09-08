@@ -18,6 +18,7 @@ type PendingDrag = {
 export function usePointerDrag(
   addItem: (item: BowlItem) => void,
   removeItem: (item: BowlItemIdentity) => void,
+  locked = false,
 ): BowlDragValue {
   const bowlRef = useRef<SVGEllipseElement>(null)
   const pending = useRef<PendingDrag | null>(null)
@@ -69,6 +70,7 @@ export function usePointerDrag(
   }
 
   function bindItem(item: BowlItem, origin: DragOrigin, unavailable = false): DragBindings {
+    unavailable = unavailable || locked
     return {
       draggable: false,
       style: { touchAction: 'none', userSelect: 'none' },
