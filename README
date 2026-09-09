@@ -1,3 +1,19 @@
-TO RUN FRONTEND:
-cd frontend
-npm run dev
+
+You should only need docker desktop installed, running "docker compose up" should download 
+all the other stuff you need.
+
+To start, run (first time might take a while):
+
+  - docker compose up --build --detach
+
+Once its finished, you access the site via http://localhost
+
+You can test the backend with http://localhost/api/
+
+And you can access the elasticsearch database with http://localhost/kibana
+  - The username/password is elastic and password
+
+To stop, run:
+
+  - docker compose down 
+
