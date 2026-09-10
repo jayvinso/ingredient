@@ -1,219 +1,17 @@
+include:
+  - compose.base.yaml
+  - compose.f.yaml
+  - compose.fb.yaml
+  - compose.fbe.yaml
 
-###################################################
-# Services
-#
-# The services define the individual components of our application stack.
-# For each service, a separate container will be launched.
-###################################################
 services:
 
-
-  ###################################################
-  # Service: proxy
-  #
-  # This service is a reverse proxy that will route requests to the appropriate
-  # service. Think of it like a HTTP router or a load balancer. It simply 
-  # forwards requests and allows us to simulate the final version of the 
-  # application where the frontend and backend are bundled together.
-  #
-  # We also expose port 80 to connect to the proxy from the host machine.
-  ###################################################
   nginx:
-    image: nginx:alpine
-    ports:
-      - "80:80"
-      - "443:443"
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-      - certs:/etc/nginx/certs:ro
     depends_on:
-      frontend:
-        condition: service_started
-      backend:
-        condition: service_started
-      es01:
-        condition: service_healthy
       kibana:
         condition: service_healthy
-    networks:
-      - proxy
-
-
-  ###################################################
-  # Service: client
-  #
-  # The client service is the React app that provides the frontend for the app.
-  # When the container starts, it will use the image that results from building
-  # the Dockerfile, targeting the dev stage.
-  #
-  # The Compose Watch configuration is used to automatically sync the code from
-  # the host machine to the container. This allows the client to be automatically
-  # reloaded when code changes are made.
-  # 
-  # The labels are used to configure Traefik (the reverse proxy) with the 
-  # appropriate routing rules. In this case, all requests to localhost will be
-  # forwarded to this service's port 5173.
-  ###################################################
-  frontend:
-    networks:
-      - proxy
-    build:
-      context: ./
-      dockerfile: ./docker/frontend/Dockerfile
-      target: client-dev
-    develop:
-      watch:
-        - path: ./client/src
-          action: sync
-          target: /usr/local/app/src
-        - path: ./client/package.json
-          action: rebuild
-
-  ###################################################
-  # Service: backend
-  # 
-  # This service is the Node.js server that provides the API for the app.
-  # When the container starts, it will use the image that results
-  # from building the Dockerfile, targeting the backend-dev stage.
-  #
-  # The Compose Watch configuration is used to automatically sync the code
-  # from the host machine to the container. This allows the server to be
-  # automatically reloaded when code changes are made.
-  #
-  # The environment variables configure the application to connect to the
-  # database, which is also configured in this Compose file. We obviously
-  # wouldn't hard-code these values in a production environment. But, in
-  # dev, these values are fine.
-  #
-  # Finally, the labels are used to configure Traefik (the reverse proxy) with
-  # the appropriate routing rules. In this case, all requests to localhost/api/*
-  # will be forwarded to this service's port 8000. 
-  ###################################################
-  backend:
-    networks:
-      - proxy
-    build:
-      context: ./
-      dockerfile: ./docker/backend/Dockerfile
-      target: backend-dev
-    develop:
-      watch:
-        - path: ./backend/django
-          action: sync
-          target: /usr/local/app/src
-        - path: ./backend/requirements.txt
-          action: rebuild
-
-  ###################################################
-  # Service: Elasticsearch
-  # 
-  ###################################################
-
-  setup:
-    image: elasticsearch:9.5.3
-    networks:
-      - proxy
-    volumes:
-      - certs:/usr/share/elasticsearch/config/certs
-    user: "0"
-    command: >
-      bash -c '
-        if [ x${ELASTIC_PASSWORD} == x ]; then
-          echo "Set the ELASTIC_PASSWORD environment variable in the .env file";
-          exit 1;
-        elif [ x${KIBANA_PASSWORD} == x ]; then
-          echo "Set the KIBANA_PASSWORD environment variable in the .env file";
-          exit 1;
-        fi;
-        if [ ! -f config/certs/ca.zip ]; then
-          echo "Creating CA";
-          bin/elasticsearch-certutil ca --silent --pem -out config/certs/ca.zip;
-          unzip config/certs/ca.zip -d config/certs;
-        fi;
-        if [ ! -f config/certs/certs.zip ]; then
-          echo "Creating certs";
-          echo -ne \
-          "instances:\n"\
-          "  - name: es01\n"\
-          "    dns:\n"\
-          "      - es01\n"\
-          "      - localhost\n"\
-          "    ip:\n"\
-          "      - 127.0.0.1\n"\
-          "  - name: es02\n"\
-          "    dns:\n"\
-          "      - es02\n"\
-          "      - localhost\n"\
-          "    ip:\n"\
-          "      - 127.0.0.1\n"\
-          "  - name: es03\n"\
-          "    dns:\n"\
-          "      - es03\n"\
-          "      - localhost\n"\
-          "    ip:\n"\
-          "      - 127.0.0.1\n"\
-          > config/certs/instances.yml;
-          bin/elasticsearch-certutil cert --silent --pem -out config/certs/certs.zip --in config/certs/instances.yml --ca-cert config/certs/ca/ca.crt --ca-key config/certs/ca/ca.key;
-          unzip config/certs/certs.zip -d config/certs;
-        fi;
-        echo "Setting file permissions"
-        chown -R root:root config/certs;
-        find . -type d -exec chmod 750 \{\} \;;
-        find . -type f -exec chmod 640 \{\} \;;
-        echo "Waiting for Elasticsearch availability";
-        until curl -s --cacert config/certs/ca/ca.crt https://es01:9200 | grep -q "missing authentication credentials"; do sleep 10; done;
-        echo "Setting kibana_system password";
-        until curl -s -X POST --cacert config/certs/ca/ca.crt -u "elastic:${ELASTIC_PASSWORD}" -H "Content-Type: application/json" https://es01:9200/_security/user/kibana_system/_password -d "{\"password\":\"${KIBANA_PASSWORD}\"}" | grep -q "^{}"; do sleep 10; done;
-        echo "All done!";
-      '
-    healthcheck:
-      test: ["CMD-SHELL", "[ -f config/certs/es01/es01.crt ]"]
-      interval: 1s
-      timeout: 5s
-      retries: 120
-
-  es01:
-    depends_on:
-      setup:
-        condition: service_healthy
-    image: elasticsearch:9.5.3
-    volumes:
-      - certs:/usr/share/elasticsearch/config/certs
-      - esdata01:/usr/share/elasticsearch/data
-    networks:
-      - proxy
-    environment:
-      - node.name=es01
-      - cluster.name=${CLUSTER_NAME}
-      - cluster.initial_master_nodes=es01
-      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
-      - bootstrap.memory_lock=true
-      - xpack.security.enabled=true
-      - xpack.security.http.ssl.enabled=true
-      - xpack.security.http.ssl.key=certs/es01/es01.key
-      - xpack.security.http.ssl.certificate=certs/es01/es01.crt
-      - xpack.security.http.ssl.certificate_authorities=certs/ca/ca.crt
-      - xpack.security.transport.ssl.enabled=true
-      - xpack.security.transport.ssl.key=certs/es01/es01.key
-      - xpack.security.transport.ssl.certificate=certs/es01/es01.crt
-      - xpack.security.transport.ssl.certificate_authorities=certs/ca/ca.crt
-      - xpack.security.transport.ssl.verification_mode=certificate
-      - xpack.license.self_generated.type=${LICENSE}
-      - xpack.ml.use_auto_machine_memory_percent=true
-    mem_limit: ${MEM_LIMIT}
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
-    healthcheck:
-      test:
-        [
-          "CMD-SHELL",
-          "curl -s --cacert config/certs/ca/ca.crt https://localhost:9200 | grep -q 'missing authentication credentials'",
-        ]
-      interval: 10s
-      timeout: 10s
-      retries: 120
 
   kibana:
     depends_on:
@@ -249,14 +47,6 @@ services:
       timeout: 10s
       retries: 120
 
-networks:
-  proxy:
-    driver: bridge
-
 volumes:
-  certs:
-    driver: local
-  esdata01:
-    driver: local
   kibanadata:
     driver: local

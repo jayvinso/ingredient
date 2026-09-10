@@ -1,0 +1,41 @@
+include:
+  - compose.base.yaml
+
+services:
+
+  nginx:
+    volumes:
+      - ./nginx/nginx_f.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      frontend:
+        condition: service_started
+
+  ###################################################
+  # Service: client
+  #
+  # The client service is the React app that provides the frontend for the app.
+  # When the container starts, it will use the image that results from building
+  # the Dockerfile, targeting the dev stage.
+  #
+  # The Compose Watch configuration is used to automatically sync the code from
+  # the host machine to the container. This allows the client to be automatically
+  # reloaded when code changes are made.
+  # 
+  # The labels are used to configure Traefik (the reverse proxy) with the 
+  # appropriate routing rules. In this case, all requests to localhost will be
+  # forwarded to this service's port 5173.
+  ###################################################
+  frontend:
+    networks:
+      - proxy
+    build:
+      context: ./
+      dockerfile: ./frontend/Dockerfile
+      target: client-dev
+    develop:
+      watch:
+        - path: ./frontend/src
+          action: sync
+          target: /usr/local/app/src
+        - path: ./frontend/package.json
+          action: rebuild

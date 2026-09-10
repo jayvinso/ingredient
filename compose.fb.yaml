@@ -1,12 +1,17 @@
-###################################################
-# Services
-#
-# The services define the individual components of our application stack.
-# For each service, a separate container will be launched.
-###################################################
+include:
+  - compose.base.yaml
+  - compose.f.yaml
+
 services:
 
-  
+  nginx:
+    volumes:
+      - ./nginx/nginx_fb.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      backend:
+        condition: service_started
+    
+
   ###################################################
   # Service: backend
   # 
@@ -32,7 +37,7 @@ services:
       - proxy
     build:
       context: ./
-      dockerfile: ./docker/backend/Dockerfile
+      dockerfile: ./backend/Dockerfile
       target: backend-dev
     develop:
       watch:

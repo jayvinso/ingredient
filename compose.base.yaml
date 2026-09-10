@@ -1,0 +1,41 @@
+
+###################################################
+# Services
+#
+# The services define the individual components of our application stack.
+# For each service, a separate container will be launched.
+###################################################
+services:
+
+
+  ###################################################
+  # Service: proxy
+  #
+  # This service is a reverse proxy that will route requests to the appropriate
+  # service. Think of it like a HTTP router or a load balancer. It simply 
+  # forwards requests and allows us to simulate the final version of the 
+  # application where the frontend and backend are bundled together.
+  #
+  # We also expose port 80 to connect to the proxy from the host machine.
+  ###################################################
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx_base.conf:/etc/nginx/nginx_base.conf:ro
+      - certs:/etc/nginx/certs:ro
+    networks:
+      - proxy
+
+
+
+
+networks:
+  proxy:
+    driver: bridge
+
+volumes:
+  certs:
+    driver: local
