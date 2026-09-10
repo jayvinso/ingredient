@@ -1,5 +1,5 @@
 
-You should only need docker desktop installed, running "docker compose up" should download 
+You should only need docker desktop installed, docker compose should download 
 all the other stuff you need.
 
 To start, run (first time might take a while):
@@ -11,9 +11,26 @@ Once its finished, you access the site via http://localhost
 You can test the backend with http://localhost/api/
 
 And you can access the elasticsearch database with http://localhost/kibana
-  - The username/password is elastic and password
+  - The username/password is "elastic" and "password"
 
 To stop, run:
-
   - docker compose down 
+
+
+It takes about a minute to start the full project with elastic search and kibana. 
+If you don't want to do that, you can use the other compose.yaml files.
+
+To run docker: 
+- "docker compose -f ./compose.yaml --build --detach"
+To stop: 
+- "docker compose -f ./compose.yaml down"
+
+Replace "compose.yaml" with whichever configuration you want.
+
+compose.f.yaml runs only the frontend
+compose.fb.yaml runs only the frontend and django backend
+compose.fbe.yaml runs the frontend, backend, and elastic search, but not kibana
+
+
+- "docker compose -f ./compose.f.yaml --build --watch" can be useful since it updates the frontend in real time
 
