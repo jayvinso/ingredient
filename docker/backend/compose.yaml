@@ -1,0 +1,43 @@
+###################################################
+# Services
+#
+# The services define the individual components of our application stack.
+# For each service, a separate container will be launched.
+###################################################
+services:
+
+  
+  ###################################################
+  # Service: backend
+  # 
+  # This service is the Node.js server that provides the API for the app.
+  # When the container starts, it will use the image that results
+  # from building the Dockerfile, targeting the backend-dev stage.
+  #
+  # The Compose Watch configuration is used to automatically sync the code
+  # from the host machine to the container. This allows the server to be
+  # automatically reloaded when code changes are made.
+  #
+  # The environment variables configure the application to connect to the
+  # database, which is also configured in this Compose file. We obviously
+  # wouldn't hard-code these values in a production environment. But, in
+  # dev, these values are fine.
+  #
+  # Finally, the labels are used to configure Traefik (the reverse proxy) with
+  # the appropriate routing rules. In this case, all requests to localhost/api/*
+  # will be forwarded to this service's port 8000. 
+  ###################################################
+  backend:
+    networks:
+      - proxy
+    build:
+      context: ./
+      dockerfile: ./docker/backend/Dockerfile
+      target: backend-dev
+    develop:
+      watch:
+        - path: ./backend/django
+          action: sync
+          target: /usr/local/app/src
+        - path: ./backend/requirements.txt
+          action: rebuild

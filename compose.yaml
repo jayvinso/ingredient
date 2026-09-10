@@ -59,6 +59,7 @@ services:
       - proxy
     build:
       context: ./
+      dockerfile: ./docker/frontend/Dockerfile
       target: client-dev
     develop:
       watch:
@@ -93,6 +94,7 @@ services:
       - proxy
     build:
       context: ./
+      dockerfile: ./docker/backend/Dockerfile
       target: backend-dev
     develop:
       watch:
