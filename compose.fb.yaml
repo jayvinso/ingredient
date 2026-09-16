@@ -42,7 +42,6 @@ services:
     develop:
       watch:
         - path: ./backend/django
-          action: sync
-          target: /usr/local/app/src
+          action: rebuild
         - path: ./backend/requirements.txt
           action: rebuild
