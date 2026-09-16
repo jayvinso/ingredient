@@ -16,6 +16,10 @@ services:
   # Service: Elasticsearch
   ###################################################
 
+  backend:
+    volumes:
+      - certs:/usr/share/elasticsearch/config/certs
+
   setup:
     image: elasticsearch:9.5.3
     networks:
