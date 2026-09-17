@@ -22,3 +22,16 @@ COPY backend/django/ingredient_backend ./ingredient_backend
 COPY backend/django/manage.py ./
 COPY backend/django/db.sqlite3 ./
 CMD [ "python", "manage.py", "runserver", "0.0.0.0:8000"]
+
+
+###################################################
+# Stage: load data
+#
+# This stage loads data into elastic search 
+###################################################
+FROM python:3 AS data
+COPY backend/data_loader/requirements.txt ./
+RUN pip install --no-cache-dir -r requirements.txt
+COPY backend/data_loader/recipes.json ./
+COPY backend/data_loader/load_recipes.py ./
+CMD [ "python", "load_recipes.py"]

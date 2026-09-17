@@ -20,6 +20,26 @@ services:
     volumes:
       - certs:/usr/share/elasticsearch/config/certs
 
+  data:
+    networks:
+      - proxy
+    volumes: 
+      - certs:/usr/share/elasticsearch/config/certs
+    depends_on:
+      nginx:
+        condition: service_started
+    build:
+      context: ./
+      dockerfile: ./backend/Dockerfile
+      target: data
+    develop:
+      watch:
+        - path: ./backend/data_loader/load_recipes.py
+          action: rebuild
+        - path: ./backend/data_loader/recipes.json
+          action: rebuild
+    
+
   setup:
     image: elasticsearch:9.5.3
     networks:
