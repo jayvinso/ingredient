@@ -1,14 +1,18 @@
 import re
 
+# Change anything you want in this file, how I was doing it probably wasn't a great way to do it anyways
+# - Kurt
+
 def get_mult(str):
+    # Regex things like this: "3 3/4"
     return re.search("\d+[.\d*]? \d+/\d+", str)
 
 f = open("recipes.csv")
 
-f.readline()
+f.readline() # removes header
 x = re.split(r',\"\[\"\"', f.readline())
 
-
+print(x[0])
 title = x[0].split(",")[1]
 
 
