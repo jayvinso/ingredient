@@ -1,0 +1,23 @@
+A good way for elastic search to parse data is in json.
+For the json, everything must be on one line.
+
+You can find an example of the format that elastic search accepts in recipes_example.json
+
+For recipes, the format is this:
+
+{   "_op_type": "index", // Specifies the operation type is to insert data into an index 
+    "_index": "recipes", // Specifies the specific index use
+	"id": "bacon-lettuce", 
+	"title": "Bacon Lettuce", // Title of recipe
+	"description": [{"bacon": 0.55, "lettuce": 0.45}] // Ingredients of recipe given as token-weight pairs. The sum of all weights should be 1. 
+}
+
+
+For ingredients, the format is this:
+
+{   "_op_type": "index", // Specifies the operation type is to insert data into an index 
+    "_index": "ingredients", // Specifies the specific index use
+	"id": "bacon", 
+	"title": "bacon", 
+}
+
