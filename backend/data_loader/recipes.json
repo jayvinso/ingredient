@@ -1,0 +1,1 @@
+[{"_op_type": "index", "_index": "my-index", "id": "bacon", "title": "bacon lettuce", "description": [{"bacon": 0.55, "lettuce": 0.3}]},{"_op_type": "index", "_index": "my-index", "id": "brocoli salad", "title": "brocoli salad", "description": [{"brocoli": 0.55, "lettuce": 0.2}]}]

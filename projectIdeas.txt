@@ -1,0 +1,48 @@
+[1]: Context-based recipe guessing
+
+User has access to search engine of all ingredients and can mix them to create a recipe.
+This recipe is then compared to the daily recipe (like wordle or contexto) and given a score of how
+similar it is. User manipulates recipe until they reach the hidden daily recipe.
+(Potential additional ideas: give hints for individual ingredients contextually)
+Requirements:
+Base requirements as 2-simple for recipe creation
+Display score and hints for daily recipe
+Create win condition on website (potentially save completion with cookie in browser)
+Backend score comparison to hidden daily recipe
+Backend contextually give hints
+
+[2]: Arbitrary recipe creator
+
+[2-simple]: User has access to search engine of all ingredients and can mix them to create a recipe
+(no intermediate ingredients, no kitchen tools, extremely simple as almost proof of concept that project works)
+Requirements:
+Drag and drop ingredients into "play" area in web page
+Drag and drop ingredients to "mix" (like bowl in current web page or could make more arbitrary like infinite craft)
+Query ingredients to get image and search for choices on user search
+Query recipes based on ingredients mixed
+
+[2-complex]: User now has intermediate ingredients and cooking utensils
+Requirements:
+Use utensils to manipulate ingredients in play area
+Give recipes when intermediate ingredients become a recipe
+Query intermediate ingredients based on utensils
+Search recipes based specifically on intermediate ingredients
+
+[3]: Ingredient exploring game
+
+User has access to a few ingredients at start of "game" and mixes to create a recipe.
+Each unique recipe unlocks new ingredients based upon the recipe.
+No end goal but general goal to see if you can reach a specific recipe of your choice or how much you can unlock.
+Requirements:
+Initial same as 2-simple
+Frontend limit ingredients and save which are unlocked
+Backend determines based on current ingredients unlocked what new ones should be unlocked based on new recipe
+
+---------------------------------------------------------------------
+
+Potential overall project idea:
+Implement the simplest idea first, then the most interesting idea and keep going through the semester
+and stopping when the next idea would take to long to implement throughout the semester.
+
+Proposal:
+[2-simple] -> [1] -> [3] -> [2-complex]

@@ -1,0 +1,52 @@
+include:
+  - compose.base.yaml
+  - compose.f.yaml
+  - compose.fb.yaml
+  - compose.fbe.yaml
+
+services:
+
+  nginx:
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      kibana:
+        condition: service_healthy
+
+  kibana:
+    depends_on:
+      es01:
+        condition: service_healthy
+
+    image: kibana:9.5.3
+    volumes:
+      - certs:/usr/share/kibana/config/certs
+      - kibanadata:/usr/share/kibana/data
+    networks:
+      - proxy
+    environment:
+      - SERVERNAME=kibana
+      - SERVER_BASEPATH=/kibana
+      - ELASTICSEARCH_HOSTS=https://es01:9200/
+      - ELASTICSEARCH_USERNAME=kibana_system
+      - ELASTICSEARCH_PASSWORD=${KIBANA_PASSWORD}
+      - ELASTICSEARCH_SSL_CERTIFICATEAUTHORITIES=config/certs/ca/ca.crt
+
+      - XPACK_ENCRYPTEDSAVEDOBJECTS_ENCRYPTIONKEY=${KIBANA_ENCRYPTION_KEY}
+      - XPACK_SECURITY_ENCRYPTIONKEY=${KIBANA_SECURITY_ENCRYPTION_KEY}
+      - XPACK_REPORTING_ENCRYPTIONKEY=${KIBANA_REPORTING_ENCRYPTION_KEY}
+
+    mem_limit: ${MEM_LIMIT}
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "curl -s -I --cacert config/certs/ca/ca.crt https://es01:9200/ | grep -q 'HTTP/1.1 401 Unauthorized'",
+        ]
+      interval: 10s
+      timeout: 10s
+      retries: 120
+
+volumes:
+  kibanadata:
+    driver: local
