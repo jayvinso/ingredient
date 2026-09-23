@@ -8,7 +8,7 @@ es = Elasticsearch('https://es01:9200', ca_certs="/usr/share/elasticsearch/confi
                        basic_auth=("elastic", "password"))
 
 try:
-    es.indices.delete(index="my-index")
+    es.indices.delete(index="recipes")
 except:
     print("Creating index")
 
@@ -27,7 +27,7 @@ mappings = {
     }
 }
 
-es.indices.create(index="my-index", mappings=mappings, settings=settings)
+es.indices.create(index="recipes", mappings=mappings, settings=settings)
 
 print("Hello world")
 
