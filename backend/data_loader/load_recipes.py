@@ -29,7 +29,6 @@ mappings = {
 
 es.indices.create(index="recipes", mappings=mappings, settings=settings)
 
-print("Hello world")
 
 with open("recipes.json") as file:
     docs = json.loads(file.read())
