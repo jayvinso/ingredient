@@ -1,39 +1,177 @@
-section { border: 1px solid; }
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 320px);
+  gap: 16px;
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding: 16px;
+  background: #e9e2d4;
+}
 
-/* Let the bowl workspace shrink or scroll without changing the sidebar. */
-.layout > .main {
+.main {
   min-width: 0;
-  min-height: 0;
-  overflow: auto;
+  overflow: hidden;
+  border: 1px solid #d2c4ad;
+  border-radius: 20px;
+  box-shadow:
+    0 3px 8px rgb(67 49 27 / 8%),
+    0 20px 48px rgb(67 49 27 / 12%),
+    inset 0 1px 0 rgb(255 255 255 / 75%);
 }
 
 .right {
   display: grid;
-  grid-template-rows: 1fr 1fr;
+  grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
   gap: 16px;
-  min-height: 0;
+  min-width: 0;
 }
 
-.right section { min-height: 0; overflow-y: auto; }
-
-.layout {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 320px;
-  gap: 16px;
-  height: 100vh;
-  height: 100dvh;
-  padding: 16px;
+.source-panel {
+  position: relative;
+  min-height: 240px;
+  overflow: auto;
+  padding: 26px 24px 24px;
+  border: 1px solid #d2c4ad;
+  border-radius: 20px;
+  background: linear-gradient(145deg, #fffdf7, #f8efe1);
+  color: #342d25;
+  box-shadow:
+    0 2px 4px rgb(70 48 25 / 8%),
+    0 16px 34px rgb(70 48 25 / 10%),
+    inset 0 1px 0 rgb(255 255 255 / 85%);
+  font-family: 'Segoe UI', system-ui, sans-serif;
 }
 
-/* Preserve both source sections while giving the bowl usable room on phones. */
-@media (max-width: 760px) {
+.source-panel::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 24px;
+  right: 24px;
+  height: 3px;
+  border-radius: 0 0 999px 999px;
+  background: linear-gradient(
+    90deg,
+    var(--rb-green, #365b46),
+    #9a7547
+  );
+  opacity: 0.7;
+}
+
+.source-panel__eyebrow {
+  margin: 0 0 16px;
+  color: #365b46;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.source-panel h2 {
+  margin: 0 0 8px;
+  font: 400 28px/1.2 Georgia, serif;
+}
+
+.source-panel > p:not(.source-panel__eyebrow) {
+  margin: 0;
+  color: #665c50;
+  line-height: 1.5;
+}
+
+.source-panel__empty {
+  margin-top: 28px;
+  padding: 20px;
+  border: 1px dashed #cbbfa9;
+  border-radius: 12px;
+  background: #f7f1e5;
+  color: #665c50;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.source-samples {
+  margin-top: 28px;
+}
+
+.source-samples__label {
+  margin: 0 0 12px;
+  color: #365b46;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.source-samples__items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.source-samples__items button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 8px 14px;
+  border: 1px solid #cbbfa9;
+  border-radius: 999px;
+  background: #fffdf7;
+  color: #342d25;
+  font: inherit;
+  cursor: grab;
+  transition:
+    border-color 150ms ease,
+    background-color 150ms ease,
+    transform 150ms ease;
+}
+
+.source-samples__items button:hover:not(:disabled) {
+  border-color: #365b46;
+  background: #eaf0e3;
+  transform: translateY(-1px);
+}
+
+.source-samples__items button:active:not(:disabled) {
+  cursor: grabbing;
+  transform: translateY(0);
+}
+
+.source-samples__items button:focus-visible {
+  outline: 3px solid #286650;
+  outline-offset: 3px;
+}
+
+.source-samples__items button:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+
+.source-samples__hint {
+  margin: 14px 0 0;
+  color: #665c50;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+@media (max-width: 900px) {
   .layout {
     grid-template-columns: minmax(0, 1fr);
-    height: auto;
-    min-height: 100dvh;
     padding: 12px;
-    gap: 12px;
   }
-  .layout > .main { overflow: visible; }
-  .right { grid-template-rows: repeat(2, minmax(14rem, auto)); }
+
+  .right {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: auto;
+  }
+}
+
+@media (max-width: 620px) {
+  .right {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .source-samples__items button {
+    transition: none;
+  }
 }
