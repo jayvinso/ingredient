@@ -2,6 +2,7 @@ import './App.css'
 import RecipeWorkspace from './components/recipe-bowl/RecipeWorkspace'
 import BowlSelectionProvider from './components/recipe-bowl/BowlSelectionProvider'
 import SelectionDevTools from './components/recipe-bowl/SelectionDevTools'
+import ThemeControls from './components/recipe-bowl/ThemeControls'
 
 function App() {
   return (
@@ -12,6 +13,8 @@ function App() {
         </section>
 
         <aside className="right" aria-label="Things to add to your bowl">
+          <ThemeControls />
+
           <section className="source-panel">
             <p className="source-panel__eyebrow">01 / Choose</p>
             <h2>Ingredients</h2>

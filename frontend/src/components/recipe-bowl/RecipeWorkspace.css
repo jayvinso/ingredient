@@ -2,9 +2,9 @@
 .rb-workspace {
   container-type: inline-size;
 
-  --rb-ink: #342d25;
-  --rb-muted: #665c50;
-  --rb-green: #365b46;
+  --rb-ink: var(--theme-text);
+  --rb-muted: var(--theme-muted);
+  --rb-green: var(--theme-accent);
   --rb-border: #d7cfbd;
   --rb-surface: #fffdf6;
 
@@ -601,4 +601,76 @@
   .rb-workspace .rb-bowl-token.is-new {
     animation: none;
   }
+}
+
+.rb-workspace {
+  background:
+    repeating-linear-gradient(
+      0deg,
+      rgb(var(--theme-shadow) / 2%) 0 1px,
+      transparent 1px 4px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      rgb(var(--theme-shadow) / 2%) 0 1px,
+      transparent 1px 5px
+    ),
+    radial-gradient(
+      ellipse at 4% 0%,
+      var(--theme-accent-soft),
+      transparent 47%
+    ),
+    radial-gradient(
+      ellipse at 96% 95%,
+      var(--theme-warm-glow),
+      transparent 52%
+    ),
+    linear-gradient(
+      150deg,
+      var(--theme-surface-strong),
+      var(--theme-surface)
+    );
+}
+
+.rb-workspace .rb-selection {
+  border-color: var(--theme-border);
+  background: linear-gradient(
+    145deg,
+    var(--theme-surface-strong),
+    var(--theme-surface)
+  );
+  color: var(--theme-text);
+  box-shadow:
+    0 2px 4px rgb(var(--theme-shadow) / 8%),
+    0 14px 30px rgb(var(--theme-shadow) / 10%);
+}
+
+.rb-workspace .rb-bowl-actions button {
+  border-color: var(--theme-accent);
+  background: var(--theme-accent);
+  color: var(--theme-on-accent);
+}
+
+.rb-workspace .rb-clear-button {
+  border-color: var(--theme-border);
+  color: var(--theme-accent);
+}
+
+.rb-workspace .rb-remove-button {
+  color: var(--theme-text);
+}
+
+.rb-workspace .rb-remove-button:hover {
+  background: var(--theme-surface-muted);
+}
+
+.rb-devtools,
+.rb-devtools-actions button {
+  border-color: var(--theme-border);
+  background: var(--theme-surface-strong);
+  color: var(--theme-text);
+}
+
+:root[data-theme='dark'] .rb-workspace .rb-bowl-stage::before {
+  background: rgb(0 0 0 / 46%);
 }
