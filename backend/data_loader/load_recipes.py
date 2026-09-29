@@ -8,32 +8,7 @@ es = Elasticsearch('https://es01:9200', ca_certs="/usr/share/elasticsearch/confi
                        basic_auth=("elastic", "password"))
 
 try:
-    es.indices.delete(index="ingredients")
-except:
-    print("Creating index")
-
-settings = {
-}
-
-mappings = {
-    "properties": {
-        "title": {
-            "type": "text"
-        },
-    }
-}
-
-es.indices.create(index="ingredients", mappings=mappings, settings=settings)
-
-
-with open("ingredients.json") as file:
-    docs = json.loads(file.read())
-    # print(docs)
-    helpers.bulk(es, docs )
-
-
-try:
-    es.indices.delete(index="my-index")
+    es.indices.delete(index="recipes")
 except:
     print("Creating index")
 
@@ -52,7 +27,7 @@ mappings = {
     }
 }
 
-es.indices.create(index="my-index", mappings=mappings, settings=settings)
+es.indices.create(index="recipes", mappings=mappings, settings=settings)
 
 
 with open("recipes.json") as file:

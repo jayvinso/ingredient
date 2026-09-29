@@ -1,5 +1,4 @@
 [
-{"_op_type": "index", "_index": "recipes", "id": 1, "title": "title", "description": [{"NER": 1.0}]},
 {"_op_type": "index", "_index": "recipes", "id": 2, "title": "No-Bake Nut Cookies", "description": [{"nuts": 0.167, "bite size shredded rice biscuits": 0.167, "milk": 0.167, "vanilla": 0.167, "brown sugar": 0.167, "butter": 0.167}]},
 {"_op_type": "index", "_index": "recipes", "id": 3, "title": "Jewell Ball'S Chicken", "description": [{"sour cream": 0.25, "chicken breasts": 0.25, "cream of mushroom soup": 0.25, "beef": 0.25}]},
 {"_op_type": "index", "_index": "recipes", "id": 4, "title": "Creamy Corn", "description": [{"cream cheese": 0.167, "garlic powder": 0.167, "frozen corn": 0.167, "salt": 0.167, "pepper": 0.167, "butter": 0.167}]},
