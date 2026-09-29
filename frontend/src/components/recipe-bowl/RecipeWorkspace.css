@@ -706,3 +706,67 @@
   background: var(--theme-accent);
   color: var(--theme-on-accent);
 }
+
+/* Smooth physical wobble while the recipe is mixing. */
+.rb-workspace .rb-bowl-scene.is-mixing {
+  transform-origin: 50% 72%;
+  animation: rb-bowl-wobble 550ms linear infinite;
+  will-change: transform;
+}
+
+@keyframes rb-bowl-wobble {
+  0%,
+  100% {
+    transform: translateX(0) rotate(0deg);
+  }
+
+  10% {
+    transform: translateX(-2.35px) rotate(-0.15deg);
+  }
+
+  20% {
+    transform: translateX(-3.8px) rotate(-0.24deg);
+  }
+
+  25% {
+    transform: translateX(-4px) rotate(-0.25deg);
+  }
+
+  30% {
+    transform: translateX(-3.8px) rotate(-0.24deg);
+  }
+
+  40% {
+    transform: translateX(-2.35px) rotate(-0.15deg);
+  }
+
+  50% {
+    transform: translateX(0) rotate(0deg);
+  }
+
+  60% {
+    transform: translateX(2.35px) rotate(0.15deg);
+  }
+
+  70% {
+    transform: translateX(3.8px) rotate(0.24deg);
+  }
+
+  75% {
+    transform: translateX(4px) rotate(0.25deg);
+  }
+
+  80% {
+    transform: translateX(3.8px) rotate(0.24deg);
+  }
+
+  90% {
+    transform: translateX(2.35px) rotate(0.15deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rb-workspace .rb-bowl-scene.is-mixing {
+    animation: none;
+  }
+}
