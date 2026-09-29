@@ -36,4 +36,27 @@ with open("recipes.json") as file:
     helpers.bulk(es, docs )
 
 
+try:
+    es.indices.delete(index="ingredients")
+except:
+    print("Creating index")
+
+
+mappings = {
+    "properties": {
+        "title": {
+            "type": "text"
+        }
+    }
+}
+
+es.indices.create(index="ingredients", mappings=mappings)
+
+
+with open("ingredients.json") as file:
+    docs = json.loads(file.read())
+    # print(docs)
+    helpers.bulk(es, docs )
+
+
 time.sleep(100000)
