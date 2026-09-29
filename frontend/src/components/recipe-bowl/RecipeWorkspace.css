@@ -674,3 +674,35 @@
 :root[data-theme='dark'] .rb-workspace .rb-bowl-stage::before {
   background: rgb(0 0 0 / 46%);
 }
+
+/* Theme-aware recipe popup. */
+.rb-recipe-dialog {
+  border-color: var(--theme-border);
+  background: var(--theme-surface-strong);
+  color: var(--theme-text);
+  box-shadow: 0 24px 80px rgb(var(--theme-shadow) / 35%);
+}
+
+.rb-recipe-dialog::backdrop {
+  background: rgb(8 10 9 / 72%);
+}
+
+.rb-recipe-header button {
+  background: var(--theme-surface-muted);
+  color: var(--theme-text);
+}
+
+.rb-recipe-items li {
+  background: var(--theme-accent-soft);
+  color: var(--theme-text);
+}
+
+.rb-recipe-text {
+  border-color: var(--theme-border);
+  color: var(--theme-text);
+}
+
+.rb-recipe-back {
+  background: var(--theme-accent);
+  color: var(--theme-on-accent);
+}
