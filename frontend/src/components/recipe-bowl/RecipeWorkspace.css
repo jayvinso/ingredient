@@ -5,8 +5,8 @@
   --rb-ink: var(--theme-text);
   --rb-muted: var(--theme-muted);
   --rb-green: var(--theme-accent);
-  --rb-border: #d7cfbd;
-  --rb-surface: #fffdf6;
+  --rb-border: var(--theme-border);
+  --rb-surface: var(--theme-surface-strong);
 
   display: flex;
   flex-direction: column;
@@ -18,31 +18,29 @@
   background:
     repeating-linear-gradient(
       0deg,
-      #78684905 0 1px,
+      rgb(var(--theme-shadow) / 2%) 0 1px,
       transparent 1px 4px
     ),
     repeating-linear-gradient(
       90deg,
-      #78684904 0 1px,
+      rgb(var(--theme-shadow) / 2%) 0 1px,
       transparent 1px 5px
     ),
     radial-gradient(
       ellipse at 4% 0%,
-      #afbc9560,
+      var(--theme-accent-soft),
       transparent 47%
     ),
     radial-gradient(
       ellipse at 96% 95%,
-      #d5aa6750,
+      var(--theme-warm-glow),
       transparent 52%
     ),
-    radial-gradient(
-      ellipse at 38% 38%,
-      #fffef9 0%,
-      #fffaf060 45%,
-      transparent 70%
-    ),
-    linear-gradient(150deg, #f9f6ed, #f1e9d9);
+    linear-gradient(
+      150deg,
+      var(--theme-surface-strong),
+      var(--theme-surface)
+    );
 }
 
 /* Heading */
@@ -193,10 +191,10 @@
   max-width: 100%;
   min-height: 3rem;
   padding: 0.8rem 1.5rem;
-  border: 1px solid var(--rb-green);
+  border: 1px solid var(--theme-accent);
   border-radius: 0.75rem;
-  color: #fffdf5;
-  background: var(--rb-green);
+  background: var(--theme-accent);
+  color: var(--theme-on-accent);
   font: 600 1rem/1.4 'Segoe UI', system-ui, sans-serif;
 }
 
@@ -217,7 +215,7 @@
 }
 
 .rb-workspace .rb-bowl-actions .rb-search-error {
-  color: #922f25;
+  color: var(--theme-danger);
 }
 
 /* Selected items */
@@ -230,13 +228,18 @@
   max-height: 36rem;
   overflow: auto;
   padding: 1.1rem;
-  border: 1px solid #d2c4ad;
+  border: 1px solid var(--theme-border);
   border-radius: 1rem;
-  background: linear-gradient(145deg, #fffdf7, #f8efe1);
+  background: linear-gradient(
+    145deg,
+    var(--theme-surface-strong),
+    var(--theme-surface)
+  );
+  color: var(--theme-text);
   box-shadow:
-    0 2px 4px rgb(70 48 25 / 8%),
-    0 14px 30px rgb(70 48 25 / 10%),
-    inset 0 1px 0 rgb(255 255 255 / 85%);
+    0 2px 4px rgb(var(--theme-shadow) / 8%),
+    0 14px 30px rgb(var(--theme-shadow) / 10%),
+    inset 0 1px 0 rgb(var(--theme-highlight) / 10%);
 }
 
 .rb-selection-heading {
@@ -292,13 +295,13 @@
   border: 0;
   border-radius: 0.5rem;
   background: transparent;
-  color: var(--rb-ink);
+  color: var(--theme-text);
   font-size: 1.5rem;
   cursor: pointer;
 }
 
 .rb-workspace .rb-remove-button:hover {
-  background: #eee5d6;
+  background: var(--theme-surface-muted);
 }
 
 .rb-workspace .rb-remove-button:disabled {
@@ -311,10 +314,10 @@
   min-height: 2.75rem;
   margin-top: 1rem;
   padding: 0.5rem;
-  border: 1px solid #b5ac9d;
+  border: 1px solid var(--theme-border);
   border-radius: 0.5rem;
   background: transparent;
-  color: var(--rb-green);
+  color: var(--theme-accent);
   font: inherit;
   cursor: pointer;
 }
@@ -387,7 +390,7 @@
 
 .rb-workspace button:focus-visible,
 .rb-workspace summary:focus-visible {
-  outline: 3px solid #286650;
+  outline: 3px solid var(--theme-accent);
   outline-offset: 3px;
 }
 
@@ -395,8 +398,10 @@
 
 .rb-devtools {
   padding: 0.75rem;
-  border: 1px dashed #918471;
+  border: 1px dashed var(--theme-border);
   border-radius: 0.5rem;
+  background: var(--theme-surface-strong);
+  color: var(--theme-text);
   font-size: 0.875rem;
 }
 
@@ -421,7 +426,7 @@
 }
 
 .rb-devtools select:focus-visible {
-  outline: 3px solid #286650;
+  outline: 3px solid var(--theme-accent);
   outline-offset: 3px;
 }
 
@@ -437,7 +442,11 @@
   padding: 0.75rem;
   border: 2px solid var(--rb-green);
   border-radius: 1rem;
-  background: #fffdf6f2;
+  background: color-mix(
+    in srgb,
+    var(--theme-surface-strong) 94%,
+    transparent
+  );
   color: var(--rb-ink);
   box-shadow: 0 8px 24px #0002;
   transform: translate(-50%, -50%);
@@ -460,7 +469,7 @@
 }
 
 .rb-drag-preview.is-removing {
-  border-color: #a03d30;
+  border-color: var(--theme-danger);
 }
 
 /* Spoon motion */
@@ -483,24 +492,23 @@
 }
 
 /* Recipe dialog */
-
 .rb-recipe-dialog {
   box-sizing: border-box;
   width: min(42rem, calc(100vw - 2rem));
   max-height: calc(100dvh - 2rem);
   overflow: auto;
   padding: clamp(1rem, 3vw, 2rem);
-  border: 1px solid #cabea7;
+  border: 1px solid var(--theme-border);
   border-radius: 1.25rem;
-  background: #fffaf0;
-  color: var(--rb-ink);
-  box-shadow: 0 24px 80px #0004;
+  background: var(--theme-surface-strong);
+  color: var(--theme-text);
+  box-shadow: 0 24px 80px rgb(var(--theme-shadow) / 35%);
   font: 1rem/1.6 'Segoe UI', system-ui, sans-serif;
   overflow-wrap: anywhere;
 }
 
 .rb-recipe-dialog::backdrop {
-  background: #211a16a6;
+  background: rgb(8 10 9 / 72%);
 }
 
 .rb-recipe-header {
@@ -531,8 +539,8 @@
   width: 2.75rem;
   border: 0;
   border-radius: 50%;
-  color: var(--rb-ink);
-  background: #eee3cf;
+  background: var(--theme-surface-muted);
+  color: var(--theme-text);
   font-size: 1.5rem;
 }
 
@@ -547,13 +555,15 @@
 .rb-recipe-items li {
   padding: 0.2rem 0.6rem;
   border-radius: 0.5rem;
-  background: #e5ebd7;
+  background: var(--theme-accent-soft);
+  color: var(--theme-text);
 }
 
 .rb-recipe-text {
   margin: 1.5rem 0;
   padding-top: 1rem;
-  border-top: 1px solid var(--rb-border);
+  border-top: 1px solid var(--theme-border);
+  color: var(--theme-text);
   white-space: pre-wrap;
 }
 
@@ -561,12 +571,12 @@
   padding: 0.6rem 1rem;
   border: 0;
   border-radius: 0.6rem;
-  background: var(--rb-green);
-  color: #fffdf5;
+  background: var(--theme-accent);
+  color: var(--theme-on-accent);
 }
 
 .rb-recipe-dialog button:focus-visible {
-  outline: 3px solid #286650;
+  outline: 3px solid var(--theme-accent);
   outline-offset: 3px;
 }
 
@@ -581,6 +591,11 @@
     grid-column: 1;
     grid-row: 4;
   }
+
+  .rb-workspace .rb-bowl-stage {
+  --rb-bowl-size: min(82cqi, 54dvh);
+  padding-inline: 0;
+}
 }
 
 /* Animation */
@@ -597,114 +612,17 @@
   }
 }
 
+
+/* Disable the ingredient drop animation when reduced motion is requested. */
 @media (prefers-reduced-motion: reduce) {
   .rb-workspace .rb-bowl-token.is-new {
     animation: none;
   }
 }
 
-.rb-workspace {
-  background:
-    repeating-linear-gradient(
-      0deg,
-      rgb(var(--theme-shadow) / 2%) 0 1px,
-      transparent 1px 4px
-    ),
-    repeating-linear-gradient(
-      90deg,
-      rgb(var(--theme-shadow) / 2%) 0 1px,
-      transparent 1px 5px
-    ),
-    radial-gradient(
-      ellipse at 4% 0%,
-      var(--theme-accent-soft),
-      transparent 47%
-    ),
-    radial-gradient(
-      ellipse at 96% 95%,
-      var(--theme-warm-glow),
-      transparent 52%
-    ),
-    linear-gradient(
-      150deg,
-      var(--theme-surface-strong),
-      var(--theme-surface)
-    );
-}
-
-.rb-workspace .rb-selection {
-  border-color: var(--theme-border);
-  background: linear-gradient(
-    145deg,
-    var(--theme-surface-strong),
-    var(--theme-surface)
-  );
-  color: var(--theme-text);
-  box-shadow:
-    0 2px 4px rgb(var(--theme-shadow) / 8%),
-    0 14px 30px rgb(var(--theme-shadow) / 10%);
-}
-
-.rb-workspace .rb-bowl-actions button {
-  border-color: var(--theme-accent);
-  background: var(--theme-accent);
-  color: var(--theme-on-accent);
-}
-
-.rb-workspace .rb-clear-button {
-  border-color: var(--theme-border);
-  color: var(--theme-accent);
-}
-
-.rb-workspace .rb-remove-button {
-  color: var(--theme-text);
-}
-
-.rb-workspace .rb-remove-button:hover {
-  background: var(--theme-surface-muted);
-}
-
-.rb-devtools,
-.rb-devtools-actions button {
-  border-color: var(--theme-border);
-  background: var(--theme-surface-strong);
-  color: var(--theme-text);
-}
-
+/* Use a darker bowl shadow in dark mode. */
 :root[data-theme='dark'] .rb-workspace .rb-bowl-stage::before {
   background: rgb(0 0 0 / 46%);
-}
-
-/* Theme-aware recipe popup. */
-.rb-recipe-dialog {
-  border-color: var(--theme-border);
-  background: var(--theme-surface-strong);
-  color: var(--theme-text);
-  box-shadow: 0 24px 80px rgb(var(--theme-shadow) / 35%);
-}
-
-.rb-recipe-dialog::backdrop {
-  background: rgb(8 10 9 / 72%);
-}
-
-.rb-recipe-header button {
-  background: var(--theme-surface-muted);
-  color: var(--theme-text);
-}
-
-.rb-recipe-items li {
-  background: var(--theme-accent-soft);
-  color: var(--theme-text);
-}
-
-.rb-recipe-text {
-  border-color: var(--theme-border);
-  color: var(--theme-text);
-}
-
-.rb-recipe-back {
-  background: var(--theme-accent);
-  color: var(--theme-on-accent);
 }
 
 /* Smooth physical wobble while the recipe is mixing. */
@@ -769,4 +687,15 @@
   .rb-workspace .rb-bowl-scene.is-mixing {
     animation: none;
   }
+}
+
+.rb-workspace .rb-bowl-actions .rb-cancel-button {
+  border-color: var(--theme-border);
+  background: transparent;
+  color: var(--theme-text);
+}
+
+.rb-workspace .rb-bowl-actions .rb-cancel-button:hover {
+  border-color: var(--theme-accent);
+  background: var(--theme-accent-soft);
 }

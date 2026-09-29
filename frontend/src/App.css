@@ -15,6 +15,7 @@
   --theme-warm-glow: #ead5af;
   --theme-shadow: 67 49 27;
   --theme-highlight: 255 255 255;
+  --theme-danger: #922f25;
 }
 
 /* Light clay palette */
@@ -65,6 +66,7 @@
   --theme-warm-glow: #3a4739;
   --theme-shadow: 0 0 0;
   --theme-highlight: 255 255 255;
+  --theme-danger: #ff9b8f;
 }
 
 /* Dark clay palette */

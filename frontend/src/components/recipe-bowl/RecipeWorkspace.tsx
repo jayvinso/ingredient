@@ -108,7 +108,11 @@ export default function RecipeWorkspace() {
           </button>
 
           {recipe.busy && (
-            <button type="button" onClick={recipe.cancel}>
+            <button
+              className="rb-cancel-button"
+              type="button"
+              onClick={recipe.cancel}
+            >
               Cancel search
             </button>
           )}
@@ -122,9 +126,11 @@ export default function RecipeWorkspace() {
               ' Add at least one ingredient to begin.'}
           </p>
 
-          <p role="status" aria-live="polite">
-            {recipe.status}
-          </p>
+          {recipe.status && (
+            <p role="status" aria-live="polite">
+              {recipe.status}
+            </p>
+          )}
 
           {recipe.error && (
             <p className="rb-search-error" role="alert">
