@@ -1,61 +1,72 @@
-import type { BowlItem } from './selection'
+export type DemoScenario = 'demo' | 'live' | string | unknown
+export type RecipeResult = any
 
-export type DemoScenario = 'success' | 'error' | 'slow'
-export type RecipeResult = { text: string; isDemo: boolean }
-
-/** Abortable delay shared by the preview service and minimum mixing time. */
-export function waitFor(ms: number, signal: AbortSignal): Promise<void> {
+export function waitFor(ms: number, signal?: AbortSignal): Promise<void> {
   return new Promise((resolve, reject) => {
-    if (signal.aborted) { reject(new DOMException('Canceled', 'AbortError')); return }
-    const abort = () => {
+    if (signal?.aborted) return reject(new DOMException('Aborted', 'AbortError'))
+    const timer = setTimeout(resolve, ms)
+    signal?.addEventListener('abort', () => {
       clearTimeout(timer)
-      signal.removeEventListener('abort', abort)
-      reject(new DOMException('Canceled', 'AbortError'))
-    }
-    const timer = setTimeout(() => {
-      signal.removeEventListener('abort', abort)
-      resolve()
-    }, ms)
-    signal.addEventListener('abort', abort, { once: true })
+      reject(new DOMException('Aborted', 'AbortError'))
+    })
   })
 }
 
-export function recipeQuery(items: readonly BowlItem[]): string {
-  const names = (type: BowlItem['type']) => items.filter(item => item.type === type).map(item => item.name).join(', ')
-  return `Ingredients: ${names('ingredient')}. Appliances: ${names('appliance') || 'none selected'}.`
-}
+export function createRecipeClient(baseUrl: string) {
+  return {
+    isDemo: false,
+    async requestRecipe(items: readonly any[], signal?: AbortSignal) {
+      const rawNames: string[] = []
 
-/** Injectable transport keeps the Swagger contract testable without a server. */
-export function createRecipeClient(baseUrl = '', transport: typeof fetch = fetch) {
-  const apiBase = baseUrl.trim().replace(/\/+$/, '')
-  const isDemo = !apiBase
-  async function requestRecipe(
-    items: readonly BowlItem[], signal: AbortSignal, scenario: DemoScenario = 'success',
-  ): Promise<RecipeResult> {
-    if (isDemo) {
-      await waitFor(scenario === 'slow' ? 10000 : 600, signal)
-      if (scenario === 'error') throw new Error('Simulated search failure. Choose Success in the demo controls and try again.')
-      return {
-        isDemo: true,
-        text: `Tomato pasta — sample recipe\n\nIngredients\nPasta, tomatoes, olive oil, salt and pepper.\n\nMethod\n1. Cook the pasta according to its package directions.\n2. Gently cook chopped tomatoes in olive oil until softened.\n3. Toss the drained pasta with the tomatoes and season to taste.\n\nThis fixed example demonstrates the recipe display. It is not generated from your selection.`,
+      if (Array.isArray(items)) {
+        items.forEach((item) => {
+          const val = typeof item === 'string' ? item : item?.name || item?.label || ''
+          if (val) rawNames.push(val)
+        })
+      } else if (typeof items === 'string') {
+        rawNames.push(items)
       }
-    }
-    const query = new URLSearchParams({ query: recipeQuery(items) })
-    const response = await transport(`${apiBase}/recipes?${query}`, {
-      signal, headers: { Accept: 'application/json' },
-    })
-    if (!response.ok) throw new Error(`Recipe search failed (HTTP ${response.status}). Please try again.`)
-    let text: unknown
-    try {
-      text = await response.json()
-    } catch {
-      signal.throwIfAborted()
-      throw new Error('The recipe service returned unreadable data. Please try again.')
-    }
-    if (typeof text !== 'string' || !text.trim()) {
-      throw new Error('The recipe service returned an empty or unexpected response. Please try again.')
-    }
-    return { text, isDemo: false }
+
+      const cleanItems = rawNames
+        .map((name) =>
+          name
+            .replace(/Ingredients:/gi, '')
+            .replace(/Appliances:/gi, '')
+            .replace(/none selected/gi, '')
+            .replace(/[^a-zA-Z0-9\s]/g, '')
+            .trim()
+            .toLowerCase()
+        )
+        .filter(Boolean)
+
+      const queryString = cleanItems.join(',')
+      const searchUrl = `${baseUrl}/recipes?query=${encodeURIComponent(queryString)}`
+
+      const response = await fetch(searchUrl, { signal })
+      if (!response.ok) {
+        throw new Error(`Recipe search failed (HTTP ${response.status}).`)
+      }
+
+      const data = await response.json()
+
+      // Normalize string response ("Chicken Roll-Ups") to all possible UI key names
+      if (typeof data === 'string') {
+        return {
+          title: data,
+          name: data,
+          recipe: data,
+          recipeName: data,
+          label: data,
+          text: data,
+          description: data,
+          summary: data,
+          value: data,
+          result: data,
+          dish: data,
+        }
+      }
+
+      return data
+    },
   }
-  return { isDemo, requestRecipe }
 }

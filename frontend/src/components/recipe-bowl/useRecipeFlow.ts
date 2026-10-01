@@ -54,7 +54,7 @@ export function useRecipeFlow(
     const timeout = setTimeout(() => { timedOut = true; controller.abort() }, 30000)
     try {
       const [recipe] = await Promise.all([
-        requestRecipe(snapshot, controller.signal, scenario),
+        requestRecipe(snapshot, controller.signal),
         waitFor(1800, controller.signal),
       ])
       if (active.current !== controller) return
