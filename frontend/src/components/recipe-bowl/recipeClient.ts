@@ -20,7 +20,20 @@ export function createRecipeClient(baseUrl: string) {
 
       if (Array.isArray(items)) {
         items.forEach((item) => {
-          const val = typeof item === 'string' ? item : item?.name || item?.label || ''
+          // The current backend matches ingredients, not appliances.
+          if (
+            typeof item !== 'string' &&
+            item?.type &&
+            item.type !== 'ingredient'
+          ) {
+            return
+          }
+
+          const val =
+            typeof item === 'string'
+              ? item
+              : item?.name || item?.label || ''
+
           if (val) rawNames.push(val)
         })
       } else if (typeof items === 'string') {
@@ -44,6 +57,16 @@ export function createRecipeClient(baseUrl: string) {
 
       const response = await fetch(searchUrl, { signal })
       if (!response.ok) {
+        if (response.status === 404) {
+          const errorBody = await response.json().catch(() => null)
+
+          if (errorBody?.error?.code === 'no_recipe_match') {
+            throw new Error(
+              'No matching recipe was found. Try changing or adding ingredients.',
+            )
+          }
+        }
+
         throw new Error(`Recipe search failed (HTTP ${response.status}).`)
       }
 

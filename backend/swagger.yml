@@ -5,24 +5,67 @@ info:
   version: 1.0.0
 
 paths:
-
   /recipes:
     get:
-      summary: Find the closest recipe
+      summary: Find and explain the closest available recipe
       parameters:
         - name: query
           in: query
           required: true
-          description: Text used to find the closest matching recipe
+          description: Comma-separated ingredient names
           schema:
             type: string
       responses:
         '200':
-          description: Closest matching recipe
+          description: Closest recipe with ingredient-match details
           content:
             application/json:
               schema:
-                type: string
+                type: object
+                required:
+                  - title
+                  - text
+                  - match_level
+                  - matched_ingredients
+                  - approximate_matches
+                  - missing_ingredients
+                  - unmatched_ingredients
+                properties:
+                  title:
+                    type: string
+                  text:
+                    type: string
+                    description: Recipe title retained for frontend compatibility
+                  match_level:
+                    type: string
+                    enum: [strong, partial, weak]
+                  matched_ingredients:
+                    type: array
+                    items:
+                      type: string
+                  approximate_matches:
+                    type: array
+                    items:
+                      type: object
+                      required: [selected, recipe_ingredient]
+                      properties:
+                        selected:
+                          type: string
+                        recipe_ingredient:
+                          type: string
+                  missing_ingredients:
+                    type: array
+                    description: Recipe ingredients without an exact selected match
+                    items:
+                      type: string
+                  unmatched_ingredients:
+                    type: array
+                    items:
+                      type: string
+        '400':
+          description: The query parameter is missing or blank
+        '404':
+          description: No related recipe was found
 
   /ingredients:
     get:

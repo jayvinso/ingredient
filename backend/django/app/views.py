@@ -14,11 +14,29 @@ def _required_query(request):
 
 
 @require_GET
+@require_GET
 def recipe_search(request):
     query = _required_query(request)
     if isinstance(query, JsonResponse):
         return query
-    return JsonResponse(backend.get_recipe(query), safe=False)
+
+    recipe = backend.get_recipe(query)
+
+    if recipe is None:
+        return JsonResponse(
+            {
+                "error": {
+                    "code": "no_recipe_match",
+                    "message": (
+                        "No matching recipe was found. "
+                        "Try changing or adding ingredients."
+                    ),
+                }
+            },
+            status=404,
+        )
+
+    return JsonResponse(recipe, safe=False)
 
 
 @require_GET
