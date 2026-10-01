@@ -3,6 +3,7 @@ import RecipeWorkspace from './components/recipe-bowl/RecipeWorkspace'
 import BowlSelectionProvider from './components/recipe-bowl/BowlSelectionProvider'
 import SelectionDevTools from './components/recipe-bowl/SelectionDevTools'
 import ThemeControls from './components/recipe-bowl/ThemeControls'
+import { IngredientSearch } from './components/recipe-bowl/IngredientSearch'
 
 function App() {
   return (
@@ -15,20 +16,16 @@ function App() {
         <aside className="right" aria-label="Things to add to your bowl">
           <ThemeControls />
 
+          {/* Section 01: Ingredients Search */}
           <section className="source-panel">
             <p className="source-panel__eyebrow">01 / Choose</p>
             <h2>Ingredients</h2>
             <p>Find ingredients and add them to your bowl.</p>
 
-            {import.meta.env.DEV ? (
-              <SelectionDevTools type="ingredient" />
-            ) : (
-              <div className="source-panel__empty">
-                Ingredient browsing is coming soon.
-              </div>
-            )}
+            <IngredientSearch />
           </section>
 
+          {/* Section 02: Appliances / Tools */}
           <section className="source-panel">
             <p className="source-panel__eyebrow">02 / Prepare</p>
             <h2>Actions &amp; tools</h2>

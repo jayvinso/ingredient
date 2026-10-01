@@ -147,7 +147,6 @@ export default function RecipeWorkspace() {
           <label>
             Demo response{' '}
             <select
-              value={scenario}
               disabled={recipe.busy}
               onChange={(event) =>
                 setScenario(event.target.value as DemoScenario)
