@@ -1,66 +1,145 @@
-export type DemoScenario = 'demo' | 'live' | string | unknown
-export type RecipeResult = any
+import type { BowlItem } from './selection'
+
+export type DemoScenario = string
+
+export type RecipeResult = {
+  title: string
+  text: string
+  isDemo: false
+  match_level?: 'strong' | 'partial' | 'weak'
+  matched_ingredients?: string[]
+  approximate_matches?: Array<{
+    selected: string
+    recipe_ingredient: string
+  }>
+  missing_ingredients?: string[]
+  unmatched_ingredients?: string[]
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value)
+}
+
+function isText(value: unknown): value is string {
+  return typeof value === 'string' && value.trim().length > 0
+}
+
+function isTextList(value: unknown): value is string[] {
+  return Array.isArray(value) && value.every(isText)
+}
+
+function normalizeRecipe(data: unknown): RecipeResult {
+  // Keep compatibility with the previous JSON-string response.
+  if (isText(data)) {
+    return {
+      title: data.trim(),
+      text: data.trim(),
+      isDemo: false,
+    }
+  }
+
+  if (
+    !isRecord(data) ||
+    !isText(data.title) ||
+    !isText(data.text) ||
+    !['strong', 'partial', 'weak'].includes(String(data.match_level)) ||
+    !isTextList(data.matched_ingredients) ||
+    !isTextList(data.missing_ingredients) ||
+    !isTextList(data.unmatched_ingredients) ||
+    !Array.isArray(data.approximate_matches) ||
+    !data.approximate_matches.every(
+      (match: unknown) =>
+        isRecord(match) &&
+        isText(match.selected) &&
+        isText(match.recipe_ingredient),
+    )
+  ) {
+    throw new Error('Recipe search returned an unexpected response.')
+  }
+
+  return {
+    ...data,
+    title: data.title.trim(),
+    text: data.text.trim(),
+    isDemo: false,
+  } as RecipeResult
+}
 
 export function waitFor(ms: number, signal?: AbortSignal): Promise<void> {
   return new Promise((resolve, reject) => {
-    if (signal?.aborted) return reject(new DOMException('Aborted', 'AbortError'))
-    const timer = setTimeout(resolve, ms)
-    signal?.addEventListener('abort', () => {
+    if (signal?.aborted) {
+      reject(signal.reason ?? new DOMException('Aborted', 'AbortError'))
+      return
+    }
+
+    const onAbort = () => {
       clearTimeout(timer)
-      reject(new DOMException('Aborted', 'AbortError'))
-    })
+      signal?.removeEventListener('abort', onAbort)
+      reject(signal?.reason ?? new DOMException('Aborted', 'AbortError'))
+    }
+
+    const timer = setTimeout(() => {
+      signal?.removeEventListener('abort', onAbort)
+      resolve()
+    }, ms)
+
+    signal?.addEventListener('abort', onAbort, { once: true })
   })
 }
 
-export function createRecipeClient(baseUrl: string) {
+export function createRecipeClient(
+  baseUrl: string,
+  fetcher: typeof fetch = fetch,
+) {
+  const endpoint = `${baseUrl.replace(/\/+$/, '')}/recipes`
+
   return {
     isDemo: false,
-    async requestRecipe(items: readonly any[], signal?: AbortSignal) {
-      const rawNames: string[] = []
 
-      if (Array.isArray(items)) {
-        items.forEach((item) => {
-          // The current backend matches ingredients, not appliances.
-          if (
-            typeof item !== 'string' &&
-            item?.type &&
-            item.type !== 'ingredient'
-          ) {
-            return
-          }
+    async requestRecipe(
+      items: readonly (BowlItem | string)[],
+      signal?: AbortSignal,
+    ): Promise<RecipeResult> {
+      signal?.throwIfAborted()
 
-          const val =
-            typeof item === 'string'
-              ? item
-              : item?.name || item?.label || ''
-
-          if (val) rawNames.push(val)
-        })
-      } else if (typeof items === 'string') {
-        rawNames.push(items)
-      }
-
-      const cleanItems = rawNames
-        .map((name) =>
+      const names = items
+        .filter(item => typeof item === 'string' || item.type === 'ingredient')
+        .map(item => typeof item === 'string' ? item : item.name)
+        .map(name =>
           name
-            .replace(/Ingredients:/gi, '')
-            .replace(/Appliances:/gi, '')
-            .replace(/none selected/gi, '')
-            .replace(/[^a-zA-Z0-9\s]/g, '')
+            .replace(/[^a-zA-Z0-9\s]/g, ' ')
+            .replace(/\s+/g, ' ')
             .trim()
-            .toLowerCase()
+            .toLowerCase(),
         )
         .filter(Boolean)
 
-      const queryString = cleanItems.join(',')
-      const searchUrl = `${baseUrl}/recipes?query=${encodeURIComponent(queryString)}`
+      const query = [...new Set(names)].join(',')
 
-      const response = await fetch(searchUrl, { signal })
+      if (!query) {
+        throw new Error('Add at least one ingredient before searching.')
+      }
+
+      const response = await fetcher(
+        `${endpoint}?query=${encodeURIComponent(query)}`,
+        {
+          signal,
+          headers: { Accept: 'application/json' },
+        },
+      )
+
+      signal?.throwIfAborted()
+
       if (!response.ok) {
         if (response.status === 404) {
-          const errorBody = await response.json().catch(() => null)
+          const body: unknown = await response.json().catch(() => null)
+          signal?.throwIfAborted()
 
-          if (errorBody?.error?.code === 'no_recipe_match') {
+          if (
+            isRecord(body) &&
+            isRecord(body.error) &&
+            body.error.code === 'no_recipe_match'
+          ) {
             throw new Error(
               'No matching recipe was found. Try changing or adding ingredients.',
             )
@@ -70,26 +149,23 @@ export function createRecipeClient(baseUrl: string) {
         throw new Error(`Recipe search failed (HTTP ${response.status}).`)
       }
 
-      const data = await response.json()
+      let data: unknown
 
-      // Normalize string response ("Chicken Roll-Ups") to all possible UI key names
-      if (typeof data === 'string') {
-        return {
-          title: data,
-          name: data,
-          recipe: data,
-          recipeName: data,
-          label: data,
-          text: data,
-          description: data,
-          summary: data,
-          value: data,
-          result: data,
-          dish: data,
+      try {
+        data = await response.json()
+      } catch (cause) {
+        signal?.throwIfAborted()
+
+        if (cause instanceof Error && cause.name === 'AbortError') {
+          throw cause
         }
+
+        throw new Error('Recipe search returned unreadable data.')
       }
 
-      return data
+      signal?.throwIfAborted()
+
+      return normalizeRecipe(data)
     },
   }
 }
