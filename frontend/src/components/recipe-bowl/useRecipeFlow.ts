@@ -38,7 +38,7 @@ export function useRecipeFlow(
     }
   }, [cancel])
 
-  async function run(scenario: DemoScenario) {
+  async function run(_scenario: DemoScenario) {
     if (active.current || !items.some(item => item.type === 'ingredient')) return
     const controller = new AbortController()
     active.current = controller // Synchronous guard against double activation.
