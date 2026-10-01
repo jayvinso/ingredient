@@ -25,17 +25,58 @@ def get_recipe(query: str) -> str:
     return str(res["hits"]["hits"][0]["_source"]["title"])
 
 
-def ingredients_search(query: str) -> str:
-    """GET /ingredients?query=... -> closest ingredient as a string."""
+def ingredients_search(query: str) -> list[str]:
+    """Return up to six ingredient names, ordered by search relevance."""
+    query = query.strip()
+    if not query:
+        return []
 
-    res = es.search(index="ingredients", body= {"query":{
-        "fuzzy": {
-            "title": {
-                "value": query
-            }
-        }
-    }})
-    return str(res["hits"]["hits"][0]["_source"]["title"])
+    res = es.search(
+        index="ingredients",
+        body={
+            "size": 6,
+            "_source": ["title"],
+            "query": {
+                "bool": {
+                    "should": [
+                        {
+                            "match_phrase_prefix": {
+                                "title": {
+                                    "query": query,
+                                    "boost": 2,
+                                }
+                            }
+                        },
+                        {
+                            "match": {
+                                "title": {
+                                    "query": query,
+                                    "fuzziness": "AUTO",
+                                    "operator": "and",
+                                }
+                            }
+                        },
+                    ],
+                    "minimum_should_match": 1,
+                }
+            },
+        },
+    )
+
+    names = []
+    seen = set()
+
+    for hit in res["hits"]["hits"]:
+        title = hit.get("_source", {}).get("title")
+        if not isinstance(title, str):
+            continue
+
+        name = title.strip()
+        if name and name.casefold() not in seen:
+            names.append(name)
+            seen.add(name.casefold())
+
+    return names
 
 
 def action_items_search(query: str) -> str:

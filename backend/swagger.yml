@@ -42,23 +42,28 @@ paths:
               schema:
                 type: string
 
-  /action-items:
+  /ingredients:
     get:
-      summary: Find the closest action item
+      summary: Find matching ingredients
       parameters:
         - name: query
           in: query
           required: true
-          description: Text used to find the closest matching action item
+          description: Ingredient name or partial name to search for
           schema:
             type: string
       responses:
         '200':
-          description: Closest matching action item
+          description: Up to six ingredient names ranked by relevance; empty if no matches
           content:
             application/json:
               schema:
-                type: string
+                type: array
+                maxItems: 6
+                items:
+                  type: string
+        '400':
+          description: The query parameter is missing or blank
 
   /random/recipes:
     get:

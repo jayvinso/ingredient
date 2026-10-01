@@ -176,7 +176,11 @@ export function IngredientSearch() {
             <span>{results.length}</span>
           </p>
 
-          <div className="source-samples__items">
+          <div
+              className="source-samples__items ingredient-search__list"
+              role="group"
+              aria-label="Ingredient search results"
+          >
             {results.map((item) => {
               const selected = items.some(
                 (entry) => itemKey(entry) === itemKey(item),

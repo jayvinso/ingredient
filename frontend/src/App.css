@@ -122,10 +122,12 @@
 
 .right {
   display: grid;
-  grid-template-rows: auto minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-rows: auto minmax(0, 1.5fr) minmax(0, 1fr);
   gap: 16px;
   min-width: 0;
   min-height: 0;
+  height: calc(100dvh - 32px);
+  align-self: start;
 }
 .theme-controls {
   display: flex;
@@ -338,6 +340,7 @@
   .right {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     grid-template-rows: auto;
+    height: auto;
   }
   .theme-controls {
   grid-column: 1 / -1;
@@ -446,7 +449,15 @@ body,
 
 /* Ingredient search */
 .ingredient-search {
-  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  margin-top: 20px;
+}
+
+.ingredient-search > :not(.ingredient-search__results) {
+  flex-shrink: 0;
 }
 
 .ingredient-search__label {
@@ -575,8 +586,12 @@ body,
 }
 
 .ingredient-search__results {
-  margin-top: 18px;
-  padding-top: 16px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  margin-top: 16px;
+  padding-top: 14px;
   border-top: 1px solid var(--theme-border);
 }
 
@@ -603,9 +618,33 @@ body,
 }
 
 .ingredient-search .ingredient-search__item {
+  box-sizing: border-box;
+  flex-shrink: 0;
+  width: 100%;
   max-width: 100%;
+  min-height: 46px;
+  justify-content: flex-start;
+  padding: 10px 12px;
+  border-radius: 12px;
   text-align: left;
   overflow-wrap: anywhere;
+  box-shadow: 0 2px 4px rgb(var(--theme-shadow) / 5%);
+}
+
+.ingredient-search__item > span:first-child {
+  display: grid;
+  flex-shrink: 0;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: var(--theme-accent-soft);
+  font-size: 18px;
+}
+
+.ingredient-search__item > span:nth-child(2) {
+  flex: 1;
+  min-width: 0;
 }
 
 .ingredient-search .ingredient-search__item.is-selected {
@@ -677,4 +716,71 @@ body,
   .ingredient-search__spinner {
     animation: none;
   }
+}
+
+/* Keep sidebar content from increasing the desktop layout height. */
+@media (min-width: 901px) {
+  .right > .source-panel {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+  }
+
+  .right > .source-panel > * {
+    flex-shrink: 0;
+  }
+
+  .right > .source-panel > .ingredient-search {
+    flex: 1;
+    min-height: 0;
+  }
+}
+
+/* Scroll results inside their own softly recessed tray. */
+.ingredient-search .ingredient-search__list {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  flex: 1;
+  gap: 8px;
+  min-height: 0;
+  max-height: 18rem;
+  overflow-y: auto;
+  padding: 6px;
+  border: 1px solid var(--theme-border);
+  border-radius: 16px;
+  background: var(--theme-surface-muted);
+  box-shadow: inset 0 2px 5px rgb(var(--theme-shadow) / 5%);
+  scrollbar-width: thin;
+  scrollbar-color: var(--theme-border) transparent;
+  scrollbar-gutter: stable;
+}
+
+.ingredient-search__results-label {
+  flex-shrink: 0;
+}
+
+.ingredient-search .ingredient-search__item:hover:not(:disabled) {
+  transform: none;
+  border-color: var(--theme-accent);
+  background: var(--theme-accent-soft);
+}
+
+.ingredient-search__list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.ingredient-search__list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.ingredient-search__list::-webkit-scrollbar-thumb {
+  border: 2px solid var(--theme-surface-muted);
+  border-radius: 999px;
+  background: var(--theme-border);
+}
+
+.ingredient-search__list::-webkit-scrollbar-thumb:hover {
+  background: var(--theme-accent);
 }
