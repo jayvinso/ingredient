@@ -11,13 +11,17 @@ with open("backend/data_loader/recipes.json", "w", encoding="utf-8") as recipe:
             if line[1] is not None:
                 currentRecipe = re.sub("\"", "", line[1])
                 instructions = re.sub("\"", "", line[3])
+                str_instructions = ""
+                for instruction in instructions:
+                    str_instructions = str_instructions + " " + instruction
+                str_instructions = re.sub("[\':\",\[\]]", "", str_instructions).strip()
                 ingredients = set([re.sub("[\':\",\[\]]", "", i).strip() for i in line[6].split(',')])
                 weight = round(1/len(ingredients), 3)
                 new_ingredients = []
                 for ingredient in ingredients:
                     new_ingredients.append(ingredient + ": " + str(weight))
                 ingredientList = str(new_ingredients).replace('\'', '\"').replace("\",", ",").replace(":", "\":")[1:-2]
-                recipe.write(f"{{\"_op_type\": \"index\", \"_index\": \"recipes\", \"id\": {index}, \"title\": \"{currentRecipe}\", \"description\": [{{{ingredientList}}}]}},\n")
+                recipe.write(f"{{\"_op_type\": \"index\", \"_index\": \"recipes\", \"id\": {index}, \"title\": \"{currentRecipe}\", \"description\": [{{{ingredientList}}}], \"instructions\": \"{str_instructions}\"}},\n")
                 index = index + 1
 
     recipe.write("]\n")
