@@ -23,14 +23,17 @@ mappings = {
         },
         "description": {
             "type": "sparse_vector"
-        } 
+        },
+        "instructions": {
+            "type": "text"
+        }
     }
 }
 
 es.indices.create(index="recipes", mappings=mappings, settings=settings)
 
 
-with open("recipes.json") as file:
+with open("recipes.json", encoding='utf-8') as file:
     docs = json.loads(file.read())
     # print(docs)
     helpers.bulk(es, docs )
@@ -53,7 +56,7 @@ mappings = {
 es.indices.create(index="ingredients", mappings=mappings)
 
 
-with open("ingredients.json") as file:
+with open("ingredients.json", encoding='utf-8') as file:
     docs = json.loads(file.read())
     # print(docs)
     helpers.bulk(es, docs )

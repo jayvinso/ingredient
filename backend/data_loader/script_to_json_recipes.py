@@ -13,8 +13,8 @@ with open("backend/data_loader/recipes.json", "w", encoding="utf-8") as recipe:
                 instructions = re.sub("\"", "", line[3])
                 str_instructions = ""
                 for instruction in instructions:
-                    str_instructions = str_instructions + " " + instruction
-                str_instructions = re.sub("[\':\",\[\]]", "", str_instructions).strip()
+                    str_instructions = str_instructions + instruction
+                str_instructions = re.sub("[\':\",\[\]]", "", str_instructions).strip().replace("\\", "\\\\")
                 ingredients = set([re.sub("[\':\",\[\]]", "", i).strip() for i in line[6].split(',')])
                 weight = round(1/len(ingredients), 3)
                 new_ingredients = []
