@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import screwOnTheLoose from './assets/screw-on-the-loose.mp3'
+import crepeSuzette from './assets/crepe-suzette.mp3'
 import './KitchenRadio.css'
 
 type Track = {
@@ -9,16 +10,18 @@ type Track = {
   src: string
 }
 
-/*
- * Add future songs to this array.
- * The tuning dial becomes available when there is more than one.
- */
 const tracks: readonly Track[] = [
   {
     id: 'screw-on-the-loose',
     title: 'Screw on the Loose',
     artist: 'Anthony Lowry',
     src: screwOnTheLoose,
+  },
+  {
+    id: 'crepe-suzette',
+    title: 'Crepe Suzette',
+    artist: 'Cyril Watters',
+    src: crepeSuzette,
   },
 ]
 
@@ -211,8 +214,7 @@ export default function KitchenRadio() {
                   tracks.length === 1
                     ? 50
                     : 8 +
-                      (trackIndex / (tracks.length - 1)) *
-                        84
+                      (trackIndex / (tracks.length - 1)) * 84
                 }%`,
               }}
             />

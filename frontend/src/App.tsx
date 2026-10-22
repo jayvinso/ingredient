@@ -9,6 +9,7 @@ import KitchenBanner from './components/recipe-bowl/KitchenBanner'
 import { useKitchenFloat } from './components/recipe-bowl/useKitchenFloat'
 import './KitchenRoom.css'
 import './KitchenDetails.css'
+import './KitchenInteractions.css'
 
 function App() {
   const kitchenRef = useRef<HTMLDivElement>(null)
@@ -31,24 +32,12 @@ function App() {
             >
               <ThemeControls />
 
-              <section className="source-panel">
-                <p className="source-panel__eyebrow">
-                  Open the cupboard
-                </p>
-
-                <h2>The pantry</h2>
-                <p>Find something good to put in your bowl.</p>
-
-                <IngredientSearch />
-              </section>
-
-              <section className="source-panel">
+              <section className="source-panel source-panel--tools">
                 <p className="source-panel__eyebrow">
                   A little kitchen help
                 </p>
 
                 <h2>Utensil drawer</h2>
-                <p>Keep your tools close at hand.</p>
 
                 {import.meta.env.DEV ? (
                   <SelectionDevTools type="appliance" />
@@ -57,6 +46,17 @@ function App() {
                     Actions and tools are coming soon.
                   </div>
                 )}
+              </section>
+
+              <section className="source-panel source-panel--pantry">
+                <p className="source-panel__eyebrow">
+                  Open the cupboard
+                </p>
+
+                <h2>The pantry</h2>
+                <p>Find something good to put in your bowl.</p>
+
+                <IngredientSearch />
               </section>
             </aside>
           </main>

@@ -70,11 +70,25 @@ export default function KitchenBanner({
         aria-hidden="true"
       >
         <Starburst className="kitchen-banner__star kitchen-banner__star--left" />
-
         <Starburst className="kitchen-banner__star kitchen-banner__star--right" />
+
+        <Starburst className="kitchen-banner__star kitchen-banner__extra-star kitchen-banner__extra-star--one" />
+        <Starburst className="kitchen-banner__star kitchen-banner__extra-star kitchen-banner__extra-star--two" />
+        <Starburst className="kitchen-banner__star kitchen-banner__extra-star kitchen-banner__extra-star--three" />
+        <Starburst className="kitchen-banner__star kitchen-banner__extra-star kitchen-banner__extra-star--four" />
+        <Starburst className="kitchen-banner__star kitchen-banner__extra-star kitchen-banner__extra-star--five" />
 
         <span className="kitchen-banner__dot kitchen-banner__dot--one" />
         <span className="kitchen-banner__dot kitchen-banner__dot--two" />
+        <span className="kitchen-banner__dot kitchen-banner__dot--three" />
+        <span className="kitchen-banner__dot kitchen-banner__dot--four" />
+        <span className="kitchen-banner__dot kitchen-banner__dot--five" />
+        <span className="kitchen-banner__dot kitchen-banner__dot--six" />
+        <span className="kitchen-banner__dot kitchen-banner__dot--seven" />
+        <span className="kitchen-banner__dot kitchen-banner__dot--eight" />
+
+        <span className="kitchen-banner__orbit kitchen-banner__orbit--left" />
+        <span className="kitchen-banner__orbit kitchen-banner__orbit--right" />
       </div>
 
       <div className="kitchen-banner__inner">
