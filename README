@@ -21,7 +21,7 @@ It takes about a minute to start the full project with elastic search and kibana
 If you don't want to do that, you can use the other compose.yaml files.
 
 To run docker: 
-- "docker compose -f ./compose.yaml --build --detach"
+- "docker compose -f ./compose.yaml up --build --detach"
 To stop: 
 - "docker compose -f ./compose.yaml down"
 
