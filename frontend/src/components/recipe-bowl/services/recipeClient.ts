@@ -1,4 +1,4 @@
-import type { BowlItem } from './selection'
+import type { BowlItem } from '../utils/selection'
 
 export type DemoScenario = string
 

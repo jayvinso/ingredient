@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import type { BowlItem, BowlItemIdentity } from './selection'
+import type { BowlItem, BowlItemIdentity } from '../utils/selection'
 import type { BowlDrag, BowlDragValue, DragBindings } from './useBowlDrag'
-import { dropAction, insideEllipse } from './dragGeometry'
-import type { DragOrigin } from './dragGeometry'
+import { dropAction, insideEllipse } from '../utils/dragGeometry'
+import type { DragOrigin } from '../utils/dragGeometry'
 
 type PendingDrag = {
   item: BowlItem

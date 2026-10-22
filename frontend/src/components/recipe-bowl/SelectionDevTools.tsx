@@ -1,7 +1,7 @@
-import { itemKey } from './selection'
-import type { BowlItem, BowlItemType } from './selection'
-import { useBowlSelection } from './useBowlSelection'
-import { useBowlDrag } from './useBowlDrag'
+import { itemKey } from './utils/selection'
+import type { BowlItem, BowlItemType } from './utils/selection'
+import { useBowlSelection } from './hooks/useBowlSelection'
+import { useBowlDrag } from './hooks/useBowlDrag'
 
 const samples: readonly BowlItem[] = [
   {

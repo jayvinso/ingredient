@@ -1,7 +1,7 @@
 import { useId } from 'react'
-import { itemKey } from './selection'
-import { useBowlSelection } from './useBowlSelection'
-import { useBowlDrag } from './useBowlDrag'
+import { itemKey } from './utils/selection'
+import { useBowlSelection } from './hooks/useBowlSelection'
+import { useBowlDrag } from './hooks/useBowlDrag'
 
 /** The selected-items card belongs inside the left workspace. */
 export default function SelectedItems() {

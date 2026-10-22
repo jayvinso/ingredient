@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react'
 import type { RefObject } from 'react'
-import { advanceSpoon, RESTING_SPOON, spoonTransform } from './spoonMotion'
+import { advanceSpoon, RESTING_SPOON, spoonTransform } from '../utils/spoonMotion'
 
 /** Update only the SVG transform, avoiding a React render on every frame. */
 export function useSpoonMotion(ref: RefObject<SVGGElement | null>, stirring: boolean) {

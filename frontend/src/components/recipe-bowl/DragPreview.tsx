@@ -1,5 +1,5 @@
 import { createPortal } from 'react-dom'
-import { useBowlDrag } from './useBowlDrag'
+import { useBowlDrag } from './hooks/useBowlDrag'
 
 export default function DragPreview() {
   const { drag } = useBowlDrag()

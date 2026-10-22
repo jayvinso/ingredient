@@ -5,7 +5,31 @@ const ts = require('typescript')
 
 // Use the existing TypeScript dependency; no extra test runner or emitted files.
 exports.load = function load(name, overrides = {}) {
-  const file = path.resolve(__dirname, '../src/components/recipe-bowl', name + '.ts')
+  const folders = {
+  "hooks": [
+    "useBowlDrag",
+    "useBowlSelection",
+    "useDropFeedback",
+    "usePointerDrag",
+    "useRecipeFlow",
+    "useRecipeSearch",
+    "useSpoonMotion"
+  ],
+  "services": [
+    "ingredientClient",
+    "ingredientService",
+    "recipeClient",
+    "recipeService"
+  ],
+  "utils": [
+    "selection",
+    "dragGeometry",
+    "spoonMotion"
+  ]
+}
+  const folder = Object.keys(folders).find(key => folders[key].includes(name))
+  if (!folder) throw new Error('Unknown test module: ' + name)
+  const file = path.resolve(__dirname, '../src/components/recipe-bowl', folder, name + '.ts')
   const mod = new Module(file, module)
   mod.filename = file
   mod.paths = Module._nodeModulePaths(path.dirname(file))

@@ -1,6 +1,6 @@
 import { createContext, useContext } from 'react'
-import type { BowlItem } from './selection'
-import type { DemoScenario, RecipeResult } from './recipeService'
+import type { BowlItem } from '../utils/selection'
+import type { DemoScenario, RecipeResult } from '../services/recipeService'
 
 export type RecipeSearchValue = {
   busy: boolean

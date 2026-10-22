@@ -1,9 +1,9 @@
 import { useEffect, useId, useRef, useState } from 'react'
-import { itemKey } from './selection'
-import type { BowlItem } from './selection'
-import { useBowlSelection } from './useBowlSelection'
-import { useBowlDrag } from './useBowlDrag'
-import { searchIngredients } from './ingredientService'
+import { itemKey } from './utils/selection'
+import type { BowlItem } from './utils/selection'
+import { useBowlSelection } from './hooks/useBowlSelection'
+import { useBowlDrag } from './hooks/useBowlDrag'
+import { searchIngredients } from './services/ingredientService'
 
 type SearchResponse = {
   key: string
@@ -14,9 +14,12 @@ type SearchResponse = {
 export function IngredientSearch() {
   const id = useId()
   const inputRef = useRef<HTMLInputElement>(null)
+
   const [searchTerm, setSearchTerm] = useState('')
   const [retry, setRetry] = useState(0)
-  const [response, setResponse] = useState<SearchResponse | null>(null)
+  const [response, setResponse] = useState<SearchResponse | null>(
+    null,
+  )
 
   const { items, locked } = useBowlSelection()
   const { bindItem } = useBowlDrag()
@@ -24,10 +27,12 @@ export function IngredientSearch() {
   const query = searchTerm.trim()
   const requestKey = `${retry}:${query}`
   const canSearch = query.length >= 2
+
   const current = response?.key === requestKey ? response : null
   const loading = canSearch && !current
   const results = canSearch ? current?.items ?? [] : []
   const error = canSearch ? current?.error : null
+
   const hintId = `${id}-hint`
 
   useEffect(() => {
@@ -38,11 +43,16 @@ export function IngredientSearch() {
 
     const timer = window.setTimeout(async () => {
       try {
-        const matches = await searchIngredients(query, controller.signal)
+        const matches = await searchIngredients(
+          query,
+          controller.signal,
+        )
+
         if (!active) return
 
-        const names = [...new Set(matches.map((name) => name.trim()))]
-          .filter(Boolean)
+        const names = [
+          ...new Set(matches.map((name) => name.trim())),
+        ].filter(Boolean)
 
         const mappedItems: BowlItem[] = names.map((name) => ({
           id: `ingredient-${name.toLowerCase().replace(/\s+/g, '-')}`,
@@ -62,7 +72,8 @@ export function IngredientSearch() {
         setResponse({
           key: requestKey,
           items: [],
-          error: 'Search is unavailable for that name. Try another ingredient or retry.',
+          error:
+            'Search is unavailable for that name. Try another ingredient or retry.',
         })
       }
     }, 300)
@@ -90,6 +101,14 @@ export function IngredientSearch() {
           : results.length === 0
             ? 'No ingredients found. Try another name.'
             : 'Click a match or drag it into your bowl.'
+
+  const emptyMessage = !canSearch
+    ? 'Search the pantry to see ingredients here.'
+    : loading
+      ? 'Finding ingredients…'
+      : error
+        ? 'Ingredient results could not be loaded.'
+        : 'No matches. Try another ingredient.'
 
   return (
     <div className="ingredient-search">
@@ -155,59 +174,84 @@ export function IngredientSearch() {
         aria-atomic="true"
       >
         {loading && (
-          <span className="ingredient-search__spinner" aria-hidden="true" />
+          <span
+            className="ingredient-search__spinner"
+            aria-hidden="true"
+          />
         )}
+
         {statusText}
       </p>
 
       {error && (
         <div className="ingredient-search__error">
           <p role="alert">{error}</p>
-          <button type="button" onClick={() => setRetry((value) => value + 1)}>
+
+          <button
+            type="button"
+            onClick={() => setRetry((value) => value + 1)}
+          >
             Try again
           </button>
         </div>
       )}
 
-      {results.length > 0 && (
-        <div className="ingredient-search__results">
-          <p className="ingredient-search__results-label">
-            {results.length === 1 ? 'Closest match' : 'Matches'}
-            <span>{results.length}</span>
-          </p>
+      <div
+        className="ingredient-search__results"
+        aria-busy={loading}
+      >
+        <p className="ingredient-search__results-label">
+          {!canSearch
+            ? 'Ingredients'
+            : results.length === 1
+              ? 'Closest match'
+              : 'Matches'}
 
-          <div
-              className="source-samples__items ingredient-search__list"
-              role="group"
-              aria-label="Ingredient search results"
-          >
-            {results.map((item) => {
-              const selected = items.some(
-                (entry) => itemKey(entry) === itemKey(item),
-              )
+          <span>{results.length}</span>
+        </p>
 
-              return (
-                <button
-                  key={itemKey(item)}
-                  type="button"
-                  {...bindItem(item, 'source', selected || locked)}
-                  className={selected ? 'ingredient-search__item is-selected' : 'ingredient-search__item'}
-                  disabled={selected || locked}
-                  aria-label={
-                    selected
-                      ? `${item.name}, already added to the bowl`
-                      : `Add ${item.name} to the bowl`
-                  }
-                >
-                  <span aria-hidden="true">{item.emoji}</span>
-                  <span>{item.name}</span>
-                  {selected && <span aria-hidden="true">✓</span>}
-                </button>
-              )
-            })}
-          </div>
+        <div
+          className="source-samples__items ingredient-search__list"
+          role="group"
+          aria-label="Ingredient search results"
+        >
+          {results.length === 0 && (
+            <p className="ingredient-search__empty">
+              {emptyMessage}
+            </p>
+          )}
+
+          {results.map((item) => {
+            const selected = items.some(
+              (entry) => itemKey(entry) === itemKey(item),
+            )
+
+            return (
+              <button
+                key={itemKey(item)}
+                type="button"
+                {...bindItem(item, 'source', selected || locked)}
+                className={
+                  selected
+                    ? 'ingredient-search__item is-selected'
+                    : 'ingredient-search__item'
+                }
+                disabled={selected || locked}
+                aria-label={
+                  selected
+                    ? `${item.name}, already added to the bowl`
+                    : `Add ${item.name} to the bowl`
+                }
+              >
+                <span aria-hidden="true">{item.emoji}</span>
+                <span>{item.name}</span>
+
+                {selected && <span aria-hidden="true">✓</span>}
+              </button>
+            )
+          })}
         </div>
-      )}
+      </div>
     </div>
   )
 }
