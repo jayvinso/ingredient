@@ -1,46 +1,67 @@
+import { useRef } from 'react'
 import './App.css'
 import RecipeWorkspace from './components/recipe-bowl/RecipeWorkspace'
 import BowlSelectionProvider from './components/recipe-bowl/BowlSelectionProvider'
 import SelectionDevTools from './components/recipe-bowl/SelectionDevTools'
 import ThemeControls from './components/recipe-bowl/ThemeControls'
 import { IngredientSearch } from './components/recipe-bowl/IngredientSearch'
+import KitchenBanner from './components/recipe-bowl/KitchenBanner'
+import { useKitchenFloat } from './components/recipe-bowl/useKitchenFloat'
+import './KitchenRoom.css'
+import './KitchenDetails.css'
 
 function App() {
+  const kitchenRef = useRef<HTMLDivElement>(null)
+  useKitchenFloat(kitchenRef)
+
   return (
     <BowlSelectionProvider>
-      <main className="layout">
-        <section className="main" aria-label="Recipe workspace">
-          <RecipeWorkspace />
-        </section>
+      <div ref={kitchenRef} className="kitchen-page">
+        <KitchenBanner />
 
-        <aside className="right" aria-label="Things to add to your bowl">
-          <ThemeControls />
+        <div className="kitchen-room">
+          <main className="layout">
+            <section className="main" aria-label="Recipe workspace">
+              <RecipeWorkspace />
+            </section>
 
-          {/* Section 01: Ingredients Search */}
-          <section className="source-panel">
-            <p className="source-panel__eyebrow">01 / Choose</p>
-            <h2>Ingredients</h2>
-            <p>Find ingredients and add them to your bowl.</p>
+            <aside
+              className="right"
+              aria-label="Things to add to your bowl"
+            >
+              <ThemeControls />
 
-            <IngredientSearch />
-          </section>
+              <section className="source-panel">
+                <p className="source-panel__eyebrow">
+                  Open the cupboard
+                </p>
 
-          {/* Section 02: Appliances / Tools */}
-          <section className="source-panel">
-            <p className="source-panel__eyebrow">02 / Prepare</p>
-            <h2>Actions &amp; tools</h2>
-            <p>Add what you can use to prepare your recipe.</p>
+                <h2>The pantry</h2>
+                <p>Find something good to put in your bowl.</p>
 
-            {import.meta.env.DEV ? (
-              <SelectionDevTools type="appliance" />
-            ) : (
-              <div className="source-panel__empty">
-                Actions and tools are coming soon.
-              </div>
-            )}
-          </section>
-        </aside>
-      </main>
+                <IngredientSearch />
+              </section>
+
+              <section className="source-panel">
+                <p className="source-panel__eyebrow">
+                  A little kitchen help
+                </p>
+
+                <h2>Utensil drawer</h2>
+                <p>Keep your tools close at hand.</p>
+
+                {import.meta.env.DEV ? (
+                  <SelectionDevTools type="appliance" />
+                ) : (
+                  <div className="source-panel__empty">
+                    Actions and tools are coming soon.
+                  </div>
+                )}
+              </section>
+            </aside>
+          </main>
+        </div>
+      </div>
     </BowlSelectionProvider>
   )
 }

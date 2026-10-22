@@ -1,5 +1,6 @@
 import { useEffect, useId, useRef, useState } from 'react'
 import MixingBowl from './MixingBowl'
+import KitchenWindow from './KitchenWindow'
 import SelectedItems from './SelectedItems'
 import DragPreview from './DragPreview'
 import { useBowlDrag } from './useBowlDrag'
@@ -11,16 +12,22 @@ import { useRecipeSearch } from './useRecipeSearch'
 import { isRecipeDemo } from './recipeService'
 import type { DemoScenario } from './recipeService'
 
-/** Left workspace containing the bowl, selected items and recipe controls. */
 export default function RecipeWorkspace() {
   const noteId = useId()
   const searchButton = useRef<HTMLButtonElement>(null)
   const wasBusy = useRef(false)
-  const [scenario, setScenario] = useState<DemoScenario>('success')
+
+  const [scenario, setScenario] =
+    useState<DemoScenario>('success')
+
   const recipe = useRecipeSearch()
 
   useEffect(() => {
-    if (wasBusy.current && !recipe.busy && !recipe.result) {
+    if (
+      wasBusy.current &&
+      !recipe.busy &&
+      !recipe.result
+    ) {
       searchButton.current?.focus()
     }
 
@@ -52,41 +59,60 @@ export default function RecipeWorkspace() {
   )
 
   return (
-    <div className="rb-workspace">
-      <div className="rb-workspace-grid">
+    <div className="rb-workspace kitchen-workspace">
+      <div className="kitchen-wall">
         <header className="rb-workspace-heading">
-          <p className="rb-kicker">The mixing table</p>
+          <p className="rb-kicker">
+            Make yourself at home
+          </p>
+
           <h1>What&apos;s in your kitchen?</h1>
+
           <p>
-            Combine your ingredients and appliances to find a recipe.
+            Pick ingredients from the pantry, add them
+            to the bowl, and give it a stir.
           </p>
         </header>
 
-        <SelectedItems />
+        <KitchenWindow />
+      </div>
 
-        <div className="rb-bowl-stage">
-          <p className="rb-drop-hint">
-            {recipe.busy ? 'Mixing your bowl…' : hint}
-          </p>
-
-          <MixingBowl />
-
-          {overflowCount > 0 && (
-            <p className="rb-overflow-note">
-              +{overflowCount} more{' '}
-              {overflowCount === 1 ? 'item' : 'items'} in the selected
-              list.
+      <div className="kitchen-counter">
+        <div className="kitchen-counter__surface">
+          <div className="rb-bowl-stage">
+            <p className="rb-drop-hint">
+              {recipe.busy
+                ? 'Mixing your bowl…'
+                : hint}
             </p>
-          )}
+
+            <MixingBowl />
+
+            {overflowCount > 0 && (
+              <p className="rb-overflow-note">
+                +{overflowCount} more{' '}
+                {overflowCount === 1
+                  ? 'item'
+                  : 'items'}{' '}
+                in the selected list.
+              </p>
+            )}
+          </div>
+
+          <SelectedItems />
         </div>
 
         <div className="rb-bowl-actions">
           <p>
             {ingredientCount}{' '}
-            {ingredientCount === 1 ? 'ingredient' : 'ingredients'}
+            {ingredientCount === 1
+              ? 'ingredient'
+              : 'ingredients'}
             {' · '}
             {applianceCount}{' '}
-            {applianceCount === 1 ? 'appliance' : 'appliances'}
+            {applianceCount === 1
+              ? 'appliance'
+              : 'appliances'}
           </p>
 
           <button
@@ -104,7 +130,7 @@ export default function RecipeWorkspace() {
               ? 'Mixing…'
               : recipe.error
                 ? 'Try again'
-                : 'Mix & find a recipe'}
+                : 'Give it a stir'}
           </button>
 
           {recipe.busy && (
@@ -120,40 +146,66 @@ export default function RecipeWorkspace() {
           <p id={noteId}>
             {isRecipeDemo
               ? 'Demo mode: shows a sample recipe, not a match for your selection.'
-              : 'Find a recipe using your selected ingredients and appliances.'}
+              : 'Only ingredients in the bowl are used for matching. Tools do not affect the results yet.'}
 
             {ingredientCount === 0 &&
               ' Add at least one ingredient to begin.'}
           </p>
 
           {recipe.status && (
-            <p role="status" aria-live="polite">
+            <p
+              role="status"
+              aria-live="polite"
+            >
               {recipe.status}
             </p>
           )}
 
           {recipe.error && (
-            <p className="rb-search-error" role="alert">
+            <p
+              className="rb-search-error"
+              role="alert"
+            >
               {recipe.error}
             </p>
           )}
         </div>
       </div>
 
+      <div
+        className="kitchen-base-cabinets"
+        aria-hidden="true"
+      >
+        <span />
+        <span />
+        <span />
+      </div>
+
       {import.meta.env.DEV && isRecipeDemo && (
         <details className="rb-devtools">
-          <summary>Development: test recipe search</summary>
+          <summary>
+            Development: test recipe search
+          </summary>
 
           <label>
             Demo response{' '}
+
             <select
               disabled={recipe.busy}
               onChange={(event) =>
-                setScenario(event.target.value as DemoScenario)
+                setScenario(
+                  event.target.value as DemoScenario,
+                )
               }
             >
-              <option value="success">Success</option>
-              <option value="error">Error</option>
+              <option value="success">
+                Success
+              </option>
+
+              <option value="error">
+                Error
+              </option>
+
               <option value="slow">
                 Slow response (10 seconds)
               </option>

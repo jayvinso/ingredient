@@ -1,0 +1,520 @@
+/* Finishing details loaded after KitchenRoom.css. */
+
+.kitchen-room {
+  --room-detail-border: color-mix(
+    in srgb,
+    var(--room-cabinet-edge) 75%,
+    #24392b
+  );
+  --room-drawer-line: color-mix(
+    in srgb,
+    var(--room-cabinet-edge) 65%,
+    #24392b
+  );
+  --room-heading-rule: color-mix(
+    in srgb,
+    var(--room-accent) 78%,
+    var(--room-paper)
+  );
+  --room-card-border: color-mix(
+    in srgb,
+    var(--room-ink) 70%,
+    var(--room-cabinet)
+  );
+
+  --room-counter-depth: 105px;
+  --window-sky-top: #92b5c4;
+  --window-sky-bottom: #e3e4cf;
+  --window-distance: #a3b69c;
+  --window-foliage: #64816b;
+}
+
+/* Cabinet seams */
+
+.kitchen-base-cabinets {
+  gap: 3px;
+  background: var(--room-drawer-line);
+}
+
+.kitchen-base-cabinets > span::after {
+  border-color: var(--room-drawer-line);
+  box-shadow:
+    inset 1px 1px 2px #26372c20,
+    1px 1px 0 #ffffff30;
+}
+
+.kitchen-room .source-panel,
+.kitchen-room .theme-controls,
+.kitchen-room .rb-workspace .rb-bowl-actions {
+  border-bottom-color: var(--room-drawer-line);
+}
+
+.kitchen-room .right {
+  border-left-color: var(--room-drawer-line);
+}
+
+/* Heading underlines */
+
+.kitchen-room .rb-workspace-heading h1,
+.kitchen-room .source-panel h2 {
+  padding-bottom: 12px;
+  border-bottom: 2px solid var(--room-heading-rule);
+}
+
+/* Countertop depth */
+
+.kitchen-counter__surface::before {
+  height: var(--room-counter-depth);
+}
+
+/* Search and control borders */
+
+.kitchen-room .rb-workspace-heading,
+.kitchen-room .rb-drop-hint,
+.kitchen-room .rb-overflow-note,
+.kitchen-room .theme-controls select,
+.kitchen-room .ingredient-search__field,
+.kitchen-room .ingredient-search .ingredient-search__list {
+  border-color: var(--room-detail-border);
+}
+
+.kitchen-room .rb-workspace .rb-selection,
+.kitchen-room .rb-workspace .rb-clear-button {
+  border-color: var(--room-detail-border);
+}
+
+/* Keep the ingredient tray visible. */
+
+.kitchen-room .ingredient-search__results {
+  flex: 0 0 auto;
+}
+
+.kitchen-room .ingredient-search .ingredient-search__list {
+  flex: 0 0 auto;
+  min-height: 180px;
+  max-height: 280px;
+}
+
+.kitchen-room .ingredient-search__empty {
+  display: grid;
+  flex: 1;
+  place-items: center;
+  min-height: 166px;
+  margin: 0;
+  padding: 20px 14px;
+  color: var(--room-muted);
+  font-family: inherit;
+  font-size: 14px;
+  line-height: 1.6;
+  text-align: center;
+}
+
+/* Bowl hover motion */
+
+@keyframes kitchen-hover-rock {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+
+  25% {
+    transform: rotate(-1.4deg);
+  }
+
+  75% {
+    transform: rotate(1.4deg);
+  }
+}
+
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .kitchen-room .rb-workspace .rb-bowl-scene:not(.is-mixing):hover {
+    transform-origin: 50% 86%;
+    animation: kitchen-hover-rock 1100ms ease-in-out infinite;
+  }
+
+  body:has(.rb-drag-preview) .kitchen-room .rb-workspace .rb-bowl-scene:not(.is-mixing),
+  .kitchen-room .rb-workspace .rb-bowl-scene:not(.is-mixing):active {
+    animation: none;
+    transform: none;
+  }
+}
+
+/* Banner controls closer to the page edges */
+
+.kitchen-page > .kitchen-banner {
+  padding-inline: clamp(12px, 1.2vw, 24px);
+}
+
+.kitchen-page .kitchen-banner .kitchen-banner__inner {
+  width: 100%;
+  max-width: none;
+  margin-inline: 0;
+  padding-inline: 0;
+}
+
+.kitchen-page .kitchen-banner .kitchen-banner__navigation {
+  justify-self: start;
+}
+
+.kitchen-page .kitchen-banner .kitchen-banner__radio {
+  justify-self: end;
+  margin: 0;
+}
+
+.kitchen-page .kitchen-banner .kitchen-banner__home {
+  gap: 10px;
+  min-height: 52px;
+  padding: 7px 12px;
+  border: 1px solid color-mix(
+    in srgb,
+    currentColor 35%,
+    transparent
+  );
+  border-radius: 4px;
+  background: color-mix(
+    in srgb,
+    currentColor 6%,
+    transparent
+  );
+  font-family: var(
+    --kitchen-font-support,
+    'Trebuchet MS',
+    sans-serif
+  );
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.kitchen-page .kitchen-banner .kitchen-banner__home--pending {
+  opacity: .85;
+}
+
+.kitchen-page .kitchen-banner .kitchen-banner__arrow {
+  flex: 0 0 36px;
+  width: 36px;
+  height: 36px;
+}
+
+.kitchen-page .kitchen-banner .kitchen-banner__arrow svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* Visible borders and raised shadows on the three cards */
+
+.kitchen-room .rb-workspace :is(
+  .rb-workspace-heading,
+  .rb-selection,
+  .rb-drop-hint
+) {
+  position: relative;
+  z-index: 1;
+  border: 2px solid var(--room-card-border);
+  border-radius: 5px;
+  background: var(--room-paper);
+  box-shadow:
+    inset 0 1px 0 #ffffff30,
+    0 2px 2px #20312418,
+    0 11px 19px -7px #20312455;
+
+  translate: 0 var(--kitchen-scroll-y, 0px);
+  transform: translateY(0) rotate(0deg);
+  transition:
+    transform 200ms ease,
+    box-shadow 200ms ease;
+}
+
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .kitchen-room .rb-workspace :is(
+    .rb-workspace-heading,
+    .rb-selection,
+    .rb-drop-hint
+  ):hover {
+    transform: translateY(-4px) rotate(-.25deg);
+    box-shadow:
+      inset 0 1px 0 #ffffff35,
+      0 3px 3px #20312418,
+      0 17px 25px -8px #20312466;
+  }
+}
+
+/* Recessed window surround */
+
+.kitchen-window {
+  aspect-ratio: 1.6;
+}
+
+.kitchen-window__reveal {
+  position: absolute;
+  inset: 12px 8px 26px;
+  background: linear-gradient(
+    110deg,
+    #8d9680,
+    var(--room-frame) 18% 80%,
+    #8d9680
+  );
+  box-shadow:
+    inset 5px 7px 10px #25382b45,
+    0 0 0 1px #7b826c,
+    6px 9px 13px #25382b30;
+}
+
+.kitchen-window .kitchen-window__frame {
+  inset: 9px;
+  border: 9px solid var(--room-frame);
+  border-radius: 1px;
+  box-shadow:
+    inset 0 0 0 1px #67735e,
+    0 0 0 1px #9da38d,
+    2px 3px 4px #25382b35;
+}
+
+.kitchen-window .kitchen-window__glass {
+  background: linear-gradient(
+    var(--window-sky-top),
+    var(--window-sky-bottom)
+  );
+  box-shadow: inset 4px 5px 9px #24392b30;
+}
+
+.kitchen-window .kitchen-window__sun {
+  top: 12%;
+  right: 20%;
+  width: 13%;
+  opacity: .75;
+  background: #fff4ce;
+  box-shadow: 0 0 24px 12px #fff4ce50;
+}
+
+.kitchen-window .kitchen-window__cloud {
+  width: 28%;
+  height: 11%;
+  opacity: .45;
+  filter: blur(5px);
+}
+
+.kitchen-window__distance {
+  position: absolute;
+  right: -12%;
+  bottom: 8%;
+  left: -12%;
+  height: 39%;
+  border-radius: 55% 70% 0 0;
+  background: var(--window-distance);
+}
+
+.kitchen-window__hedge {
+  position: absolute;
+  right: -3%;
+  bottom: -3%;
+  left: -3%;
+  height: 30%;
+  background:
+    radial-gradient(
+      ellipse at 12% 100%,
+      var(--window-foliage) 0 55%,
+      transparent 57%
+    ),
+    radial-gradient(
+      ellipse at 63% 110%,
+      var(--window-foliage) 0 58%,
+      transparent 60%
+    ),
+    radial-gradient(
+      ellipse at 100% 100%,
+      var(--window-foliage) 0 55%,
+      transparent 57%
+    );
+}
+
+.kitchen-window__reflection {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    120deg,
+    transparent 0 18%,
+    #fff9e22b 18% 30%,
+    transparent 30% 66%,
+    #fff9e21a 66% 71%,
+    transparent 71%
+  );
+  box-shadow: inset 0 0 0 1px #ffffff38;
+}
+
+/* Beveled window dividers */
+
+.kitchen-window .kitchen-window__panes {
+  background:
+    linear-gradient(
+      90deg,
+      transparent calc(50% - 5px),
+      #5d67554a calc(50% - 5px) calc(50% - 4px),
+      #fff7e6 calc(50% - 4px) calc(50% - 2px),
+      var(--room-frame) calc(50% - 2px) calc(50% + 3px),
+      #777d6560 calc(50% + 3px) calc(50% + 5px),
+      transparent calc(50% + 5px)
+    ),
+    linear-gradient(
+      transparent calc(50% - 5px),
+      #5d67554a calc(50% - 5px) calc(50% - 4px),
+      #fff7e6 calc(50% - 4px) calc(50% - 2px),
+      var(--room-frame) calc(50% - 2px) calc(50% + 3px),
+      #777d6560 calc(50% + 3px) calc(50% + 5px),
+      transparent calc(50% + 5px)
+    );
+}
+
+.kitchen-window__panes::after {
+  content: '';
+  position: absolute;
+  top: calc(50% + 8px);
+  left: calc(50% - 9px);
+  width: 18px;
+  height: 5px;
+  border: 1px solid #77796a;
+  border-radius: 2px;
+  background: linear-gradient(#ede7d4, #aaa68f);
+  box-shadow: 0 2px 2px #25382b30;
+}
+
+/* Darker stripes over light fabric, with shaded folds */
+
+.kitchen-window .kitchen-window__curtain,
+.kitchen-window .kitchen-window__valance {
+  background:
+    linear-gradient(
+      90deg,
+      #ffffff40,
+      transparent 25%,
+      #593d2a24 46%,
+      #ffffff28 70%,
+      #593d2a20
+    ),
+    repeating-linear-gradient(
+      0deg,
+      #9b57474d 0 9px,
+      transparent 9px 18px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      #9b57474d 0 9px,
+      transparent 9px 18px
+    ),
+    #f4e7d0;
+}
+
+.kitchen-window .kitchen-window__curtain {
+  top: 9px;
+  bottom: 29px;
+  width: 27%;
+  filter: drop-shadow(2px 3px 2px #25382b30);
+}
+
+.kitchen-window .kitchen-window__curtain--left {
+  left: 0;
+}
+
+.kitchen-window .kitchen-window__curtain--right {
+  right: 0;
+}
+
+.kitchen-window .kitchen-window__valance {
+  top: 6px;
+  right: -3px;
+  left: -3px;
+  height: 16%;
+  border-bottom: 1px solid #995f4c;
+  box-shadow: 0 3px 4px #25382b25;
+}
+
+.kitchen-window .kitchen-window__rod {
+  top: 1px;
+  height: 5px;
+  background: linear-gradient(#b4aa91, #776b53);
+}
+
+/* Projecting sill and lower trim */
+
+.kitchen-window .kitchen-window__sill {
+  right: -6px;
+  bottom: 10px;
+  left: -6px;
+  height: 17px;
+  border: 1px solid #92967d;
+  background: linear-gradient(
+    #f8f2df,
+    var(--room-frame) 55%,
+    #b2b59e
+  );
+  box-shadow: 0 7px 8px -3px #25382b55;
+}
+
+.kitchen-window__sill::after {
+  content: '';
+  position: absolute;
+  right: 12px;
+  bottom: -11px;
+  left: 12px;
+  height: 9px;
+  border-bottom: 1px solid #92967d;
+  background: var(--room-frame);
+  box-shadow: inset 0 3px 3px #25382b25;
+}
+
+.kitchen-window .kitchen-window__plant {
+  bottom: 14px;
+  left: 30px;
+  width: 30px;
+  height: 28px;
+  box-shadow: 3px 3px 4px #25382b30;
+}
+
+.kitchen-window__plant::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  right: -2px;
+  left: -2px;
+  height: 5px;
+  border-radius: 2px;
+  background: #b08363;
+  box-shadow: 0 2px 2px #503c2930;
+}
+
+.kitchen-window .kitchen-window__plant > span {
+  left: 11px;
+  height: 34px;
+}
+
+.kitchen-window .kitchen-window__plant > span:last-child {
+  left: 19px;
+  height: 40px;
+  transform: rotate(14deg);
+  transform-origin: bottom;
+}
+
+:root[data-theme='dark'] .kitchen-room {
+  --window-sky-top: #4e6c7c;
+  --window-sky-bottom: #9aabac;
+  --window-distance: #81967e;
+  --window-foliage: #506e5b;
+}
+
+/* Motion preferences */
+
+@media (prefers-reduced-motion: reduce) {
+  .kitchen-room .rb-workspace .rb-bowl-scene {
+    animation: none;
+  }
+
+  .kitchen-room .rb-workspace :is(
+    .rb-workspace-heading,
+    .rb-selection,
+    .rb-drop-hint
+  ) {
+    translate: none;
+    transform: none;
+    transition: none;
+  }
+}
