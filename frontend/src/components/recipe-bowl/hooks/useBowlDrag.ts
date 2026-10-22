@@ -1,7 +1,7 @@
 import { createContext, useContext } from 'react'
 import type { ButtonHTMLAttributes, RefObject } from 'react'
-import type { BowlItem } from './selection'
-import type { DragOrigin } from './dragGeometry'
+import type { BowlItem } from '../utils/selection'
+import type { DragOrigin } from '../utils/dragGeometry'
 
 export type BowlDrag = {
   item: BowlItem

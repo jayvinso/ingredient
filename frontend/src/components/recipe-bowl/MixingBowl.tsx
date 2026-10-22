@@ -1,11 +1,11 @@
 import { useId, useRef } from 'react'
 import bowlImage from './assets/wooden-bowl.png'
 import spoonImage from './assets/wooden-spoon.png'
-import { itemKey, MAX_VISIBLE_BOWL_ITEMS, tokenPosition } from './selection'
-import { useBowlSelection } from './useBowlSelection'
-import { useBowlDrag } from './useBowlDrag'
-import { useDropFeedback } from './useDropFeedback'
-import { useSpoonMotion } from './useSpoonMotion'
+import { itemKey, MAX_VISIBLE_BOWL_ITEMS, tokenPosition } from './utils/selection'
+import { useBowlSelection } from './hooks/useBowlSelection'
+import { useBowlDrag } from './hooks/useBowlDrag'
+import { useDropFeedback } from './hooks/useDropFeedback'
+import { useSpoonMotion } from './hooks/useSpoonMotion'
 
 /** PNG layers share one SVG coordinate system with the drop target and tokens. */
 export default function MixingBowl() {

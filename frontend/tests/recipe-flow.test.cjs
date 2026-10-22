@@ -31,7 +31,7 @@ function harness(items = [item]) {
     requestRecipe(snapshot, signal) { const d = deferred(); requests.push({ ...d, snapshot, signal }); return d.promise },
     waitFor(ms, signal) { const d = deferred(); waits.push({ ...d, ms, signal }); return d.promise },
   }
-  const { useRecipeFlow } = load('useRecipeFlow', { react, './recipeService': service })
+  const { useRecipeFlow } = load('useRecipeFlow', { react, '../services/recipeService': service })
   const lock = value => locks.push(value)
   const render = function TestHost() { cursor = 0; return useRecipeFlow(items, lock, () => {}) }
   return { render, requests, waits, locks, cleanup: () => cleanups.forEach(fn => fn?.()),

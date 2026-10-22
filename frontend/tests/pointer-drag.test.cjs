@@ -26,7 +26,7 @@ function PointerTestHost(origin = 'source', unavailable = false) {
     useCallback: fn => fn,
     useEffect: fn => { cleanups.push(fn()) },
   }
-  const { usePointerDrag } = load('usePointerDrag', { react: fakeReact, './dragGeometry': geometry })
+  const { usePointerDrag } = load('usePointerDrag', { react: fakeReact, '../utils/dragGeometry': geometry })
   const hook = usePointerDrag(item => calls.push(['add', item]), item => calls.push(['remove', item]))
   hook.bowlRef.current = {
     ownerSVGElement: scene,

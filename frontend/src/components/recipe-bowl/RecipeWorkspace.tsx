@@ -1,16 +1,16 @@
 import { useEffect, useId, useRef, useState } from 'react'
 import MixingBowl from './MixingBowl'
-import KitchenWindow from './KitchenWindow'
+import KitchenWindow from '../kitchen/KitchenWindow'
 import SelectedItems from './SelectedItems'
 import DragPreview from './DragPreview'
-import { useBowlDrag } from './useBowlDrag'
-import { MAX_VISIBLE_BOWL_ITEMS } from './selection'
-import { useBowlSelection } from './useBowlSelection'
+import { useBowlDrag } from './hooks/useBowlDrag'
+import { MAX_VISIBLE_BOWL_ITEMS } from './utils/selection'
+import { useBowlSelection } from './hooks/useBowlSelection'
 import './RecipeWorkspace.css'
 import RecipeDialog from './RecipeDialog'
-import { useRecipeSearch } from './useRecipeSearch'
-import { isRecipeDemo } from './recipeService'
-import type { DemoScenario } from './recipeService'
+import { useRecipeSearch } from './hooks/useRecipeSearch'
+import { isRecipeDemo } from './services/recipeService'
+import type { DemoScenario } from './services/recipeService'
 
 export default function RecipeWorkspace() {
   const noteId = useId()

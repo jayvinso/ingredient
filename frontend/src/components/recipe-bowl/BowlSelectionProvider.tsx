@@ -1,13 +1,13 @@
 import { useCallback, useMemo, useReducer, useRef, useState } from 'react'
 import type { ReactNode } from 'react'
-import { initialSelection, selectionReducer } from './selection'
-import type { BowlItem, BowlItemIdentity } from './selection'
-import { BowlDragContext } from './useBowlDrag'
-import { usePointerDrag } from './usePointerDrag'
-import { BowlSelectionContext } from './useBowlSelection'
-import type { BowlSelectionValue } from './useBowlSelection'
-import { useRecipeFlow } from './useRecipeFlow'
-import { RecipeSearchContext } from './useRecipeSearch'
+import { initialSelection, selectionReducer } from './utils/selection'
+import type { BowlItem, BowlItemIdentity } from './utils/selection'
+import { BowlDragContext } from './hooks/useBowlDrag'
+import { usePointerDrag } from './hooks/usePointerDrag'
+import { BowlSelectionContext } from './hooks/useBowlSelection'
+import type { BowlSelectionValue } from './hooks/useBowlSelection'
+import { useRecipeFlow } from './hooks/useRecipeFlow'
+import { RecipeSearchContext } from './hooks/useRecipeSearch'
 
 /** One provider around the page lets the bowl and source lists share state. */
 export default function BowlSelectionProvider({ children }: { children: ReactNode }) {

@@ -1,9 +1,9 @@
 import { useEffect, useId, useRef, useState } from 'react'
-import { itemKey } from './selection'
-import type { BowlItem } from './selection'
-import { useBowlSelection } from './useBowlSelection'
-import { useBowlDrag } from './useBowlDrag'
-import { searchIngredients } from './ingredientService'
+import { itemKey } from './utils/selection'
+import type { BowlItem } from './utils/selection'
+import { useBowlSelection } from './hooks/useBowlSelection'
+import { useBowlDrag } from './hooks/useBowlDrag'
+import { searchIngredients } from './services/ingredientService'
 
 type SearchResponse = {
   key: string

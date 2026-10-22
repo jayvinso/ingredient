@@ -1,8 +1,8 @@
 import { useEffect, useId, useRef } from 'react'
 import type { RefObject } from 'react'
-import type { BowlItem } from './selection'
-import { itemKey } from './selection'
-import type { RecipeResult } from './recipeService'
+import type { BowlItem } from './utils/selection'
+import { itemKey } from './utils/selection'
+import type { RecipeResult } from './services/recipeService'
 import './RecipeCard.css'
 
 type Props = {

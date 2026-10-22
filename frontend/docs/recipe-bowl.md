@@ -34,9 +34,9 @@ Keep IDs stable. The backend's action-item meaning still needs team agreement.
 Example for `src/components/IngredientBubble.tsx`:
 
 ```tsx
-import { useBowlDrag } from './recipe-bowl/useBowlDrag'
-import { useBowlSelection } from './recipe-bowl/useBowlSelection'
-import type { BowlItem } from './recipe-bowl/selection'
+import { useBowlDrag } from './recipe-bowl/hooks/useBowlDrag'
+import { useBowlSelection } from './recipe-bowl/hooks/useBowlSelection'
+import type { BowlItem } from './recipe-bowl/utils/selection'
 
 export default function IngredientBubble({ item }: { item: BowlItem }) {
   const { bindItem } = useBowlDrag()

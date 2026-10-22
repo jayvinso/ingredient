@@ -15,7 +15,7 @@ test('animation settles on cancel, respects live reduced motion and cancels fram
   global.requestAnimationFrame = fn => { queue.set(++id, fn); return id }
   global.cancelAnimationFrame = key => queue.delete(key)
   const react = { useRef: initial => state ??= { current: initial }, useEffect: fn => { cleanup = fn() } }
-  const { useSpoonMotion } = load('useSpoonMotion', { react, './spoonMotion': load('spoonMotion') })
+  const { useSpoonMotion } = load('useSpoonMotion', { react, '../utils/spoonMotion': load('spoonMotion') })
   const ref = { current: {
     setAttribute: (_name, value) => { transform = value }, removeAttribute: () => { transform = '' },
   } }
