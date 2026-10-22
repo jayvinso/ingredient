@@ -1,0 +1,110 @@
+.home-page {
+  display: grid;
+  align-content: center;
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding: clamp(24px, 6vw, 80px);
+  background: var(--theme-page);
+  color: var(--theme-text);
+  font-family: 'Josefin Sans', system-ui, sans-serif;
+}
+
+.home-page__content {
+  width: 100%;
+  max-width: 760px;
+  margin-inline: auto;
+}
+
+.home-page__toolbar {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 32px;
+}
+
+.home-page__toolbar .theme-controls {
+  width: min(100%, 390px);
+  flex-wrap: wrap;
+  padding: 12px 14px;
+  border-radius: 12px;
+  font-family: inherit;
+}
+
+.home-page__toolbar .theme-controls__palette {
+  flex: 1;
+  justify-content: space-between;
+}
+
+.home-page__toolbar .theme-controls select,
+.home-page__toolbar .theme-controls__mode {
+  font-family: inherit;
+}
+
+.home-page__header {
+  margin-bottom: 32px;
+}
+
+.home-page__brand,
+.home-page__eyebrow {
+  margin: 0 0 12px;
+  color: var(--theme-accent);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.home-page h1 {
+  margin: 0 0 14px;
+  font-size: clamp(34px, 6vw, 56px);
+  line-height: 1.15;
+}
+
+.home-page__header > p:last-child,
+.home-page__card > p:not(.home-page__eyebrow) {
+  margin: 0;
+  color: var(--theme-muted);
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+.home-page__card {
+  padding: clamp(24px, 5vw, 40px);
+  border: 1px solid var(--theme-border);
+  border-radius: 16px;
+  background: var(--theme-surface);
+  box-shadow: 0 10px 28px rgb(var(--theme-shadow) / 10%);
+}
+
+.home-page__card h2 {
+  margin: 0 0 16px;
+  font-family: 'Fontdiner Swanky', Georgia, serif;
+  font-size: clamp(26px, 4vw, 36px);
+  font-weight: 400;
+  line-height: 1.4;
+}
+
+.home-page__link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  min-height: 48px;
+  margin-top: 24px;
+  padding: 14px 20px;
+  border-radius: 8px;
+  background: var(--theme-accent);
+  color: var(--theme-on-accent);
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 1.4;
+  text-decoration: none;
+}
+
+.home-page__link:hover {
+  background: var(--theme-accent-hover);
+}
+
+.home-page__link:focus-visible {
+  outline: 3px solid var(--theme-accent);
+  outline-offset: 4px;
+}
