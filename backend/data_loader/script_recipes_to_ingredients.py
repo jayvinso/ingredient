@@ -1,9 +1,10 @@
 import json
+import re
 
 ingredientSet = set()
 index = 1
 
-with open("backend/data_loader/ingredients2.json", "w", encoding="utf-8") as ingredient:
+with open("backend/data_loader/ingredients.json", "w", encoding="utf-8") as ingredient:
     ingredient.write("[\n")
     with open("backend/data_loader/recipes.json", "r", encoding="utf-8") as file:
         json_recipes = json.load(file)
@@ -11,7 +12,7 @@ with open("backend/data_loader/ingredients2.json", "w", encoding="utf-8") as ing
             for map in line["description"]:
                 for currentIngredient in map.keys():
                     if currentIngredient not in ingredientSet:
-                        ingredientSet.add(currentIngredient)
+                        ingredientSet.add(re.sub(r"[\':\",\[\]\\]", "", currentIngredient).strip())
 
     for ingredient_name in ingredientSet:
         ingredient.write(f"{{\"_op_type\": \"index\", \"_index\": \"ingredients\", \"id\": {index}, \"title\": \"{ingredient_name}\"}},\n")
