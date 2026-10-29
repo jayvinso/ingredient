@@ -1,5 +1,6 @@
 import csv
 import re
+import numpy
 from fractions import Fraction
 
 leftover = []
@@ -66,7 +67,7 @@ index = 1
 
 
 
-with open("backend/data_loader/recipes.json", "w", encoding="utf-8") as recipe:
+with open("backend/data_loader/recipes_new.json", "w", encoding="utf-8") as recipe:
     recipe.write("[\n")
     with open("backend/data_loader/recipes_full.csv", "r", encoding="utf-8") as file:
         csvFile = csv.reader(file)
@@ -90,16 +91,27 @@ with open("backend/data_loader/recipes.json", "w", encoding="utf-8") as recipe:
                 ingredients = parse_list(line[6])
 
                 ingred_weights, total = get_weighted_ingredients(ingredients, parse_list(line[2]))
+                for i in ingred_weights:
+                    ingred_weights[i] = ingred_weights[i] / total
+
+                # READ IN SUBSTITUTIONS TO THE VARIABLE HERE
+                substitutions = dict()
 
                 new_ingredients = []
-                for ingredient in ingredients:
-                    new_ingredients.append(ingredient + ": " + str(ingred_weights[ingredient] / total))
-                ingredientList = str(new_ingredients).replace('\'', '\"').replace("\",", ",").replace(":", "\":")[1:-2]
+                for i in ingred_weights:
+                    i_dict = dict()
+                    weight = ingred_weights[i]
+                    i_dict[i] = weight
+                    if  i in substitutions:
+                        for sub in substitutions[i]:
+                            i_dict[sub] = weight * 0.8
+                    new_ingredients.append(i_dict)
+                ingredientList = str(new_ingredients).replace('\'', '\"') #.replace("\",", ",").replace(":", "\":")
                 if index > 2:
                     recipe.write(",\n")
-                recipe.write(f"{{\"_op_type\": \"index\", \"_index\": \"recipes\", \"id\": {index}, \"title\": \"{currentRecipe}\", \"description\": [{{{ingredientList}}}], \"instructions\": \"{str_instructions}\"}}")
+                recipe.write(f"{{\"_op_type\": \"index\", \"_index\": \"recipes\", \"id\": {index}, \"title\": \"{currentRecipe}\", \"description\": {ingredientList}, \"instructions\": \"{str_instructions}\"}}")
             index = index + 1
-            if index > 100000:
+            if index > 10000:
                 break
     recipe.write("\n]\n")
 
