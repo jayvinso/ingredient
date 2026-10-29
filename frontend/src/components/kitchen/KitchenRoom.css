@@ -1,0 +1,982 @@
+/* Kitchen materials and interface colors */
+
+.kitchen-room {
+  --room-pigment: #456b56;
+  --room-tile-light: #f0eadc;
+  --room-tile-dark: color-mix(
+    in srgb,
+    var(--room-pigment) 70%,
+    #fff9ec
+  );
+
+  --room-bowl-offset: 18px;
+  --room-scene-min-width: 720px;
+
+  --room-grout: #c4c1b1;
+  --room-cabinet: #b8c7b5;
+  --room-cabinet-edge: #7a907c;
+  --room-paper: #e3ecd9;
+  --room-counter: #ded5c1;
+  --room-counter-edge: #a69e8b;
+  --room-ink: #303e33;
+  --room-muted: #526154;
+  --room-accent: var(--room-pigment);
+  --room-on-accent: #fffaf0;
+  --room-frame: #eee8d9;
+  --room-sky: #b9cfd0;
+  --room-floor-light: #d8d2c2;
+  --room-floor-dark: #c5bfae;
+
+  --theme-page: var(--room-tile-light);
+  --theme-surface: var(--room-paper);
+  --theme-surface-strong: var(--room-paper);
+  --theme-surface-muted: color-mix(
+    in srgb,
+    var(--room-cabinet) 30%,
+    var(--room-paper)
+  );
+  --theme-text: var(--room-ink);
+  --theme-muted: var(--room-muted);
+  --theme-border: var(--room-cabinet-edge);
+  --theme-accent: var(--room-accent);
+  --theme-accent-hover: color-mix(
+    in srgb,
+    var(--room-accent) 88%,
+    #24392d
+  );
+  --theme-accent-soft: color-mix(
+    in srgb,
+    var(--room-cabinet) 45%,
+    var(--room-paper)
+  );
+  --theme-on-accent: var(--room-on-accent);
+
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+  overflow-x: auto;
+  color: var(--room-ink);
+  background: var(--room-tile-light);
+  font-family: var(
+    --kitchen-font-support,
+    'Trebuchet MS',
+    sans-serif
+  );
+}
+
+/* Furniture reaches both page edges.
+   The right column remains beside the workspace at every width. */
+
+.kitchen-room > .layout {
+  display: grid;
+  flex: 1;
+  grid-template-columns:
+    minmax(0, 1fr)
+    clamp(230px, 25vw, 400px);
+  align-items: stretch;
+  gap: 0;
+  width: 100%;
+  max-width: none;
+  min-width: var(--room-scene-min-width);
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+}
+
+.kitchen-room .main {
+  display: flex;
+  min-width: 0;
+  overflow: visible;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+/* Continuous checkerboard behind the heading, window and bowl. */
+
+.kitchen-room .rb-workspace {
+  --room-tiles:
+    linear-gradient(
+      110deg,
+      #ffffff0d,
+      transparent 55%,
+      #293c3010
+    ),
+    linear-gradient(
+      90deg,
+      var(--room-grout) 1px,
+      transparent 1px
+    ) 0 0 / 64px 64px,
+    linear-gradient(
+      var(--room-grout) 1px,
+      transparent 1px
+    ) 0 0 / 64px 64px,
+    repeating-conic-gradient(
+      var(--room-tile-light) 0 25%,
+      var(--room-tile-dark) 0 50%
+    ) 0 0 / 128px 128px;
+
+  container-type: inline-size;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 0;
+  min-width: 0;
+  min-height: 0;
+  padding: 0;
+  background: var(--room-tiles);
+  font-family: inherit;
+}
+
+.kitchen-wall {
+  display: grid;
+  flex: 0 0 auto;
+  grid-template-columns:
+    minmax(0, 1fr)
+    minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(24px, 4cqi, 60px);
+  min-width: 0;
+  padding: 34px clamp(24px, 4cqi, 64px) 18px;
+  margin: 0;
+  border: 0;
+  background: none;
+  box-shadow: none;
+}
+
+/* Introductory text backdrop follows the selected palette. */
+
+.kitchen-room .rb-workspace-heading {
+  min-width: 0;
+  padding: clamp(20px, 3cqi, 34px);
+  border: 1px solid var(--room-cabinet-edge);
+  border-radius: 3px;
+  background: var(--room-paper);
+  box-shadow: 0 3px 8px #26372c20;
+}
+
+.kitchen-room .rb-workspace-heading .rb-kicker {
+  margin: 0 0 12px;
+  color: var(--room-muted);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .12em;
+}
+
+.kitchen-room .rb-workspace-heading h1 {
+  margin: 0 0 14px;
+  color: var(--room-ink);
+  font-family: var(--kitchen-font-display, Georgia, serif);
+  font-size: clamp(27px, 3.3cqi, 44px);
+  font-style: normal;
+  font-weight: 400;
+  font-synthesis: none;
+  line-height: 1.35;
+  letter-spacing: 0;
+  overflow-wrap: anywhere;
+}
+
+.kitchen-room .rb-workspace-heading > p:last-child {
+  max-width: 420px;
+  margin: 0;
+  color: var(--room-muted);
+  font-size: 17px;
+  line-height: 1.6;
+}
+
+/* Window */
+
+.kitchen-window {
+  position: relative;
+  justify-self: center;
+  width: 100%;
+  max-width: 540px;
+  min-width: 0;
+  aspect-ratio: 1.7;
+  pointer-events: none;
+}
+
+.kitchen-window__rod {
+  position: absolute;
+  top: 0;
+  right: -8px;
+  left: -8px;
+  height: 4px;
+  border-radius: 3px;
+  background: #827765;
+}
+
+.kitchen-window__rod::before,
+.kitchen-window__rod::after {
+  content: '';
+  position: absolute;
+  top: -2px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #827765;
+}
+
+.kitchen-window__rod::before {
+  left: -2px;
+}
+
+.kitchen-window__rod::after {
+  right: -2px;
+}
+
+.kitchen-window__frame {
+  position: absolute;
+  inset: 9px 0 16px;
+  border: 10px solid var(--room-frame);
+  border-radius: 1px;
+  background: linear-gradient(
+    #a9c4ca,
+    var(--room-sky) 65%,
+    #d4d8c6
+  );
+  box-shadow:
+    inset 3px 4px 8px #32413930,
+    0 0 0 1px #8f8b78,
+    3px 5px 10px #26372c25;
+}
+
+.kitchen-window__glass {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.kitchen-window__sun {
+  position: absolute;
+  top: 13%;
+  right: 19%;
+  width: 15%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #fff4c9;
+  box-shadow: 0 0 22px 12px #fff4c940;
+  opacity: .65;
+}
+
+.kitchen-window__cloud {
+  position: absolute;
+  width: 22%;
+  height: 9%;
+  border-radius: 50%;
+  background: #f6f4e8;
+  filter: blur(4px);
+  opacity: .4;
+}
+
+.kitchen-window__cloud--one {
+  top: 30%;
+  left: 14%;
+}
+
+.kitchen-window__cloud--two {
+  top: 46%;
+  right: 12%;
+}
+
+.kitchen-window__hill {
+  position: absolute;
+  right: -10%;
+  bottom: -25%;
+  left: -10%;
+  height: 48%;
+  border-radius: 50% 50% 0 0;
+  background: linear-gradient(#96ac8d, #718e77);
+}
+
+.kitchen-window__panes {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      90deg,
+      transparent calc(50% - 3px),
+      var(--room-frame) calc(50% - 3px) calc(50% + 3px),
+      transparent calc(50% + 3px)
+    ),
+    linear-gradient(
+      transparent calc(50% - 3px),
+      var(--room-frame) calc(50% - 3px) calc(50% + 3px),
+      transparent calc(50% + 3px)
+    );
+}
+
+.kitchen-window__curtain,
+.kitchen-window__valance {
+  background:
+    repeating-linear-gradient(
+      90deg,
+      #ffffff22 0 2px,
+      transparent 2px 5px
+    ),
+    repeating-linear-gradient(
+      0deg,
+      #99695a18 0 9px,
+      transparent 9px 18px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      #99695a18 0 9px,
+      transparent 9px 18px
+    ),
+    #e9ddca;
+}
+
+.kitchen-window__curtain {
+  position: absolute;
+  top: -4px;
+  bottom: 0;
+  width: 26%;
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    49% 55%,
+    39% 64%,
+    66% 100%,
+    0 100%
+  );
+}
+
+.kitchen-window__curtain--left {
+  left: -4px;
+}
+
+.kitchen-window__curtain--right {
+  right: -4px;
+  transform: scaleX(-1);
+}
+
+.kitchen-window__valance {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  left: -4px;
+  height: 16%;
+  border-bottom: 1px solid #b6a48d;
+}
+
+.kitchen-window__sill {
+  position: absolute;
+  right: -9px;
+  bottom: 5px;
+  left: -9px;
+  height: 11px;
+  border: 1px solid #a69c86;
+  background: var(--room-frame);
+  box-shadow: 0 4px 5px #26372c20;
+}
+
+.kitchen-window__plant {
+  position: absolute;
+  bottom: 9px;
+  left: 30px;
+  width: 25px;
+  height: 23px;
+  border-radius: 2px 2px 6px 6px;
+  background: linear-gradient(
+    90deg,
+    #986c50,
+    #bc9072 60%,
+    #a27658
+  );
+}
+
+.kitchen-window__plant > span {
+  position: absolute;
+  bottom: 100%;
+  left: 11px;
+  width: 2px;
+  height: 30px;
+  background: #526e47;
+}
+
+.kitchen-window__plant > span::before,
+.kitchen-window__plant > span::after {
+  content: '';
+  position: absolute;
+  width: 17px;
+  height: 9px;
+  border-radius: 100% 0 100% 0;
+  background: #6c875b;
+}
+
+.kitchen-window__plant > span::before {
+  top: 9px;
+  left: -15px;
+  transform: rotate(20deg);
+}
+
+.kitchen-window__plant > span::after {
+  top: 1px;
+  left: 1px;
+  transform: rotate(-20deg);
+}
+
+/* Shallow textured laminate worktop */
+
+.kitchen-counter {
+  position: relative;
+  flex: 0 0 auto;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+}
+
+.kitchen-counter__surface {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  grid-template-columns:
+    minmax(0, 1fr)
+    minmax(180px, 26%);
+  align-items: end;
+  gap: clamp(16px, 3cqi, 40px);
+  min-width: 0;
+  padding: 16px clamp(20px, 4cqi, 64px) 20px;
+  background: none;
+}
+
+.kitchen-counter__surface::before {
+  content: '';
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: -1;
+  height: 84px;
+  border-top: 1px solid var(--room-counter-edge);
+  background:
+    radial-gradient(
+      ellipse at 3px 4px,
+      #625b4938 0 .7px,
+      transparent 1.3px
+    ) 0 0 / 13px 11px,
+    radial-gradient(
+      ellipse at 5px 2px,
+      #fffbedb0 0 .8px,
+      transparent 1.5px
+    ) 3px 5px / 17px 13px,
+    radial-gradient(
+      ellipse at 2px 6px,
+      #82745b25 0 1px,
+      transparent 1.8px
+    ) 7px 1px / 23px 19px,
+    repeating-linear-gradient(
+      7deg,
+      #ffffff12 0 1px,
+      transparent 1px 6px
+    ),
+    linear-gradient(
+      #00000008,
+      transparent 35%,
+      #fff9e716
+    ),
+    var(--room-counter);
+  box-shadow: inset 0 2px 0 #fff9e73d;
+  pointer-events: none;
+}
+
+.kitchen-counter__surface::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1;
+  height: 10px;
+  background: linear-gradient(
+    #ebe6d7,
+    #b6b3a4 40%,
+    #d8d5c8 70%,
+    #949084
+  );
+  box-shadow: 0 3px 4px #26372c25;
+  pointer-events: none;
+}
+
+.kitchen-room .rb-workspace .rb-bowl-stage {
+  --rb-bowl-size: min(51cqi, 450px);
+
+  min-width: 0;
+  padding: 0;
+  overflow: visible;
+}
+
+/* Move the bowl and contact shadow without replacing the mixing animation. */
+
+.kitchen-room .rb-workspace .rb-bowl-scene {
+  translate: 0 var(--room-bowl-offset);
+}
+
+.kitchen-room .rb-workspace .rb-bowl-stage::before {
+  translate: 0 var(--room-bowl-offset);
+}
+
+.kitchen-room .rb-drop-hint,
+.kitchen-room .rb-overflow-note {
+  max-width: 100%;
+  margin: 0;
+  padding: 7px 12px;
+  border: 1px solid var(--room-cabinet-edge);
+  border-radius: 3px;
+  color: var(--room-muted);
+  background: var(--room-paper);
+  font-size: 13px;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.kitchen-room .rb-overflow-note {
+  margin-bottom: 10px;
+}
+
+/* Selected ingredients remain to the right of the bowl. */
+
+.kitchen-room .rb-workspace .rb-selection {
+  position: relative;
+  grid-column: auto;
+  grid-row: auto;
+  align-self: end;
+  min-width: 0;
+  max-height: 320px;
+  margin: 0 0 16px;
+  padding: 20px 16px 16px;
+  overflow: auto;
+  border: 1px solid var(--room-cabinet-edge);
+  border-radius: 2px;
+  background: var(--room-paper);
+  box-shadow: 0 2px 5px #26372c20;
+  transform: none;
+}
+
+.kitchen-room .rb-selection::before {
+  content: none;
+}
+
+.kitchen-room .rb-selection-heading h2 {
+  font-family: var(--kitchen-font-display, Georgia, serif);
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 1.4;
+}
+
+.kitchen-room .rb-selected-group h3 {
+  font-size: 14px;
+}
+
+.kitchen-room .rb-selected-name {
+  font-size: 15px;
+}
+
+.kitchen-room .rb-workspace .rb-clear-button {
+  border-radius: 3px;
+  font-size: 14px;
+}
+
+/* Controls below the worktop */
+
+.kitchen-room .rb-workspace .rb-bowl-actions {
+  gap: 9px;
+  margin: 0;
+  padding: 23px 24px 20px;
+  border-bottom: 1px solid var(--room-cabinet-edge);
+  background: var(--room-cabinet);
+}
+
+.kitchen-room .rb-workspace .rb-bowl-actions > button:first-of-type {
+  min-height: 46px;
+  padding: 10px 26px;
+  border: 1px solid var(--room-accent);
+  border-radius: 4px;
+  box-shadow: none;
+  font-family: inherit;
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.kitchen-room .rb-workspace .rb-bowl-actions p {
+  max-width: 640px;
+  color: var(--room-muted);
+  font-size: 14px;
+}
+
+.kitchen-room .rb-workspace .rb-bowl-actions .rb-search-error {
+  color: var(--theme-danger);
+}
+
+.kitchen-room .rb-workspace .rb-bowl-actions .rb-cancel-button {
+  font-family: inherit;
+}
+
+/* Cabinet doors */
+
+.kitchen-base-cabinets {
+  display: grid;
+  flex: 1 0 180px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 2px;
+  min-width: 0;
+  min-height: 180px;
+  margin: 0;
+  padding: 0 0 4px;
+  border: 0;
+  border-bottom: 20px solid color-mix(
+    in srgb,
+    var(--room-cabinet-edge) 80%,
+    #344536
+  );
+  background: var(--room-cabinet-edge);
+  pointer-events: none;
+}
+
+.kitchen-base-cabinets > span {
+  position: relative;
+  min-width: 0;
+  background: var(--room-cabinet);
+  box-shadow: inset 1px 1px 0 #ffffff25;
+}
+
+.kitchen-base-cabinets > span::before {
+  content: '';
+  position: absolute;
+  top: 20px;
+  left: calc(50% - 27px);
+  width: 54px;
+  height: 6px;
+  border: 1px solid #8b8d80;
+  border-radius: 3px;
+  background: linear-gradient(
+    #eeeade,
+    #afafa1 60%,
+    #d7d5c8
+  );
+  box-shadow: 0 2px 2px #26372c20;
+}
+
+.kitchen-base-cabinets > span::after {
+  content: '';
+  position: absolute;
+  inset: 45px 18px 18px;
+  border: 1px solid color-mix(
+    in srgb,
+    var(--room-cabinet-edge) 65%,
+    var(--room-cabinet)
+  );
+  box-shadow:
+    inset 1px 1px 1px #26372c0d,
+    1px 1px 0 #ffffff20;
+}
+
+/* Pantry and tools remain in the right-hand column. */
+
+.kitchen-room .right {
+  display: flex;
+  flex-direction: column;
+  align-self: stretch;
+  gap: 0;
+  min-width: 0;
+  min-height: 0;
+  height: auto;
+  padding: 0;
+  border: 0;
+  border-left: 1px solid var(--room-cabinet-edge);
+  border-bottom: 20px solid color-mix(
+    in srgb,
+    var(--room-cabinet-edge) 80%,
+    #344536
+  );
+  border-radius: 0;
+  background: var(--room-cabinet);
+  box-shadow: inset 3px 0 5px #26372c0d;
+  font-family: inherit;
+}
+
+.kitchen-room .theme-controls {
+  flex-shrink: 0;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 18px 22px;
+  border: 0;
+  border-bottom: 1px solid var(--room-cabinet-edge);
+  border-radius: 0;
+  background: var(--room-paper);
+  box-shadow: none;
+  font-family: inherit;
+}
+
+.kitchen-room .theme-controls__palette {
+  color: var(--room-muted);
+  font: inherit;
+  font-size: 11px;
+}
+
+.kitchen-room .theme-controls select {
+  padding-left: 8px;
+  border-radius: 3px;
+  font-family: inherit;
+}
+
+.kitchen-room .theme-controls__mode {
+  padding: 8px 10px;
+  border-radius: 3px;
+  font-family: inherit;
+  font-size: 12px;
+}
+
+.kitchen-room .source-panel {
+  min-width: 0;
+  min-height: 0;
+  padding: 28px 24px;
+  overflow: visible;
+  border: 0;
+  border-bottom: 1px solid var(--room-cabinet-edge);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  color: var(--room-ink);
+  font-family: inherit;
+}
+
+.kitchen-room .right > .theme-controls + .source-panel {
+  flex: 1;
+}
+
+.kitchen-room .right > .source-panel:last-child {
+  border-bottom: 0;
+}
+
+.kitchen-room .source-panel::before {
+  content: none;
+}
+
+.kitchen-room .source-panel__eyebrow {
+  margin: 0 0 12px;
+  color: var(--room-muted);
+  font-size: 10px;
+  letter-spacing: .08em;
+}
+
+.kitchen-room .source-panel h2 {
+  margin-bottom: 12px;
+  font-family: var(--kitchen-font-display, Georgia, serif);
+  font-size: 25px;
+  font-weight: 400;
+  line-height: 1.4;
+}
+
+.kitchen-room .source-panel > p:not(.source-panel__eyebrow) {
+  color: var(--room-muted);
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.kitchen-room .source-panel__empty {
+  margin-top: 18px;
+  padding: 14px;
+  border-radius: 3px;
+}
+
+.kitchen-room .ingredient-search {
+  margin-top: 20px;
+}
+
+.kitchen-room .ingredient-search__field {
+  border-radius: 3px;
+}
+
+.kitchen-room .ingredient-search .ingredient-search__input {
+  font-family: inherit;
+  font-size: 16px;
+}
+
+.kitchen-room .ingredient-search .ingredient-search__list {
+  max-height: 280px;
+  border-radius: 3px;
+}
+
+.kitchen-room .ingredient-search .ingredient-search__item {
+  border-radius: 3px;
+  font-family: inherit;
+}
+
+.kitchen-room .source-samples__items button {
+  border-radius: 3px;
+  font-family: inherit;
+}
+
+.kitchen-room .rb-devtools {
+  margin: 0;
+  border-radius: 0;
+}
+
+.kitchen-room .rb-recipe-dialog {
+  font-family: inherit;
+}
+
+.kitchen-room .rb-recipe-header h2 {
+  font-family: var(--kitchen-font-display);
+  line-height: 1.4;
+}
+
+/* Floor follows the same minimum scene width. */
+
+.kitchen-room::after {
+  content: '';
+  flex: 0 0 56px;
+  min-width: var(--room-scene-min-width);
+  background: repeating-conic-gradient(
+    var(--room-floor-light) 0 25%,
+    var(--room-floor-dark) 0 50%
+  ) 0 0 / 80px 80px;
+  box-shadow: inset 0 7px 10px #26372c20;
+  pointer-events: none;
+}
+
+/* Palette-specific backdrop colors */
+
+:root[data-palette='clay'] .kitchen-room {
+  --room-pigment: #89624e;
+  --room-paper: #f1dfd1;
+  --room-cabinet: #d0b9a6;
+  --room-cabinet-edge: #a28b75;
+}
+
+:root[data-palette='blue'] .kitchen-room {
+  --room-pigment: #4b7180;
+  --room-paper: #deedf2;
+  --room-cabinet: #b4c7ca;
+  --room-cabinet-edge: #7c979e;
+}
+
+/* Night mode preserves the colored checkerboard. */
+
+:root[data-theme='dark'] .kitchen-room {
+  --room-tile-light: #c4c9bc;
+  --room-tile-dark: color-mix(
+    in srgb,
+    var(--room-pigment) 65%,
+    #e9ebdb
+  );
+  --room-grout: #a6b09e;
+  --room-cabinet: #58725f;
+  --room-cabinet-edge: #49614f;
+  --room-paper: #344b3d;
+  --room-counter: #b6b09a;
+  --room-counter-edge: #8e9584;
+  --room-ink: #f5f1e5;
+  --room-muted: #f0f0e3;
+  --room-accent: #e0edd7;
+  --room-on-accent: #28382b;
+  --room-frame: #cac9b7;
+  --room-sky: #78959c;
+  --room-floor-light: #8c9583;
+  --room-floor-dark: #7c8978;
+}
+
+:root[data-theme='dark'][data-palette='clay'] .kitchen-room {
+  --room-paper: #554133;
+  --room-cabinet: #7f6652;
+  --room-cabinet-edge: #69513f;
+  --room-accent: #ecd0b4;
+}
+
+:root[data-theme='dark'][data-palette='blue'] .kitchen-room {
+  --room-paper: #304a58;
+  --room-cabinet: #526f7c;
+  --room-cabinet-edge: #425f6a;
+  --room-accent: #c5e0e9;
+}
+
+:root[data-theme='dark'] .kitchen-window__frame {
+  background: linear-gradient(#657f8b, var(--room-sky));
+}
+
+:root[data-theme='dark'] .kitchen-window__sun {
+  opacity: .3;
+}
+
+:root[data-theme='dark'] .kitchen-window__hill {
+  background: #69806b;
+}
+
+/* Compact layouts retain both right-hand ingredient areas. */
+
+@container (max-width: 700px) {
+  .kitchen-wall {
+    gap: 20px;
+    padding-inline: 20px;
+  }
+
+  .kitchen-room .rb-workspace-heading {
+    padding: 20px;
+  }
+
+  .kitchen-room .rb-workspace-heading h1 {
+    font-size: 27px;
+  }
+
+  .kitchen-counter__surface {
+    padding-inline: 20px;
+    grid-template-columns: minmax(0, 1fr) 160px;
+  }
+
+  .kitchen-room .rb-workspace .rb-bowl-stage {
+    --rb-bowl-size: min(49cqi, 360px);
+  }
+
+  .kitchen-room .rb-workspace .rb-selection {
+    padding-inline: 12px;
+  }
+
+  .kitchen-room .rb-selection-heading {
+    flex-wrap: wrap;
+  }
+
+  .kitchen-room .rb-selection-heading h2 {
+    font-size: 18px;
+  }
+
+  .kitchen-base-cabinets > span::after {
+    inset-inline: 10px;
+  }
+}
+
+@container (max-width: 580px) {
+  .kitchen-wall {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 26px;
+    padding: 24px 20px;
+  }
+
+  .kitchen-room .rb-workspace-heading {
+    width: 100%;
+  }
+
+  .kitchen-window {
+    width: min(100%, 360px);
+  }
+}
+
+@media (max-width: 1100px) {
+  .kitchen-room .source-panel {
+    padding: 24px 18px;
+  }
+
+  .kitchen-room .theme-controls {
+    padding: 16px 18px;
+  }
+
+  .kitchen-room .source-panel h2 {
+    font-size: 23px;
+  }
+}

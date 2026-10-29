@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import type { BowlItem } from './selection'
-import { requestRecipe, waitFor } from './recipeService'
-import type { DemoScenario, RecipeResult } from './recipeService'
+import type { BowlItem } from '../utils/selection'
+import { requestRecipe, waitFor } from '../services/recipeService'
+import type { DemoScenario, RecipeResult } from '../services/recipeService'
 import type { RecipeSearchValue } from './useRecipeSearch'
 
 /** Each run owns a controller; canceled or older runs cannot publish results. */

@@ -1,0 +1,399 @@
+/* Wooden cabinet */
+.kitchen-radio {
+  position: relative;
+
+  width: 274px;
+  max-width: 100%;
+  padding: 9px;
+
+  border: 2px solid #4a3022;
+  border-radius: 25px 25px 12px 12px;
+
+  background:
+    repeating-linear-gradient(
+      0deg,
+      transparent 0 5px,
+      rgb(84 43 20 / 9%) 5px 6px
+    ),
+    linear-gradient(
+      105deg,
+      #a16c43,
+      #c28b54 45%,
+      #a66c40
+    );
+
+  color: #fff0c8;
+  font-family: var(
+    --kitchen-font-support,
+    'Trebuchet MS',
+    sans-serif
+  );
+
+  box-shadow:
+    inset 0 0 0 3px rgb(255 229 167 / 25%),
+    0 4px 0 #65442c,
+    3px 8px 0 rgb(43 39 24 / 15%);
+}
+
+/* Little cabinet feet */
+.kitchen-radio::before,
+.kitchen-radio::after {
+  content: '';
+
+  position: absolute;
+  bottom: -9px;
+
+  width: 17px;
+  height: 6px;
+
+  border: 1px solid #4a3022;
+  border-radius: 0 0 3px 3px;
+
+  background: #efe0b8;
+}
+
+.kitchen-radio::before {
+  left: 22px;
+}
+
+.kitchen-radio::after {
+  right: 22px;
+}
+
+/* Cream speaker grille */
+.kitchen-radio__grille {
+  position: relative;
+
+  height: 40px;
+  margin-bottom: 6px;
+
+  overflow: hidden;
+
+  border: 2px solid #5b452e;
+  border-radius: 16px 16px 5px 5px;
+
+  background:
+    repeating-linear-gradient(
+      90deg,
+      transparent 0 19px,
+      rgb(101 78 40 / 30%) 19px 20px
+    ),
+    repeating-linear-gradient(
+      0deg,
+      #eed9a7 0 4px,
+      #a98a52 4px 5px,
+      #fff0c9 5px 7px
+    );
+
+  box-shadow: inset 0 2px 2px rgb(72 47 20 / 15%);
+}
+
+.kitchen-radio__badge {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+
+  padding: 4px 7px;
+
+  border: 1px solid #5b452e;
+  border-radius: 3px;
+
+  background: #fff0c9;
+  color: #4d3927;
+
+  font-family: var(
+    --kitchen-font-display,
+    Georgia,
+    serif
+  );
+  font-size: 9px;
+  line-height: 1.2;
+}
+
+.kitchen-radio__light {
+  position: absolute;
+  top: 13px;
+  left: 12px;
+
+  width: 9px;
+  height: 9px;
+
+  border: 1px solid #5b452e;
+  border-radius: 50%;
+
+  background: #766447;
+}
+
+.kitchen-radio.is-playing .kitchen-radio__light {
+  background: #f4ad3e;
+  box-shadow: 0 0 7px #f4ad3e;
+}
+
+/* Dark tuning panel */
+.kitchen-radio__dashboard {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr) 44px;
+  align-items: center;
+  gap: 7px;
+
+  padding: 5px 6px;
+
+  border: 2px solid #493423;
+  border-radius: 4px;
+
+  background:
+    repeating-linear-gradient(
+      0deg,
+      transparent 0 3px,
+      rgb(255 215 139 / 5%) 3px 4px
+    ),
+    #493b2a;
+
+  box-shadow: inset 0 2px 3px rgb(0 0 0 / 20%);
+}
+
+/* Native range controls with illustrated round faces */
+.kitchen-radio__dial {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+
+  min-width: 0;
+  margin: 0;
+}
+
+.kitchen-radio__dial-control {
+  position: relative;
+  display: grid;
+  place-items: center;
+
+  width: 44px;
+  height: 44px;
+}
+
+.kitchen-radio__dial-control input {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+  margin: 0;
+
+  opacity: 0;
+  cursor: ew-resize;
+}
+
+.kitchen-radio__dial-face {
+  position: relative;
+  display: block;
+
+  width: 36px;
+  height: 36px;
+
+  border: 2px solid #362c20;
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      circle,
+      #fff0c8 0 49%,
+      #b69c63 50% 55%,
+      #fff2cf 56% 66%,
+      #a58952 67% 73%,
+      #fff1c9 74%
+    );
+
+  box-shadow:
+    1px 3px 0 rgb(0 0 0 / 35%),
+    inset 0 1px 2px rgb(255 255 255 / 70%);
+
+  pointer-events: none;
+}
+
+.kitchen-radio__dial-face::after {
+  content: '';
+
+  position: absolute;
+  top: 4px;
+  left: calc(50% - 1px);
+
+  width: 2px;
+  height: 8px;
+
+  border-radius: 2px;
+  background: #5e4729;
+}
+
+.kitchen-radio__dial-control input:focus-visible
+  + .kitchen-radio__dial-face {
+  outline: 3px solid #ffd47a;
+  outline-offset: 3px;
+}
+
+.kitchen-radio__dial-caption {
+  color: #f9df9d;
+
+  font-size: 8px;
+  font-weight: 600;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.kitchen-radio__dial.is-disabled .kitchen-radio__dial-face {
+  filter: saturate(0.5);
+  opacity: 0.65;
+}
+
+.kitchen-radio__dial.is-disabled input {
+  cursor: default;
+}
+
+/* Station scale and song information */
+.kitchen-radio__screen {
+  align-self: stretch;
+  min-width: 0;
+
+  padding-top: 3px;
+  text-align: center;
+}
+
+.kitchen-radio__scale {
+  position: relative;
+
+  display: flex;
+  justify-content: space-between;
+
+  padding: 0 2px 6px;
+  margin-bottom: 5px;
+
+  border-bottom: 1px solid #b69655;
+
+  color: #f2ce80;
+  font: 7px/1 monospace;
+
+  background:
+    repeating-linear-gradient(
+      90deg,
+      #b69655 0 1px,
+      transparent 1px 5px
+    )
+    left bottom / 100% 4px no-repeat;
+}
+
+.kitchen-radio__scale i {
+  position: absolute;
+  top: 0;
+  bottom: -1px;
+
+  width: 2px;
+  background: #e67855;
+
+  transform: translateX(-50%);
+}
+
+.kitchen-radio__song {
+  margin: 0;
+
+  color: #fff0c8;
+
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+
+.kitchen-radio__artist {
+  margin: 3px 0 0;
+
+  color: #e5cb95;
+
+  font-size: 9px;
+  line-height: 1.2;
+}
+
+/* Piano-key style play button */
+.kitchen-radio__transport {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+
+  margin-top: 6px;
+}
+
+.kitchen-radio__play {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+
+  flex-shrink: 0;
+  min-width: 84px;
+  min-height: 32px;
+
+  padding: 5px 10px;
+
+  border: 2px solid #59412a;
+  border-radius: 4px 4px 7px 7px;
+
+  background: linear-gradient(#fff4d4, #e9d7a4);
+  color: #42301f;
+
+  box-shadow: 0 3px 0 #65482e;
+
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+.kitchen-radio__play:hover {
+  background: #fff3cf;
+}
+
+.kitchen-radio__play:active {
+  box-shadow: 0 1px 0 #65482e;
+  transform: translateY(2px);
+}
+
+.kitchen-radio__play:focus-visible {
+  outline: 3px solid #fff0c8;
+  outline-offset: 3px;
+}
+
+.kitchen-radio__status {
+  margin: 0;
+
+  color: #fff0c8;
+
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 1.3;
+  text-align: right;
+}
+
+.kitchen-radio__error {
+  margin: 8px 0 0;
+  padding: 6px;
+
+  border-radius: 3px;
+
+  background: #fff0c8;
+  color: #833324;
+
+  font-size: 11px;
+  line-height: 1.4;
+}
+
+.kitchen-radio audio {
+  display: none;
+}
+
+@media (max-width: 700px) {
+  .kitchen-radio {
+    width: 260px;
+  }
+}

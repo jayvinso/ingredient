@@ -1,5 +1,5 @@
 import { createContext, useContext } from 'react'
-import type { BowlItem, BowlItemIdentity } from './selection'
+import type { BowlItem, BowlItemIdentity } from '../utils/selection'
 
 export type BowlSelectionValue = {
   locked: boolean
