@@ -12,7 +12,7 @@ export default function HomePage() {
         <header className="home-page__header">
           <p className="home-page__brand">Ingredient</p>
           <h1>All experiences</h1>
-          <p>Choose a kitchen and make something good.</p>
+          <p>Choose a recipe experience.</p>
         </header>
 
         <section
@@ -29,6 +29,20 @@ export default function HomePage() {
 
           <a className="home-page__link" href="#/kitchen">
             Enter the kitchen
+            <span aria-hidden="true">→</span>
+          </a>
+        </section>
+
+        <section
+          className="home-page__card"
+          aria-labelledby="contexto-experience-title"
+        >
+          <p className="home-page__eyebrow">Coming soon</p>
+          <h2 id="contexto-experience-title">Recipatico</h2>
+          <p>Find the secret recipe, one guess at a time.</p>
+
+          <a className="home-page__link" href="#/contexto">
+            Explore Recipatico
             <span aria-hidden="true">→</span>
           </a>
         </section>

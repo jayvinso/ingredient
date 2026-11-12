@@ -2,6 +2,7 @@ import { useEffect, useSyncExternalStore } from 'react'
 import './App.css'
 import HomePage from './pages/HomePage'
 import KitchenPage from './pages/KitchenPage'
+import ContextoPage from './pages/ContextoPage'
 
 function subscribeToNavigation(onChange: () => void) {
   window.addEventListener('hashchange', onChange)
@@ -9,7 +10,9 @@ function subscribeToNavigation(onChange: () => void) {
 }
 
 function getCurrentPage() {
-  return window.location.hash === '#/kitchen' ? 'kitchen' : 'home'
+  if (window.location.hash === '#/kitchen') return 'kitchen'
+  if (window.location.hash === '#/contexto') return 'contexto'
+  return 'home'
 }
 
 function App() {
@@ -22,7 +25,9 @@ function App() {
   useEffect(() => {
     document.title = page === 'kitchen'
       ? 'Domestic Bliss | Ingredient'
-      : 'All experiences | Ingredient'
+      : page === 'contexto'
+        ? 'Recipatico | Ingredient'
+        : 'All experiences | Ingredient'
 
     window.scrollTo(0, 0)
     document.querySelector<HTMLElement>('main')?.focus({
@@ -30,7 +35,9 @@ function App() {
     })
   }, [page])
 
-  return page === 'kitchen' ? <KitchenPage /> : <HomePage />
+  if (page === 'kitchen') return <KitchenPage />
+  if (page === 'contexto') return <ContextoPage />
+  return <HomePage />
 }
 
 export default App
