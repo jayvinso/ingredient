@@ -1,27 +1,10 @@
-import catalogUrl from './data/recipe-catalog.json?url'
-
 export type CatalogRecipe = {
   id: string
   title: string
   ingredients: Record<string, number>
 }
 
-let pendingCatalog: Promise<CatalogRecipe[]> | undefined
-
-export function loadRecipeCatalog(): Promise<CatalogRecipe[]> {
-  if (!pendingCatalog) {
-    pendingCatalog = fetch(catalogUrl)
-      .then(async (response) => {
-        if (!response.ok) throw new Error('Could not load the recipe catalog.')
-        return await response.json() as CatalogRecipe[]
-      })
-      .catch((error: unknown) => {
-        pendingCatalog = undefined
-        throw error
-      })
-  }
-  return pendingCatalog
-}
+export { loadRecipeCatalog, scoreRecipe } from './recipeSimilarity'
 
 export function suggestRecipes(catalog: CatalogRecipe[], input: string) {
   const query = input.trim().toLowerCase()
@@ -54,26 +37,4 @@ export function chooseRecipe(catalog: CatalogRecipe[], previous?: CatalogRecipe)
   }
   const index = Math.floor(Math.random() * (catalog.length - 1))
   return catalog[index >= previousIndex ? index + 1 : index]
-}
-
-export function scoreRecipe(guess: CatalogRecipe, target: CatalogRecipe) {
-  if (guess.id === target.id) return 100
-
-  let dot = 0
-  let guessSquared = 0
-  let targetSquared = 0
-
-  for (const [ingredient, weight] of Object.entries(guess.ingredients)) {
-    guessSquared += weight * weight
-    if (Object.prototype.hasOwnProperty.call(target.ingredients, ingredient)) {
-      dot += weight * target.ingredients[ingredient]
-    }
-  }
-  for (const weight of Object.values(target.ingredients)) {
-    targetSquared += weight * weight
-  }
-
-  const denominator = Math.sqrt(guessSquared * targetSquared)
-  if (denominator === 0) return 0
-  return Math.min(99, Math.round(100 * dot / denominator))
 }
