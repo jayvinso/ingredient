@@ -9,32 +9,17 @@ from difflib import SequenceMatcher
 from functools import lru_cache
 from time import monotonic
 import re
+from ingredient_normalization import canonical_ingredient
 
 es = Elasticsearch('https://es01:9200', ca_certs="/usr/share/elasticsearch/config/certs/ca/ca.crt", 
                        basic_auth=("elastic", "password"))
 
 def _ingredient_words(name: str) -> frozenset[str]:
-    """Normalize capitalization and common plurals."""
-    words = []
-
-    for word in re.findall(r"[a-z0-9]+", name.casefold()):
-        if word in {"of", "the", "and", "with"}:
-            continue
-
-        if word.endswith("ies") and len(word) > 4:
-            word = word[:-3] + "y"
-        elif word.endswith("oes") and len(word) > 4:
-            word = word[:-2]
-        elif (
-            word.endswith("s")
-            and len(word) > 3
-            and not word.endswith(("ss", "us", "is"))
-        ):
-            word = word[:-1]
-
-        words.append(word)
-
-    return frozenset(words)
+    return frozenset(
+        word
+        for word in canonical_ingredient(name).split()
+        if word not in {"of", "the", "and", "with"}
+    )
 
 
 def _ingredient_similarity(
@@ -303,7 +288,7 @@ def get_recipe(query: str) -> dict | None:
 
 def ingredients_search(query: str) -> list[str]:
     """Return up to six ingredient names, ordered by search relevance."""
-    query = query.strip()
+    query = canonical_ingredient(query)
     if not query:
         return []
 

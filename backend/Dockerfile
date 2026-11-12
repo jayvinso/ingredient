@@ -17,6 +17,9 @@ WORKDIR /usr/local/app
 FROM python:3 AS backend-dev
 COPY backend/django/requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
+ENV NLTK_DATA=/usr/local/share/nltk_data
+RUN python -c "import nltk; assert nltk.download('wordnet', download_dir='/usr/local/share/nltk_data', quiet=True)"
+COPY backend/data_loader/ingredient_normalization.py ./ingredient_normalization.py
 COPY backend/django/app ./app
 COPY backend/django/ingredient_backend ./ingredient_backend
 COPY backend/django/manage.py ./

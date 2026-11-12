@@ -1,18 +1,45 @@
 import json
 
-ingredientSet = set()
+from ingredient_normalization import canonical_ingredient
+
+
+ingredient_set = set()
 index = 1
 
-with open("ingredients.json", "w", encoding="utf-8") as ingredient:
-    ingredient.write("[\n")
-    with open("foodb_2020_04_07_json/Content.json", "r", encoding="utf-8") as file:
-        for line in file:
-            currentLine = json.loads(line)
-            if currentLine["orig_food_common_name"] is not None:
-                currentIngredient = currentLine["orig_food_common_name"].split(",")[0]
-                if currentIngredient not in ingredientSet:
-                    ingredientSet.add(currentIngredient)
-                    ingredient.write(f"{{\"_op_type\": \"index\", \"_index\": \"ingredients\", \"id\": {index}, \"title\": \"{currentIngredient}\"}},\n")
-                    index = index + 1
+with open("ingredients.json", "w", encoding="utf-8") as output:
+    output.write("[\n")
+    with open(
+        "foodb_2020_04_07_json/Content.json",
+        "r",
+        encoding="utf-8",
+    ) as source:
+        first = True
+        for line in source:
+            current_line = json.loads(line)
+            common_name = current_line["orig_food_common_name"]
 
-    ingredient.write("]\n")
+            if common_name is None:
+                continue
+
+            canonical = canonical_ingredient(common_name.split(",")[0])
+            if not canonical or canonical in ingredient_set:
+                continue
+
+            ingredient_set.add(canonical)
+            if not first:
+                output.write(",\n")
+
+            json.dump(
+                {
+                    "_op_type": "index",
+                    "_index": "ingredients",
+                    "id": index,
+                    "title": canonical,
+                },
+                output,
+                ensure_ascii=False,
+            )
+            first = False
+            index += 1
+
+    output.write("\n]\n")

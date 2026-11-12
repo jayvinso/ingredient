@@ -2,3 +2,6 @@
 backend/data_loader/recipes_full.csv
 backend/data_sparse/recipes/recipes_full.csv
 backend/data_loader/full_dataset.csv
+
+.venv/
+.vscode/
