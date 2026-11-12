@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState, type CSSProperties, type FormEvent } from 'react'
 import ThemeControls from '../components/kitchen/ThemeControls'
+import { chooseRecipe, loadRecipeCatalog, scoreRecipe, suggestRecipes, type CatalogRecipe } from '../components/recipatico/recipeCatalog'
 import './RecipaticoPage.css'
 
-const secretRecipe = 'Baked ziti'
+
 
 function recipeKey(name: string) {
   return name.trim().replace(/\s+/g, ' ').toLowerCase()
@@ -26,7 +27,7 @@ function ServingStation({ label, guess, solvedIn }: {
           <span className={`rec-reveal-name${solvedIn ? ' rec-reveal-count' : ''}`}>
             {solvedIn
               ? <>Solved in <strong>{solvedIn} {solvedIn === 1 ? 'guess' : 'guesses'}</strong></>
-              : secretRecipe}
+              : guess.recipe}
           </span>
         )}
         <span className="rec-cloche__knob" />
@@ -56,7 +57,41 @@ function HeatLamp() {
 
 export default function RecipaticoPage() {
   const [recipe, setRecipe] = useState('')
-  const [similarity, setSimilarity] = useState(0)
+  const [catalog, setCatalog] = useState<CatalogRecipe[]>([])
+  const [catalogStatus, setCatalogStatus] = useState<'loading' | 'ready' | 'error'>('loading')
+
+  useEffect(() => {
+    let active = true
+    loadRecipeCatalog().then(
+      (recipes) => {
+        if (active) {
+          if (!recipes.length) {
+            setCatalogStatus('error')
+            return
+          }
+          setCatalog(recipes)
+          setTarget(chooseRecipe(recipes))
+          setCatalogStatus('ready')
+        }
+      },
+      () => {
+        if (active) setCatalogStatus('error')
+      },
+    )
+    return () => { active = false }
+  }, [])
+
+  const suggestions = suggestRecipes(catalog, recipe)
+  const [target, setTarget] = useState<CatalogRecipe | null>(null)
+  const [guessError, setGuessError] = useState('')
+  const [gaveUp, setGaveUp] = useState(false)
+  const [hintCount, setHintCount] = useState(0)
+
+  const hintIngredients = target
+    ? Object.keys(target.ingredients).sort(
+        (a, b) => target.ingredients[b] - target.ingredients[a] || a.localeCompare(b),
+      )
+    : []
   const [tickets, setTickets] = useState<(Guess & { id: number })[]>([])
   const railRef = useRef<HTMLDivElement>(null)
   const nextTicketId = useRef(1)
@@ -169,7 +204,15 @@ export default function RecipaticoPage() {
   function submitGuess(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
     const name = recipe.trim()
-    if (!name || won) return
+    if (!name || won || gaveUp || !target) return
+
+    const key = recipeKey(name)
+    const selected = catalog.find((item) => recipeKey(item.title) === key)
+    if (!selected) {
+      setGuessError('Choose a recipe from the suggestions or enter its full title.')
+      return
+    }
+    setGuessError('')
 
     if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       const board = event.currentTarget
@@ -189,10 +232,10 @@ export default function RecipaticoPage() {
       )
     }
 
-    const correct = recipeKey(name) === recipeKey(secretRecipe)
+    const correct = selected.id === target.id
     const guess: Guess = {
-      recipe: correct ? secretRecipe : name,
-      similarity: correct ? 100 : similarity,
+      recipe: selected.title,
+      similarity: scoreRecipe(selected, target),
       correct,
     }
     const ticket = { ...guess, id: nextTicketId.current++ }
@@ -206,10 +249,13 @@ export default function RecipaticoPage() {
   }
 
   function resetRound() {
+    setGaveUp(false)
+    setHintCount(0)
     setTickets([])
     setClosest(null)
     setRecipe('')
-    setSimilarity(0)
+    setGuessError('')
+    if (target) setTarget(chooseRecipe(catalog, target))
     nextTicketId.current = 1
   }
 
@@ -239,7 +285,15 @@ export default function RecipaticoPage() {
 
             <form className="rec-clipboard" onSubmit={submitGuess}>
               <div className="rec-clipboard__paper">
-                {won ? (
+                {gaveUp && target ? (
+                  <div className="rec-win-check">
+                    <p>Secret recipe</p>
+                    <strong className="rec-answer-name" role="status">{target.title}</strong>
+                    <button className="rec-clipboard__submit" type="button" onClick={resetRound}>
+                      Play again
+                    </button>
+                  </div>
+                ) : won ? (
                   <div className="rec-win-check">
                     <p>Order complete</p>
                     <span className="rec-sr-only" role="status">Solved in {tickets.length} {tickets.length === 1 ? 'guess' : 'guesses'}.</span>
@@ -252,19 +306,61 @@ export default function RecipaticoPage() {
                 <label htmlFor="rec-recipe">Recipe guess</label>
                 <input
                   id="rec-recipe"
+                  list="rec-recipe-titles"
                   type="text"
                   placeholder="Write a recipe…"
                   autoComplete="off"
                   value={recipe}
-                  onChange={(event) => setRecipe(event.target.value)}
+                  onChange={(event) => {
+                    setRecipe(event.target.value)
+                    setGuessError('')
+                  }}
+                  aria-invalid={Boolean(guessError)}
+                  aria-describedby={guessError ? 'rec-guess-error' : undefined}
                 />
+                {guessError && <small id="rec-guess-error" role="alert">{guessError}</small>}
+                <datalist id="rec-recipe-titles">
+                  {suggestions.map((item) => (
+                    <option key={item.id} value={item.title} />
+                  ))}
+                </datalist>
+                {catalogStatus === 'loading' && <small role="status">Loading recipes…</small>}
+                {catalogStatus === 'error' && <small role="alert">Recipe suggestions could not load. Refresh to retry.</small>}
                 <button
                   className="rec-clipboard__submit"
                   type="submit"
-                  disabled={!recipe.trim()}
+                  disabled={!recipe.trim() || catalogStatus !== 'ready' || !target}
                 >
                   Submit guess
                 </button>
+                <div className="rec-round-actions">
+                  <button
+                    type="button"
+                    disabled={!target || hintCount >= hintIngredients.length}
+                    onClick={() => setHintCount((count) => Math.min(count + 1, hintIngredients.length))}
+                  >
+                    {target && hintCount >= hintIngredients.length ? 'All hints shown' : 'Get a hint'}
+                  </button>
+                  <button
+                    type="button"
+                    disabled={!target}
+                    onClick={() => {
+                      setGuessError('')
+                      setGaveUp(true)
+                    }}
+                  >
+                    Give up
+                  </button>
+                </div>
+                <div aria-live="polite" aria-relevant="additions">
+                  {hintCount > 0 && (
+                    <ol className="rec-hints" aria-label="Ingredient hints">
+                      {hintIngredients.slice(0, hintCount).map((name) => (
+                        <li key={name}>{name}</li>
+                      ))}
+                    </ol>
+                  )}
+                </div>
                   </>
                 )}
               </div>
@@ -304,23 +400,6 @@ export default function RecipaticoPage() {
                   </ol>
                 )}
               </div>
-
-            <details className="rec-preview">
-              <summary>Preview controls</summary>
-              <div className="rec-preview__controls">
-                <label htmlFor="rec-similarity">Test similarity</label>
-                <output htmlFor="rec-similarity">{similarity}%</output>
-                <input
-                  id="rec-similarity" disabled={won}
-                  type="range"
-                  min="0"
-                  max="100"
-                  value={similarity}
-                  aria-valuetext={`${similarity} percent`}
-                  onChange={(event) => setSimilarity(Number(event.target.value))}
-                />
-              </div>
-            </details>
           </section>
         </div>
       </div>

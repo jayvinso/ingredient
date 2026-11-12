@@ -4,7 +4,6 @@
 @import "../components/recipatico/stations.css";
 @import "../components/recipatico/clipboard.css";
 @import "../components/recipatico/tickets.css";
-@import "../components/recipatico/preview.css";
 
 .rec-page {
   --display: 'Italiana', Georgia, serif;

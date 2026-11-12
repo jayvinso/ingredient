@@ -144,3 +144,54 @@
   text-transform: uppercase;
   color: #795344;
 }
+
+.rec-round-actions {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  margin-top: 8px;
+  padding-top: 5px;
+  border-top: 1px solid #ae967a55;
+}
+
+.rec-round-actions button {
+  padding: 5px 0;
+  border: 0;
+  background: transparent;
+  color: #684537;
+  font: 600 .78rem/1.3 system-ui, sans-serif;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.rec-round-actions button:disabled {
+  color: #756e64;
+  text-decoration: none;
+  cursor: default;
+}
+
+.rec-round-actions button:focus-visible {
+  outline: 2px solid #715e42;
+  outline-offset: 2px;
+}
+
+.rec-hints {
+  max-height: 7rem;
+  overflow-y: auto;
+  margin: 7px 0 0;
+  padding-left: 1.5rem;
+  color: #293b46;
+  text-align: left;
+  font: 400 1.05rem/1.35 'Kalam', cursive;
+  overflow-wrap: anywhere;
+}
+
+.rec-answer-name {
+  display: block;
+  margin: 5px 0 9px;
+  color: #293b46;
+  font: 400 1.45rem/1.2 'Kalam', cursive;
+  overflow-wrap: anywhere;
+}
