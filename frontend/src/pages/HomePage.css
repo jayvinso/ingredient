@@ -1,4 +1,4 @@
-﻿@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Italiana&display=swap");
 .home-page {
   display: grid;
   align-content: center;
@@ -117,11 +117,19 @@
 /* Recipatico experience */
 #contexto-experience-title,
 .recipatico-page h1 {
-  font-family: 'Space Grotesk', system-ui, sans-serif;
+  font-family: 'Italiana', Georgia, serif;
   font-weight: 700;
   letter-spacing: -0.04em;
 }
 
 .recipatico-page {
-  font-family: 'Space Grotesk', system-ui, sans-serif;
+  font-family: 'Italiana', Georgia, serif;
+}
+
+.home-page__header h1,
+#contexto-experience-title {
+  font-family: 'Italiana', Georgia, serif;
+  font-weight: 400;
+  letter-spacing: -.035em;
+  line-height: 1.08;
 }

@@ -1,0 +1,1008 @@
+﻿@import url("https://fonts.googleapis.com/css2?family=Italiana&display=swap");
+
+.rec-page {
+  --display: 'Italiana', Georgia, serif;
+  --brick: color-mix(in srgb, #ae7058 74%, var(--theme-accent));
+  --mortar: color-mix(in srgb, var(--brick) 60%, #f4e5d5);
+  --walnut: color-mix(in srgb, #67442f 85%, var(--theme-accent));
+  --wood: color-mix(in srgb, #ab7851 85%, var(--theme-accent));
+  --paper: #f6eddb;
+  --steel-light: #e9e5d9;
+  --steel-mid: #a6a69e;
+  --steel-dark: #565956;
+  --grain: repeating-linear-gradient(
+    2deg, transparent 0 10px, #341d1220 11px, transparent 13px 23px
+  );
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  background: var(--theme-page);
+  color: var(--theme-text);
+  font-family: system-ui, sans-serif;
+}
+
+[data-theme="dark"] .rec-page {
+  --brick: color-mix(in srgb, #55382e 70%, var(--theme-accent));
+  --mortar: color-mix(in srgb, var(--brick) 72%, #aa9486);
+  --walnut: color-mix(in srgb, #37271e 87%, var(--theme-accent));
+  --wood: color-mix(in srgb, #735038 85%, var(--theme-accent));
+  --paper: #e2d5bb;
+  --steel-light: #ccc7b6;
+  --steel-mid: #838780;
+  --steel-dark: #424744;
+}
+
+.rec-header {
+  padding: 14px clamp(16px, 5vw, 80px) 21px;
+  background: var(--theme-page);
+  text-align: center;
+  border-bottom: 3px solid var(--theme-accent);
+}
+
+.rec-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.rec-toolbar .theme-controls {
+  position: static;
+  width: auto;
+  max-width: 100%;
+  flex-wrap: wrap;
+}
+
+.rec-back {
+  color: var(--theme-text);
+  text-underline-offset: 4px;
+}
+
+.rec-header h1 {
+  margin: 4px 0;
+  color: var(--theme-text);
+  font: 400 clamp(3.4rem, 6vw, 5.6rem)/1 var(--display);
+  letter-spacing: -.045em;
+}
+
+.rec-header p {
+  margin: 8px 0 0;
+  color: var(--theme-muted);
+}
+
+.rec-facade {
+  flex: 1;
+  padding: clamp(34px, 6vh, 76px) clamp(12px, 6vw, 100px);
+  background-color: var(--brick);
+  background-image:
+    linear-gradient(180deg, #281b1726, transparent 20%, transparent 75%, #281b1724),
+    linear-gradient(var(--mortar) 2px, transparent 2px),
+    conic-gradient(from 90deg at 2px 34px, transparent 25%, var(--mortar) 0 50%, transparent 0),
+    conic-gradient(from 90deg at 2px 34px, transparent 25%, var(--mortar) 0 50%, transparent 0);
+  background-size: 100% 100%, 100% 34px, 116px 68px, 116px 68px;
+  background-position: 0 0, 0 0, 0 0, 58px 34px;
+}
+
+.rec-pass {
+  max-width: 1180px;
+  margin-inline: auto;
+  filter: drop-shadow(0 10px 9px #21170f55);
+}
+
+.rec-window {
+  padding: clamp(9px, 1.2vw, 18px);
+  padding-bottom: 0;
+  background: var(--grain), var(--walnut);
+  border-top: 2px solid #ffffff38;
+  box-shadow: inset 2px 0 #ffffff20, inset -3px 0 #28180e66;
+}
+
+.rec-opening, .rec-countertop {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.rec-opening {
+  height: clamp(175px, 27vh, 310px);
+  background:
+    radial-gradient(ellipse at 50% 110%, #443d32, transparent 74%),
+    linear-gradient(#161716, #252622);
+  box-shadow: inset 0 13px 24px #000a, inset 5px 0 12px #0007;
+}
+
+.rec-lamp {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.rec-lamp__cord {
+  width: 4px;
+  height: 24%;
+  background: linear-gradient(90deg, #151612, #887d69, #252621);
+}
+
+.rec-lamp__shade {
+  width: clamp(80px, 13vw, 165px);
+  height: clamp(34px, 5vw, 62px);
+  border-radius: 50% 50% 7% 7% / 94% 94% 6% 6%;
+  background: linear-gradient(110deg, #191b19, #56574e 42%, #292c26 75%, #141613);
+  border-bottom: 3px solid #d1ab71;
+  box-shadow: 0 6px 16px -6px #e8af68a0;
+}
+
+.rec-countertop {
+  position: relative;
+  isolation: isolate;
+  min-height: clamp(106px, 14vh, 158px);
+  align-items: start;
+}
+
+/* The rear corners meet the frame; the near corners project past it. */
+.rec-countertop::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  inset: 0 -1.8%;
+  clip-path: polygon(1.75% 0, 98.25% 0, 100% 100%, 0 100%);
+  background:
+    var(--grain),
+    linear-gradient(to bottom, #301d164d, transparent 48%, #ffe4b825),
+    var(--wood);
+  border-top: 2px solid #d2a47a;
+  border-bottom: 12px solid var(--walnut);
+}
+
+.rec-serving {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  min-width: 0;
+}
+
+.rec-cloche {
+  position: relative;
+  width: clamp(80px, 13vw, 166px);
+  aspect-ratio: 2 / 1;
+  margin-top: clamp(-46px, -3vw, -22px);
+  filter: drop-shadow(1px 7px 3px #261b1655);
+}
+
+.rec-cloche__knob, .rec-cloche__dome, .rec-cloche__plate {
+  position: absolute;
+  background: linear-gradient(105deg, var(--steel-dark), var(--steel-light) 34%,
+    var(--steel-mid) 55%, var(--steel-light) 74%, var(--steel-dark));
+}
+
+.rec-cloche__knob {
+  width: 10%;
+  height: 17%;
+  top: 0;
+  left: 45%;
+  border-radius: 50%;
+}
+
+.rec-cloche__dome {
+  inset: 13% 6% 7%;
+  border-radius: 50% 50% 5% 5% / 95% 95% 5% 5%;
+  box-shadow: inset 0 -5px 5px #32353055;
+}
+
+.rec-cloche__plate {
+  inset: 88% 0 0;
+  border-radius: 50%;
+  border-bottom: 2px solid var(--steel-dark);
+}
+
+.rec-slip {
+  position: absolute;
+  left: calc(50% + clamp(46px, 7vw, 91px));
+  top: 8px;
+  padding: 7px 9px;
+  background: var(--paper);
+  color: #382e25;
+  border-bottom: 3px solid #b1a087;
+  box-shadow: 2px 3px 3px #22191044;
+  transform: rotate(-2deg);
+  text-align: center;
+}
+
+.rec-slip h2 {
+  margin: 0;
+  font: 400 clamp(1.05rem, 1.6vw, 1.45rem)/1.15 var(--display);
+}
+
+.rec-slip p {
+  margin: 3px 0 0;
+  font: .75rem/1.3 system-ui, sans-serif;
+}
+
+.rec-counterfront {
+  min-height: clamp(115px, 15vh, 175px);
+  padding: 22px 4%;
+  background: var(--grain), linear-gradient(#0003, transparent 23%), var(--walnut);
+  color: #f8efdd;
+  text-align: center;
+}
+
+.rec-rail {
+  height: 10px;
+  border-radius: 3px;
+  background: linear-gradient(#f6e1a4, #b29253 35%, #76602e 65%, #d9c184);
+  box-shadow: 0 3px 4px #25190e88;
+}
+
+.rec-counterfront p { margin: 18px 0 0; font-size: .85rem; }
+
+@media (max-width: 740px) {
+  .rec-slip {
+    position: static;
+    margin: 6px 3px 18px;
+    transform: none;
+  }
+
+  .rec-facade { padding-inline: 14px; }
+  .rec-countertop { min-height: 125px; }
+}
+
+/* Full-width counter with a centered pickup window */
+.rec-facade {
+  --window-width: min(64%, 1180px);
+  --frame-width: clamp(9px, 1.2vw, 18px);
+  padding-inline: 0;
+  padding-bottom: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.rec-pass {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  filter: none;
+}
+
+.rec-window {
+  width: var(--window-width);
+  margin-inline: auto;
+  padding-inline: var(--frame-width);
+  box-shadow: 0 -3px 12px #21170f35, inset 2px 0 #ffffff20;
+}
+
+/* Match the serving grid to the inside edges of the framed opening.
+   The wood itself spans the full page. */
+.rec-countertop {
+  padding-inline: calc((100% - var(--window-width)) / 2 + var(--frame-width));
+  min-height: clamp(116px, 16vh, 175px);
+}
+
+.rec-countertop::before {
+  inset: 0;
+  clip-path: none;
+  border-top: 2px solid color-mix(in srgb, var(--wood) 65%, white);
+  border-bottom: 12px solid var(--walnut);
+  background:
+    var(--grain),
+    linear-gradient(to bottom, #32201440, transparent 40%, #ffe1b52b 98%),
+    var(--wood);
+  box-shadow: 0 5px 7px #281a1055;
+}
+
+.rec-counterfront {
+  flex: 1;
+  padding-inline: 0;
+  padding-top: clamp(20px, 3vh, 32px);
+}
+
+.rec-rail {
+  width: 100%;
+  border-radius: 0;
+  box-shadow: 0 2px 1px #422e1c, 0 5px 6px #21170f70;
+}
+
+/* Restaurant sign */
+.rec-header {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  grid-template-areas:
+    "back title controls"
+    ". subtitle .";
+  align-items: center;
+  gap: 6px 20px;
+  padding: 20px clamp(18px, 4vw, 72px) 22px;
+  border-bottom: 4px double var(--theme-accent);
+  background: var(--theme-page);
+}
+
+.rec-toolbar {
+  display: contents;
+}
+
+.rec-back {
+  grid-area: back;
+  justify-self: start;
+}
+
+.rec-toolbar .theme-controls {
+  grid-area: controls;
+  justify-self: end;
+  min-width: 0;
+}
+
+.rec-header h1 {
+  grid-area: title;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(10px, 1.5vw, 24px);
+  margin: 0;
+  font-size: clamp(3.5rem, 5.5vw, 5.5rem);
+}
+
+.rec-header h1::before,
+.rec-header h1::after {
+  content: '';
+  width: clamp(24px, 4vw, 68px);
+  height: 5px;
+  background: var(--theme-accent);
+  clip-path: polygon(0 50%, 82% 32%, 90% 0, 100% 50%, 90% 100%, 82% 68%);
+}
+
+.rec-header h1::after {
+  transform: scaleX(-1);
+}
+
+.rec-header > p {
+  grid-area: subtitle;
+  margin: 0;
+}
+
+/* Give the labels room in front of the dishes on narrower counters. */
+@media (max-width: 1050px) {
+  .rec-facade { --window-width: 78%; }
+
+  .rec-slip {
+    position: static;
+    margin: 6px 3px 20px;
+    transform: none;
+  }
+}
+
+@media (max-width: 800px) {
+  .rec-header {
+    grid-template-columns: 1fr auto;
+    grid-template-areas:
+      "back controls"
+      "title title"
+      "subtitle subtitle";
+    gap: 8px;
+    padding: 12px 16px 16px;
+  }
+
+  .rec-facade { --window-width: 88%; }
+}
+
+@media (max-width: 480px) {
+  .rec-header {
+    grid-template-columns: 1fr;
+    grid-template-areas: "back" "title" "subtitle" "controls";
+  }
+
+  .rec-toolbar .theme-controls { justify-self: center; }
+  .rec-facade { --window-width: 92%; }
+}
+
+/* The router focuses this landmark on navigation. */
+.rec-page:focus {
+  outline: none;
+}
+
+/* Engraved sign ornaments: two curling strokes, a central rule and a bead. */
+.rec-header h1::before,
+.rec-header h1::after {
+  width: clamp(34px, 6vw, 92px);
+  height: 22px;
+  flex: 0 0 auto;
+  clip-path: none;
+  background:
+    radial-gradient(circle at 95% 50%, currentColor 0 2px, transparent 2.5px),
+    radial-gradient(ellipse at 50% 100%, transparent 56%, currentColor 60% 65%, transparent 69%)
+      left 8% top 1px / 63% 10px no-repeat,
+    radial-gradient(ellipse at 50% 0%, transparent 55%, currentColor 60% 65%, transparent 69%)
+      left 28% bottom 1px / 51% 10px no-repeat,
+    linear-gradient(to right, transparent, currentColor 30% 86%, transparent)
+      center / 100% 1px no-repeat;
+  color: var(--theme-accent);
+}
+
+.rec-header h1::after {
+  transform: scaleX(-1);
+}
+
+/* Reflections follow the dome, with the lamp reflected high on the left. */
+.rec-cloche {
+  isolation: isolate;
+  filter: none;
+}
+
+.rec-cloche::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  inset: 85% -8% -9%;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, #25190ecc, #38261950 45%, transparent 73%);
+  filter: blur(2px);
+}
+
+.rec-cloche__dome {
+  border-radius: 50% 50% 12% 12% / 94% 94% 8% 8%;
+  background:
+    radial-gradient(ellipse at 34% 21%, #fff9e0ba, transparent 24%),
+    radial-gradient(ellipse at 52% -34%, transparent 61%, #353b3566 76%, transparent 83%),
+    linear-gradient(106deg,
+      var(--steel-dark) 0%, var(--steel-mid) 18%,
+      var(--steel-light) 33%, var(--steel-mid) 57%,
+      var(--steel-dark) 79%, var(--steel-mid) 95%);
+  box-shadow:
+    inset 0 1px 1px #fff9,
+    inset 2px -5px 7px #22282288,
+    inset -2px 0 3px #fff4;
+}
+
+.rec-cloche__knob {
+  background: radial-gradient(circle at 32% 23%,
+    #fff7dc, var(--steel-mid) 40%, var(--steel-dark) 76%);
+}
+
+.rec-cloche__plate {
+  inset: 87% -1% -1%;
+  background: linear-gradient(to bottom,
+    var(--steel-dark), var(--steel-light) 30%, var(--steel-mid) 55%, var(--steel-dark));
+  box-shadow: 0 2px 2px #251b1755;
+}
+
+/* Paneled counter front. Keep the upper portion clear for hanging tickets. */
+.rec-counterfront {
+  --panel-width: clamp(145px, 19vw, 315px);
+  position: relative;
+  isolation: isolate;
+  min-height: clamp(155px, 21vh, 230px);
+  background:
+    linear-gradient(to bottom, #20140d5c, transparent 22px),
+    var(--grain), var(--walnut);
+  border-bottom: 9px solid color-mix(in srgb, var(--walnut) 78%, black);
+}
+
+.rec-counterfront::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  inset: 56px 0 14px;
+  border-block: 3px ridge color-mix(in srgb, var(--walnut) 80%, #ddbb90);
+  background:
+    repeating-linear-gradient(90deg,
+      transparent 0 calc(var(--panel-width) - 13px),
+      #24180e55 calc(var(--panel-width) - 13px) calc(var(--panel-width) - 10px),
+      var(--walnut) calc(var(--panel-width) - 10px) calc(var(--panel-width) - 2px),
+      #f4d6a72e calc(var(--panel-width) - 2px) var(--panel-width)),
+    linear-gradient(#27190e33, transparent 12px, #ffffff05 85%, #26170f29);
+}
+
+.rec-rail {
+  position: relative;
+}
+
+/* Flush screw heads repeat along the brass strip. */
+.rec-rail::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 22px 50%,
+      #59421e 0 1px, #ead49d 1.4px 2px, transparent 2.6px)
+    0 0 / var(--panel-width) 100% repeat-x;
+}
+
+/* Engraved botanical scrolls beside the restaurant name. */
+.rec-header h1::before,
+.rec-header h1::after {
+  --scrollwork: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 160 44'%3E%3Cg fill='none' stroke='black' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath stroke-width='1.6' d='M3 29C22 32 35 26 54 20S85 12 105 20S135 33 155 20'/%3E%3Cpath stroke-width='1.15' d='M23 28C39 25 41 10 32 9C24 8 24 17 30 17C33 17 34 14 32 13M48 22C64 18 65 4 55 4C48 4 47 11 52 12C55 13 57 10 55 9M75 16C88 15 91 4 84 3C79 2 77 7 80 9M71 17C83 19 87 32 79 35C71 38 66 31 71 28C74 26 77 28 76 30M109 22C123 32 124 41 116 40C109 39 109 33 113 32M119 26C130 28 139 23 137 18C135 14 130 16 131 19'/%3E%3C/g%3E%3Cg fill='black'%3E%3Cpath d='M8 29Q16 21 24 24Q19 30 8 29ZM37 25Q42 32 51 30Q46 24 37 25ZM57 19Q66 10 72 12Q68 18 57 19ZM93 17Q99 9 106 10Q102 17 93 17ZM140 26Q147 18 157 18Q153 24 140 26Z'/%3E%3C/g%3E%3C/svg%3E");
+  content: '';
+  width: clamp(40px, 8vw, 138px);
+  height: auto;
+  aspect-ratio: 160 / 44;
+  flex: none;
+  background: var(--theme-accent);
+  clip-path: none;
+  -webkit-mask: var(--scrollwork) center / contain no-repeat;
+  mask: var(--scrollwork) center / contain no-repeat;
+}
+
+.rec-header h1::after {
+  transform: scaleX(-1);
+}
+
+/* The plate has a visible top, rolled rim and contact shadow. */
+.rec-cloche {
+  width: clamp(85px, 13vw, 172px);
+  aspect-ratio: 1.85 / 1;
+  isolation: isolate;
+}
+
+.rec-cloche::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  inset: 81% -14% -15% -7%;
+  border-radius: 50%;
+  background: radial-gradient(ellipse,
+    #24180ed9 0%, #39281980 34%, #402b1936 53%, transparent 73%);
+  filter: blur(2px);
+}
+
+.rec-cloche__plate {
+  z-index: 0;
+  inset: 75% -3% 0;
+  border-radius: 50%;
+  border: 1px solid var(--steel-dark);
+  background: radial-gradient(ellipse at 48% 30%,
+    var(--steel-dark) 27%, var(--steel-mid) 58%,
+    var(--steel-light) 76%, var(--steel-mid) 84%);
+  box-shadow: inset 0 -2px 1px #30332f91, 0 2px 1px #2d2118a6;
+}
+
+.rec-cloche__dome {
+  z-index: 1;
+  inset: 13% 5% 10%;
+  border-radius: 50% 50% 47% 47% / 87% 87% 13% 13%;
+  background:
+    radial-gradient(ellipse at 32% 24%, #fffbeaaf, transparent 24%),
+    radial-gradient(ellipse at 58% 3%, transparent 42%, #30352d40 72%, #20261f73 100%),
+    linear-gradient(102deg,
+      var(--steel-dark) 1%, var(--steel-mid) 13%,
+      var(--steel-light) 35%, var(--steel-mid) 56%,
+      var(--steel-dark) 77%, var(--steel-mid) 94%);
+  box-shadow:
+    inset 1px 1px 2px #fff8,
+    inset -3px -4px 5px #282d2777;
+}
+
+/* A curved reflection of the wood along the lower part of the silver. */
+.rec-cloche__dome::after {
+  content: '';
+  position: absolute;
+  inset: 60% 2% 2%;
+  border-radius: 0 0 50% 50% / 0 0 35% 35%;
+  background: linear-gradient(0deg,
+    color-mix(in srgb, var(--wood) 48%, transparent),
+    transparent 85%);
+  border-bottom: 1px solid #f2e7cf99;
+}
+
+.rec-cloche__knob {
+  z-index: 2;
+  inset: 1% auto auto 45%;
+  width: 10%;
+  height: 15%;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at 32% 21%,
+    #fffae4 4%, var(--steel-light) 22%, var(--steel-mid) 48%, var(--steel-dark) 82%);
+  box-shadow: 0 2px 2px #32362c77;
+}
+
+/* One continuous round brass rail, standing proud of the paneling. */
+.rec-rail {
+  --mount-spacing: clamp(160px, 22vw, 340px);
+  position: relative;
+  isolation: isolate;
+  height: 15px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+/* Short mounting stems, visible in the gap behind the tube. */
+.rec-rail::before {
+  content: '';
+  position: absolute;
+  inset: 5px 0 -7px;
+  background: repeating-linear-gradient(90deg,
+    transparent 0 31px,
+    #594428 31px 33px,
+    #ba985c 33px 36px,
+    #725737 36px 39px,
+    transparent 39px var(--mount-spacing));
+  filter: drop-shadow(2px 3px 1px #23170f88);
+}
+
+/* The brightest reflection sits above center on a cylindrical rail. */
+.rec-rail::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom,
+    #70552e 0%, #bc9b60 13%, #f4dc9e 29%,
+    #d0af71 42%, #9a793e 58%, #69502f 83%, #46351f 100%);
+  box-shadow:
+    0 1px 1px #30241799,
+    1px 9px 5px -2px #28190eb3,
+    2px 13px 10px -3px #28190e66;
+}
+
+@media (max-width: 480px) {
+  .rec-header h1 { gap: 8px; }
+  .rec-header h1::before,
+  .rec-header h1::after { width: 38px; }
+}
+
+/* Enlarge the existing title ornaments by 40%. */
+.rec-header h1::before,
+.rec-header h1::after {
+  width: clamp(56px, 11.2vw, 193px);
+}
+
+/* A pair of engraved corners and a fine rule across the sign. */
+.rec-header {
+  --corner-engraving: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 52'%3E%3Cg fill='none' stroke='black' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath stroke-width='1.3' d='M4 3V44H175M9 18V39H46'/%3E%3Cpath stroke-width='1.6' d='M5 9C6 26 17 36 35 36C52 36 60 24 75 25C91 26 96 39 120 39C138 39 149 35 166 37'/%3E%3Cpath stroke-width='1.15' d='M18 31C10 20 17 12 23 15C29 18 24 25 20 22M37 36C51 34 54 17 45 17C38 17 38 25 43 25M68 26C80 20 83 12 78 10C72 8 69 15 73 17M88 29C99 35 107 29 104 24C101 20 96 23 98 26'/%3E%3C/g%3E%3Cpath fill='black' d='M12 25Q9 18 11 12Q16 17 12 25ZM47 33Q51 24 58 22Q56 30 47 33ZM111 38Q119 31 127 32Q122 38 111 38Z'/%3E%3C/svg%3E");
+  padding-bottom: 29px;
+  background-image: linear-gradient(
+    to right, transparent 5%, var(--theme-border) 20% 80%, transparent 95%
+  );
+  background-size: 100% 1px;
+  background-position: center bottom 8px;
+  background-repeat: no-repeat;
+}
+
+.rec-header::before,
+.rec-header::after {
+  content: '';
+  position: absolute;
+  bottom: 4px;
+  width: clamp(90px, 11vw, 175px);
+  aspect-ratio: 180 / 52;
+  background: var(--theme-accent);
+  opacity: .8;
+  -webkit-mask: var(--corner-engraving) center / contain no-repeat;
+  mask: var(--corner-engraving) center / contain no-repeat;
+  pointer-events: none;
+}
+
+.rec-header::before { left: 9px; }
+.rec-header::after { right: 9px; transform: scaleX(-1); }
+
+/* Walnut surface. Board widths increase toward the viewer. */
+.rec-countertop {
+  --board-seams: linear-gradient(to bottom,
+    transparent 0 calc(19% - 1px),
+    #2c190e55 19%, #f5cc9b29 calc(19% + 1px), transparent calc(19% + 2px),
+    transparent calc(51% - 1px),
+    #2c190e66 51%, #f5cc9b38 calc(51% + 1px), transparent calc(51% + 2px));
+  --wood-figure: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 640 110' preserveAspectRatio='none'%3E%3Cg fill='none' stroke='%23351e10' stroke-opacity='.19' stroke-width='1'%3E%3Cpath d='M0 12C110 12 128 5 217 8S439 18 640 12M0 36C88 36 127 39 177 33S249 19 310 26S439 41 640 36M0 42C97 42 130 44 187 37S253 24 305 30S451 46 640 42M0 76C122 76 219 69 311 74S448 92 520 85S590 76 640 76M0 83C106 83 221 75 307 80S439 96 526 91S603 83 640 83'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+.rec-countertop::before {
+  /* Each lamp is centered one quarter-window from the page center. */
+  --lamp-offset: calc(var(--window-width) / 4 - var(--frame-width) / 2);
+  border: 0;
+  background:
+    radial-gradient(ellipse 15% 52% at calc(50% - var(--lamp-offset)) 4%,
+      #ffe5a923, transparent 94%),
+    radial-gradient(ellipse 15% 52% at calc(50% + var(--lamp-offset)) 4%,
+      #ffe5a923, transparent 94%),
+    var(--board-seams),
+    var(--wood-figure) left top / 660px 100% repeat-x,
+    linear-gradient(to bottom, #30201650, transparent 28%, #ffe0b51a 88%),
+    var(--wood);
+  box-shadow: inset 0 1px #edc59b55;
+}
+
+/* Rounded near edge with a fine highlight, darker underside and cast shadow. */
+.rec-countertop::after {
+  content: '';
+  position: absolute;
+  inset: auto 0 0;
+  height: 13px;
+  pointer-events: none;
+  background: linear-gradient(to bottom,
+    color-mix(in srgb, var(--wood) 72%, #f7d4aa),
+    var(--wood) 19%, var(--walnut) 64%,
+    color-mix(in srgb, var(--walnut) 75%, #20160f));
+  box-shadow: 0 5px 6px -2px #21160fb0;
+}
+
+@media (max-width: 800px) {
+  .rec-header::before, .rec-header::after { width: 78px; }
+}
+
+@media (max-width: 480px) {
+  .rec-header h1::before, .rec-header h1::after { width: 50px; }
+  .rec-header::before, .rec-header::after { width: 54px; }
+}
+
+/* Window reveal: the front trim catches light, while the inner faces recede. */
+.rec-window {
+  --reveal: clamp(12px, 1.8vw, 26px);
+  position: relative;
+  background:
+    linear-gradient(90deg, #ffffff10, transparent 7% 92%, #130e0b28),
+    var(--grain), var(--walnut);
+  border-top: 2px solid color-mix(in srgb, var(--walnut) 68%, #e3c29a);
+  box-shadow:
+    inset 2px 0 1px #f4d7b332,
+    inset -3px 0 2px #20140e66,
+    2px 4px 7px #21170f45;
+}
+
+.rec-opening {
+  position: relative;
+  isolation: isolate;
+  background:
+    radial-gradient(ellipse at 50% 110%, #413d34, transparent 72%),
+    linear-gradient(#131514, #252723);
+}
+
+/* Angled ends make the underside meet both side jambs at the rear corners. */
+.rec-opening::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  inset: 0 0 auto;
+  height: var(--reveal);
+  clip-path: polygon(0 0, 100% 0,
+    calc(100% - var(--reveal)) 100%, var(--reveal) 100%);
+  background: linear-gradient(to bottom,
+    color-mix(in srgb, var(--walnut) 72%, #161410),
+    color-mix(in srgb, var(--walnut) 34%, #161410));
+}
+
+.rec-opening::after {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, #8c72554a, #382d2240)
+      left / var(--reveal) 100% no-repeat,
+    linear-gradient(90deg, #201c1855, #120e0bc4)
+      right / var(--reveal) 100% no-repeat;
+  clip-path: polygon(
+    0 0, var(--reveal) var(--reveal), var(--reveal) 100%,
+    calc(100% - var(--reveal)) 100%,
+    calc(100% - var(--reveal)) var(--reveal), 100% 0,
+    100% 100%, 0 100%);
+}
+
+.rec-lamp {
+  position: relative;
+  padding-top: calc(var(--reveal) * .58);
+}
+
+/* A shallow oval shows where the cord meets the underside of the ceiling. */
+.rec-lamp::before {
+  content: '';
+  width: 19px;
+  height: 5px;
+  flex: none;
+  border-radius: 50%;
+  background: linear-gradient(#292923, #706957 55%, #35352d);
+  box-shadow: 0 1px 2px #0008;
+}
+
+/* Continuous wood surface with softer curved grain. */
+.rec-countertop {
+  --board-seams: linear-gradient(transparent, transparent);
+}
+
+.rec-countertop::before {
+  background:
+    radial-gradient(ellipse 15% 55% at calc(50% - var(--lamp-offset)) 3%,
+      #ffe6b022, transparent 95%),
+    radial-gradient(ellipse 15% 55% at calc(50% + var(--lamp-offset)) 3%,
+      #ffe6b022, transparent 95%),
+    linear-gradient(to bottom, #23180f35, transparent 35%, #f9d7aa12),
+    linear-gradient(
+      color-mix(in srgb, var(--wood) 58%, transparent),
+      color-mix(in srgb, var(--wood) 58%, transparent)),
+    var(--wood-figure) left top / 760px 100% repeat-x,
+    var(--wood);
+}
+
+/* A shallower desktop sign; retain room for the controls on small screens. */
+@media (min-width: 801px) {
+  .rec-header {
+    padding-top: 10px;
+    padding-bottom: 17px;
+    row-gap: 3px;
+  }
+
+  .rec-header h1 {
+    font-size: clamp(3.2rem, 4.8vw, 4.8rem);
+    line-height: .98;
+  }
+
+  .rec-header > p {
+    line-height: 1.2;
+  }
+}
+
+@media (max-width: 800px) {
+  .rec-header {
+    padding-block: 9px 17px;
+    row-gap: 5px;
+  }
+}
+
+/* Carry the countertop through the pickup window to the back of the jambs. */
+.rec-countertop {
+  --sill-depth: clamp(12px, 1.8vw, 26px);
+  --opening-left: calc((100% - var(--window-width)) / 2 + var(--frame-width));
+  --opening-right: calc(100% - var(--opening-left));
+}
+
+.rec-countertop::before {
+  top: calc(0px - var(--sill-depth));
+  clip-path: polygon(
+    0 var(--sill-depth),
+    var(--opening-left) var(--sill-depth),
+    calc(var(--opening-left) + var(--sill-depth)) 0,
+    calc(var(--opening-right) - var(--sill-depth)) 0,
+    var(--opening-right) var(--sill-depth),
+    100% var(--sill-depth),
+    100% 100%,
+    0 100%
+  );
+}
+
+/* The old worktop was clamp(116px, 16vh, 175px).
+   Return half of the saved height to the brick and half to the opening. */
+.rec-facade {
+  --extra-height: clamp(11.6px, 1.6vh, 17.5px);
+  padding-top: calc(clamp(34px, 6vh, 76px) + var(--extra-height));
+}
+
+.rec-opening {
+  height: calc(clamp(175px, 27vh, 310px) + var(--extra-height));
+}
+
+.rec-countertop {
+  min-height: clamp(92.8px, 12.8vh, 140px);
+}
+
+/* A little reflected warmth under the metal rim.
+   Keep the kitchen behind the lamps dark. */
+.rec-lamp__shade {
+  position: relative;
+}
+
+.rec-lamp__shade::after {
+  content: '';
+  position: absolute;
+  left: 8%;
+  right: 8%;
+  bottom: -4px;
+  height: 5px;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, #ffe2aab3, #e5ad6445 58%, transparent 76%);
+  box-shadow: 0 4px 9px -3px #edb76c70;
+  pointer-events: none;
+}
+
+/* Center a soft pool on the same axis as the lamp and plate.
+   Fade it into the wood before it reaches the front lip. */
+.rec-serving {
+  isolation: isolate;
+}
+
+.rec-serving::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  left: 50%;
+  width: min(92%, 325px);
+  height: clamp(45px, 7vh, 74px);
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: radial-gradient(ellipse at 50% 44%,
+    #ffdc9638 0%, #f2bc7324 34%, #efb46a0d 58%, transparent 75%);
+  pointer-events: none;
+}
+
+/* Tight shadows anchor the plate and folded card to the illuminated wood. */
+.rec-cloche__plate {
+  box-shadow:
+    inset 0 -2px 1px #30332f91,
+    0 2px 2px #25190e99,
+    1px 5px 5px -3px #25190e80;
+}
+
+.rec-slip {
+  box-shadow:
+    0 1px 1px #25190e80,
+    1px 4px 4px -2px #25190e73;
+}
+
+/* Where the wood enters the opening, the wall shades its far edge.
+   The existing polygon clips this shadow to the recessed portion. */
+.rec-countertop::before {
+  box-shadow:
+    inset 0 6px 9px -6px #1c160fc7,
+    inset 0 1px 1px #20170f66;
+}
+
+/* Raised walnut casing around the outside of the pickup window. */
+.rec-window {
+  --casing-overlap: clamp(6px, .65vw, 10px);
+  --backsplash-height: clamp(9px, 1.1vw, 15px);
+  position: relative;
+  overflow: visible;
+}
+
+.rec-window::before {
+  content: '';
+  position: absolute;
+  inset: calc(0px - var(--casing-overlap))
+         calc(0px - var(--casing-overlap)) 0;
+  pointer-events: none;
+
+  /* Three sides leave the sill open where the wood enters the kitchen. */
+  border-style: solid;
+  border-width: var(--casing-overlap) var(--casing-overlap) 0;
+  border-color:
+    color-mix(in srgb, var(--walnut) 68%, #d1ac81)
+    color-mix(in srgb, var(--walnut) 72%, #281c14)
+    transparent
+    color-mix(in srgb, var(--walnut) 81%, #c4a17c);
+
+  border-radius: 2px 2px 0 0;
+  box-shadow:
+    1px -1px 1px #f5d4a51c,
+    3px 1px 2px #24180f52,
+    5px 3px 8px #20160f45;
+}
+
+/* A short backsplash on the brick portions of the wall.
+   The transparent center ends each piece at the outer casing. */
+.rec-window::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100vw;
+  height: var(--backsplash-height);
+  pointer-events: none;
+
+  --trim-end: calc((100% - var(--window-width)) / 2 - var(--casing-overlap));
+  mask-image: linear-gradient(to right,
+    black 0 var(--trim-end),
+    transparent var(--trim-end) calc(100% - var(--trim-end)),
+    black calc(100% - var(--trim-end)) 100%);
+
+  background: linear-gradient(to bottom,
+    color-mix(in srgb, var(--wood) 65%, #d5b28e) 0 1px,
+    var(--wood) 1px 24%,
+    var(--walnut) 56%,
+    color-mix(in srgb, var(--walnut) 68%, #23180f) 90%,
+    #2b1c13 100%);
+}
+
+/* Clip the full-width trim at the page edges on scrollbar layouts. */
+.rec-facade {
+  overflow-x: clip;
+}
+
+/* Let desktop banner spacing respond to window height. */
+@media (min-width: 801px) {
+  .rec-header {
+    padding-block: clamp(12px, 1.65svh, 19px) clamp(20px, 2.55svh, 29px);
+  }
+}
