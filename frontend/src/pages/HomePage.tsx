@@ -41,7 +41,7 @@ export default function HomePage() {
           <h2 id="contexto-experience-title">Recipatico</h2>
           <p>Find the secret recipe, one guess at a time.</p>
 
-          <a className="home-page__link" href="#/contexto">
+          <a className="home-page__link" href="#/recipatico">
             Explore Recipatico
             <span aria-hidden="true">→</span>
           </a>

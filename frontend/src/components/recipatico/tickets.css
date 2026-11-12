@@ -1,0 +1,204 @@
+.rec-rail {
+  width: 100%;
+}
+
+.rec-rail {
+  --mount-spacing: clamp(160px, 22vw, 340px);
+  position: relative;
+  isolation: isolate;
+  height: 15px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.rec-rail::before {
+  content: '';
+  position: absolute;
+  inset: 5px 0 -7px;
+  background: repeating-linear-gradient(90deg,
+    transparent 0 31px,
+    #594428 31px 33px,
+    #ba985c 33px 36px,
+    #725737 36px 39px,
+    transparent 39px var(--mount-spacing));
+  filter: drop-shadow(2px 3px 1px #23170f88);
+}
+
+.rec-rail::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom,
+    #70552e 0%, #bc9b60 13%, #f4dc9e 29%,
+    #d0af71 42%, #9a793e 58%, #69502f 83%, #46351f 100%);
+  box-shadow:
+    0 1px 1px #30241799,
+    1px 9px 5px -2px #28190eb3,
+    2px 13px 10px -3px #28190e66;
+}
+
+.rec-ticket-viewport {
+  --ticket-width: clamp(145px, 14vw, 185px);
+  --ticket-gap: 12px;
+  position: relative;
+  margin-top: -8px;
+  overflow-x: auto;
+  overflow-anchor: none;
+  scrollbar-width: thin;
+  scrollbar-color: #b79a68 var(--walnut);
+}
+
+.rec-ticket-viewport:focus-visible {
+  outline: 2px solid var(--theme-accent);
+  outline-offset: -2px;
+}
+
+.rec-counterfront .rec-ticket-empty {
+  margin: 0;
+  padding: 24px 16px 8px;
+  color: #fff3dd;
+}
+
+.rec-tickets {
+  display: flex;
+  align-items: flex-start;
+  width: max-content;
+  margin: 0;
+  padding: 0 clamp(14px, 4vw, 60px) 12px;
+  list-style: none;
+}
+
+.rec-ticket-slot {
+  flex: none;
+  width: calc(var(--ticket-width) + var(--ticket-gap));
+  overflow: hidden;
+  padding: 9px 0 8px;
+  animation: rec-ticket-arrive 240ms ease-out both;
+}
+
+.rec-ticket {
+  position: relative;
+  width: var(--ticket-width);
+  min-height: 105px;
+  border-radius: 1px 2px 3px 2px;
+  color: #382f27;
+  box-shadow: 2px 4px 4px #21170e55;
+  text-align: left;
+  animation: rec-ticket-settle 210ms ease-out 65ms both;
+}
+
+.rec-ticket__clip {
+  position: absolute;
+  left: calc(50% - 9px);
+  top: -8px;
+  width: 18px;
+  height: 15px;
+  border: 1px solid #654e2f;
+  border-radius: 3px;
+  background: linear-gradient(#765a36, #dfc78d 35%, #967849 70%, #b49961);
+  box-shadow: 0 2px 2px #33271955;
+}
+
+.rec-ticket h3 {
+  margin: 0 0 10px;
+  color: #293b46;
+  font: 400 1.24rem/1.15 'Kalam', cursive;
+  overflow-wrap: anywhere;
+}
+
+.rec-ticket p {
+  display: flex;
+  justify-content: space-between;
+  gap: 6px;
+  margin: 0 0 5px;
+  font: .76rem/1.3 system-ui, sans-serif;
+}
+
+.rec-ticket__track {
+  height: 5px;
+  overflow: hidden;
+  border-radius: 4px;
+  background: #d5c8ad;
+}
+
+.rec-ticket__track span {
+  display: block;
+  height: 100%;
+  background: #91603b;
+}
+
+@keyframes rec-ticket-arrive {
+from { width: 0; }
+  to { width: calc(var(--ticket-width) + var(--ticket-gap)); }
+}
+
+@keyframes rec-ticket-settle {
+from { opacity: 0; transform: translateY(7px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rec-ticket-slot,
+  .rec-ticket {
+    animation: none;
+  }
+}
+
+.rec-ticket {
+  padding: 16px 13px 18px 19px;
+  background:
+    linear-gradient(to right,
+      transparent 9px, #b65d554f 9px 10px, transparent 10px),
+    linear-gradient(115deg, #fffaf0, #eee2c9);
+}
+
+.rec-ticket__number {
+  margin-bottom: 8px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid #ac93735c;
+  color: #795344;
+  font: 600 .65rem/1.15 ui-monospace, monospace;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+}
+
+.rec-ticket::after {
+  content: '';
+  position: absolute;
+  inset: auto 5px 6px;
+  border-bottom: 1px dashed #9d846680;
+  pointer-events: none;
+}
+
+.rec-served-stamp {
+  display: inline-block;
+  margin: 0 0 10px;
+  padding: 2px 6px;
+  border: 2px double currentColor;
+  border-radius: 2px;
+  color: #944637;
+  font: 700 .72rem/1.1 ui-monospace, monospace;
+  letter-spacing: .13em;
+  text-transform: uppercase;
+  transform: rotate(-7deg);
+}
+
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .rec-ticket {
+    transform-origin: 50% 0;
+    transition: rotate 280ms ease-out;
+  }
+
+  .rec-ticket-slot:hover .rec-ticket {
+    animation: rec-ticket-settle 210ms ease-out 65ms both, rec-ticket-sway 650ms ease-in-out both;
+  }
+
+  @keyframes rec-ticket-sway {
+  0%   { rotate: 0deg; }
+      30%  { rotate: -1.8deg; }
+      65%  { rotate: 1deg; }
+      100% { rotate: -.4deg; }
+  }
+}
