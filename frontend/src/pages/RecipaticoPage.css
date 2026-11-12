@@ -1,0 +1,52 @@
+@import url("https://fonts.googleapis.com/css2?family=Italiana&family=Kalam:wght@400&display=swap");
+@import "../components/recipatico/banner.css";
+@import "../components/recipatico/counter.css";
+@import "../components/recipatico/stations.css";
+@import "../components/recipatico/clipboard.css";
+@import "../components/recipatico/tickets.css";
+
+.rec-page {
+  --display: 'Italiana', Georgia, serif;
+  --brick: color-mix(in srgb, #ae7058 74%, var(--theme-accent));
+  --mortar: color-mix(in srgb, var(--brick) 60%, #f4e5d5);
+  --walnut: color-mix(in srgb, #67442f 85%, var(--theme-accent));
+  --wood: color-mix(in srgb, #ab7851 85%, var(--theme-accent));
+  --paper: #f6eddb;
+  --steel-light: #e9e5d9;
+  --steel-mid: #a6a69e;
+  --steel-dark: #565956;
+  --grain: repeating-linear-gradient(
+    2deg, transparent 0 10px, #341d1220 11px, transparent 13px 23px
+  );
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  background: var(--theme-page);
+  color: var(--theme-text);
+  font-family: system-ui, sans-serif;
+}
+
+[data-theme="dark"] .rec-page {
+  --brick: color-mix(in srgb, #55382e 70%, var(--theme-accent));
+  --mortar: color-mix(in srgb, var(--brick) 72%, #aa9486);
+  --walnut: color-mix(in srgb, #37271e 87%, var(--theme-accent));
+  --wood: color-mix(in srgb, #735038 85%, var(--theme-accent));
+  --paper: #e2d5bb;
+  --steel-light: #ccc7b6;
+  --steel-mid: #838780;
+  --steel-dark: #424744;
+}
+
+.rec-page:focus {
+  outline: none;
+}
+
+.rec-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}

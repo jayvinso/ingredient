@@ -1,0 +1,197 @@
+.rec-clipboard {
+  position: relative;
+  grid-column: 1 / -1;
+  justify-self: center;
+  width: min(280px, 94%);
+  padding: 11px 12px 14px;
+  border: 1px solid #603c26;
+  border-radius: 5px;
+  background:
+    repeating-linear-gradient(94deg, transparent 0 9px, #32190e18 10px, transparent 12px 21px),
+    linear-gradient(110deg, #966544, #70482f 60%, #885a3b);
+  box-shadow: inset 0 1px #d5a17c, 0 3px #533521, 2px 6px 7px #26190f66;
+  transform: rotate(-1.5deg);
+}
+
+.rec-clipboard__paper {
+  padding: 19px 14px 12px;
+  background: linear-gradient(115deg, #fffaf0, #f3ebdb);
+  color: #372d24;
+  box-shadow: 0 1px #b9ab91, 0 3px #f0e5cf, 0 4px #b4a58a;
+}
+
+.rec-clipboard__paper label {
+  display: block;
+  font: 600 .68rem/1.3 system-ui, sans-serif;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: #655748;
+}
+
+.rec-clipboard__paper input {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  margin-top: 3px;
+  padding: 2px 0;
+  border: 0;
+  border-bottom: 1px solid #a99c83;
+  border-radius: 0;
+  background: transparent;
+  color: #293b46;
+  font: 400 1.45rem/1.4 'Kalam', cursive;
+  color-scheme: light;
+}
+
+.rec-clipboard__paper input::placeholder {
+  color: #766d60;
+}
+
+.rec-clipboard__paper input:focus-visible {
+  outline: 2px solid #715e42;
+  outline-offset: 3px;
+}
+
+.rec-clipboard__clip {
+  position: absolute;
+  top: 3px;
+  left: 50%;
+  width: 35%;
+  height: 13px;
+  transform: translateX(-50%);
+  border: 1px solid #755426;
+  border-radius: 5px 5px 3px 3px;
+  background: linear-gradient(#ae8644, #f4d991 28%, #c9a661 58%, #916f36);
+  box-shadow: 0 2px 2px #3b2b1755;
+}
+
+.rec-clipboard__clip::before {
+  content: '';
+  position: absolute;
+  left: 38%;
+  bottom: 65%;
+  width: 24%;
+  height: 12px;
+  border: 1px solid #94733b;
+  border-radius: 50% 50% 2px 2px;
+  background: linear-gradient(110deg, #b99a54, #ebce84, #af8b45);
+}
+
+.rec-clipboard__submit {
+  display: block;
+  margin: 8px 0 0 auto;
+  padding: 5px 10px;
+  border: 1px solid #885a46;
+  border-radius: 3px;
+  background: #793f30;
+  color: #fff7e9;
+  font: 600 .78rem/1.3 system-ui, sans-serif;
+  cursor: pointer;
+}
+
+.rec-clipboard__submit:disabled {
+  opacity: .55;
+  cursor: default;
+}
+
+.rec-clipboard__submit:focus-visible {
+  outline: 2px solid #715e42;
+  outline-offset: 3px;
+}
+
+@media (min-width: 1051px) {
+  .rec-clipboard {
+    grid-column: 1;
+    grid-row: 1;
+    align-self: center;
+    justify-self: center;
+    width: min(265px, 87%);
+    margin-top: 8px;
+    transform: rotate(-2deg);
+  }
+}
+
+@media (max-width: 1050px) {
+  .rec-clipboard {
+    justify-self: start;
+    width: min(280px, 100%);
+    transform: rotate(-1deg);
+  }
+}
+
+.rec-countertop > .rec-clipboard {
+  grid-column: 2 / 4;
+  grid-row: 1;
+  align-self: start;
+  justify-self: center;
+  width: clamp(175px, 19vw, 270px);
+  margin: 10px 0 0;
+  transform: rotate(-1.5deg);
+}
+
+@media (max-width: 700px) {
+  .rec-countertop > .rec-clipboard {
+    grid-row: 2;
+    width: min(250px, 92%);
+    margin-top: 0;
+  }
+}
+
+.rec-win-check p {
+  margin: 0 0 4px;
+  font: 600 .68rem/1.3 system-ui, sans-serif;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: #795344;
+}
+
+.rec-round-actions {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  margin-top: 8px;
+  padding-top: 5px;
+  border-top: 1px solid #ae967a55;
+}
+
+.rec-round-actions button {
+  padding: 5px 0;
+  border: 0;
+  background: transparent;
+  color: #684537;
+  font: 600 .78rem/1.3 system-ui, sans-serif;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.rec-round-actions button:disabled {
+  color: #756e64;
+  text-decoration: none;
+  cursor: default;
+}
+
+.rec-round-actions button:focus-visible {
+  outline: 2px solid #715e42;
+  outline-offset: 2px;
+}
+
+.rec-hints {
+  max-height: 7rem;
+  overflow-y: auto;
+  margin: 7px 0 0;
+  padding-left: 1.5rem;
+  color: #293b46;
+  text-align: left;
+  font: 400 1.05rem/1.35 'Kalam', cursive;
+  overflow-wrap: anywhere;
+}
+
+.rec-answer-name {
+  display: block;
+  margin: 5px 0 9px;
+  color: #293b46;
+  font: 400 1.45rem/1.2 'Kalam', cursive;
+  overflow-wrap: anywhere;
+}
